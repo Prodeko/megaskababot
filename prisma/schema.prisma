@@ -22,10 +22,10 @@ model User {
 }
 
 model Entry {
-  id                Int    @id @default(autoincrement())
-  distanceTravelled Float
-  photoId           String
-  sport             String
-  user              User   @relation(fields: [userId], references: [telegramUserId])
-  userId            String
+  id       Int    @id @default(autoincrement())
+  distance Float
+  fileId  String
+  sport    String
+  user     User   @relation(fields: [userId], references: [telegramUserId])
+  userId   String
 }

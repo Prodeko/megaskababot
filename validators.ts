@@ -1,8 +1,8 @@
-import { GUILDS, TRANSP } from "./constants";
-import { Guild, Transp } from "./types";
+import { GUILDS, SPORTS } from "./constants";
+import { Guild, Sport } from "./types";
 
-const isTransp = (transp: any): transp is Transp => {
-    return typeof transp === 'string' && TRANSP.some(t => transp === t)
+const isSport = (sport: any): sport is Sport => {
+    return typeof sport === 'string' && SPORTS.some(t => sport === t)
 }
 
 const isGuild = (guild: any): guild is Guild => {
@@ -10,6 +10,6 @@ const isGuild = (guild: any): guild is Guild => {
 }
 
 export {
-    isTransp,
+    isSport,
     isGuild
 }
