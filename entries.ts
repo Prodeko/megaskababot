@@ -1,31 +1,35 @@
 import { writeToDb } from "./db"
 import { Entry, User } from "./types"
 import { v4 } from 'uuid';
+import { isCompleteEntry, isCompleteUser } from "./validators";
+import { prisma } from "./config";
 
 const entries = new Map<number, Partial<Entry>>()
 const entryIds = new Map()
 
-const initEntryId = (chatId: number) => {
-    entryIds.set(chatId, v4())
-}
-
 const updateEntryStash = (chatId: number, update: Partial<Entry>) => {
-    const entryId = entryIds.get(chatId)
-    entries.set(entryId, {
-        ...entries.get(entryId),
+    entries.set(chatId, {
+        ...entries.get(chatId),
         ...update
     })
 }
 
-const getEntry = (chatId: number) => {
-    return  entries.get(entryIds.get(chatId))
+const getEntries = async (userId: number) => {
+    return await prisma.entry.findMany({where:{userId}})
 }
 
-const entriesToDb = () => writeToDb('entries_db.json', entries)
+const entryToDb = async (chatId: number) => {
+    const entry = entries.get(chatId)
+    if(!entry || !isCompleteEntry(entry)) throw new Error("Entry is not complete!")
+
+    await prisma.entry.create({
+        data: entry
+    })
+
+}
 
 export {
-    initEntryId,
     updateEntryStash,
-    entriesToDb,
-    getEntry
+    entryToDb,
+    getEntries  
 }

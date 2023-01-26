@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  telegramUserId   String   @id
+  telegramUserId   Int   @id
   telegramUsername String
   firstName        String
   lastName         String
@@ -24,8 +24,8 @@ model User {
 model Entry {
   id       Int    @id @default(autoincrement())
   distance Float
-  fileId  String
+  fileId   String
   sport    String
   user     User   @relation(fields: [userId], references: [telegramUserId])
-  userId   String
+  userId   Int
 }

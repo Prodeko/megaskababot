@@ -2,9 +2,9 @@ import * as dotenv from 'dotenv';
 import { Markup, Telegraf } from "telegraf";
 import { GUILDS, SPORTS, YEARS } from "./constants";
 import { savePic } from "./db";
-import { entriesToDb, initEntryId, updateEntryStash } from "./entries";
+import { entryToDb, getEntries, updateEntryStash } from "./entries";
 import { Phase } from "./types";
-import { isUser, updateUsersStash, usersToDb } from "./users";
+import { isUser, updateUsersStash, userToDb } from "./users";
 import { isGuild, isSport } from './validators';
 
 dotenv.config();
@@ -30,9 +30,15 @@ const transpKeyboard = Markup.keyboard(SPORTS.map(g =>
 )).oneTime()
 
 bot.start(async (ctx, next) => {
-    initEntryId(ctx.chat.id)
-    if(!isUser(ctx.message.from.id)) {
+    const userId = ctx.message.from.id
+    if(!(await isUser(userId))) {
         conversationPhase.set(ctx.chat.id, 'year')
+        updateUsersStash(userId, {
+            firstName: ctx.message.from.first_name,
+            lastName: ctx.message.from.last_name,
+            telegramUsername: ctx.message.from.username,
+            telegramUserId: ctx.message.from.id
+        })
         ctx.reply('Welcome to megaskaba! You have not registered previously, so I\'ll ask a few questions first')
         ctx.reply('What is your freshman year?', yearKeyboard)
     } else {
@@ -41,6 +47,10 @@ bot.start(async (ctx, next) => {
     }
 })
 
+bot.command('entries', async (ctx) => {
+    const entries = await getEntries(ctx.message.from.id)
+    ctx.reply(JSON.stringify(entries))
+})
 
 bot.on('message', (ctx: any, next) => {
     const chatId = ctx.chat?.id
@@ -62,6 +72,7 @@ bot.on('message', (ctx: any, next) => {
         case 'guild':
             if(isGuild(text)){
                 updateUsersStash(userId, {guild: text})
+                userToDb(userId)
                 ctx.reply('Your user data has now been saved! Did you ski or run/walk?', transpKeyboard)
                 conversationPhase.set(chatId, 'transp')
             } else {
@@ -98,8 +109,7 @@ bot.on('message', (ctx: any, next) => {
                 const fileId = ctx.message?.photo[3].file_id
                 savePic(ctx, fileId)
                 updateEntryStash(chatId, {fileId})
-                entriesToDb()
-                usersToDb()
+                entryToDb(chatId)
                 ctx.reply('Well done!')
             } catch {
                 ctx.reply('That did not work. Please try again')
