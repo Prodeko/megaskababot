@@ -1,11 +1,11 @@
 import * as dotenv from 'dotenv';
 import { Markup, Telegraf } from "telegraf";
-import { GUILDS, TRANSP, YEARS } from "./constants";
+import { GUILDS, SPORTS, YEARS } from "./constants";
 import { savePic } from "./db";
 import { entriesToDb, initEntryId, updateEntryStash } from "./entries";
 import { Phase } from "./types";
 import { isUser, updateUsersStash, usersToDb } from "./users";
-import { isGuild, isTransp } from './validators';
+import { isGuild, isSport } from './validators';
 
 dotenv.config();
 
@@ -25,7 +25,7 @@ const yearKeyboard = Markup.keyboard(YEARS.map(g =>
     Markup.button.callback(g, g)
 )).oneTime()
 
-const transpKeyboard = Markup.keyboard(TRANSP.map(g => 
+const transpKeyboard = Markup.keyboard(SPORTS.map(g => 
     Markup.button.callback(g, g)
 )).oneTime()
 
@@ -65,7 +65,7 @@ YEARS.forEach(year => {
     })
 })
 
-TRANSP.forEach(transp => {
+SPORTS.forEach(transp => {
     bot.action(transp, (ctx, next) => {
         const chatId = ctx.update.callback_query.message?.chat.id
         if (!chatId) return ctx.reply('No chat id?')
@@ -103,7 +103,7 @@ bot.on('message', (ctx: any, next) => {
             break
 
         case 'transp':
-            if(isTransp(text)) {
+            if(isSport(text)) {
                 updateEntryStash(chatId, {transp: text})
                 ctx.reply(`What distance (km) did you ${text}?`)
                 conversationPhase.set(chatId, 'dist')
