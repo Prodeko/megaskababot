@@ -11,19 +11,21 @@ datasource db {
 }
 
 model User {
-  telegramUserId String   @id
-  firstName      String
-  lastName       String
-  freshmanYear   Int
-  guild          String
-  createdAt      DateTime @default(now())
-  entries        Entry[]
+  telegramUserId   String   @id
+  telegramUsername String
+  firstName        String
+  lastName         String
+  freshmanYear     Int
+  guild            String
+  createdAt        DateTime @default(now())
+  entries          Entry[]
 }
 
 model Entry {
   id                Int    @id @default(autoincrement())
   distanceTravelled Float
   photoId           String
+  sport             String
   user              User   @relation(fields: [userId], references: [telegramUserId])
   userId            String
 }
