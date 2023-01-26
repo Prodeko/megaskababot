@@ -32,6 +32,7 @@ bot.start(async (ctx, next) => {
     initEntryId(ctx.chat.id)
     if(!isUser(ctx.message.from.id)) {
         conversationPhase.set(ctx.chat.id, 'year')
+        ctx.reply('Welcome to megaskaba! You have not registered previously, so I\'ll ask a few questions first')
         ctx.reply('What is your freshman year?', yearKeyboard)
     } else {
         await ctx.reply('Welcome back! What distance did you travel')

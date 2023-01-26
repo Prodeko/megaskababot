@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 const entries = new Map<number, Partial<Entry>>()
 const entryIds = new Map()
 
-function initEntryId(chatId: number) {
+const initEntryId = (chatId: number) => {
     entryIds.set(chatId, v4())
 }
 
@@ -17,7 +17,7 @@ const updateEntryStash = (chatId: number, update: Partial<Entry>) => {
     })
 } 
 
-const entriesToDb = () => writeToDb('entries.json', entries)
+const entriesToDb = () => writeToDb('entries_db.json', entries)
 
 export {
     initEntryId,

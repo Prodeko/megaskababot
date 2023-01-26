@@ -1,3 +1,5 @@
 node_modules
 .env
 photos
+entries_db.json
+users_db.json

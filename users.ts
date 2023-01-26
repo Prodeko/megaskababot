@@ -12,7 +12,7 @@ const updateUsersStash = (userId: number, update: Partial<User>) => {
     })
 } 
 
-const usersToDb = () => writeToDb('users.json', users)
+const usersToDb = () => writeToDb('users_db.json', users)
 
 export {
     isUser,
