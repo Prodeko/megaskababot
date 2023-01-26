@@ -1,7 +1,7 @@
-export type Phase = 'year' | 'guild' | 'dist' | 'proof'
+export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
 
 export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta'
-export type Transp = "foot" | "ski"
+export type Transp = "run/walk" | "ski"
 
 export interface User {
     id:  number

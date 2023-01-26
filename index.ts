@@ -5,6 +5,7 @@ import { savePic } from "./db";
 import { entriesToDb, initEntryId, updateEntryStash } from "./entries";
 import { Phase } from "./types";
 import { isUser, updateUsersStash, usersToDb } from "./users";
+import { isGuild, isTransp } from './validators';
 
 dotenv.config();
 
@@ -16,17 +17,17 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const conversationPhase = new Map<number, Phase>()
 
-const guildKeyboard = Markup.inlineKeyboard(GUILDS.map(g => 
-      Markup.button.callback(g, g)
-))
-
-const yearKeyboard = Markup.inlineKeyboard(YEARS.map(g => 
+const guildKeyboard = Markup.keyboard(GUILDS.map(g => 
     Markup.button.callback(g, g)
-))
+)).oneTime()
 
-const transpKeyboard = Markup.inlineKeyboard(TRANSP.map(g => 
+const yearKeyboard = Markup.keyboard(YEARS.map(g => 
     Markup.button.callback(g, g)
-))
+)).oneTime()
+
+const transpKeyboard = Markup.keyboard(TRANSP.map(g => 
+    Markup.button.callback(g, g)
+)).oneTime()
 
 bot.start(async (ctx, next) => {
     initEntryId(ctx.chat.id)
@@ -35,8 +36,8 @@ bot.start(async (ctx, next) => {
         ctx.reply('Welcome to megaskaba! You have not registered previously, so I\'ll ask a few questions first')
         ctx.reply('What is your freshman year?', yearKeyboard)
     } else {
-        await ctx.reply('Welcome back! What distance did you travel')
-        conversationPhase.set(ctx.chat.id, 'dist')
+        await ctx.reply('Welcome back! Did you ski or run/walk?', transpKeyboard)
+        conversationPhase.set(ctx.chat.id, 'transp')
     }
 })
 
@@ -45,12 +46,7 @@ GUILDS.forEach(guild => {
         const userId = ctx.update.callback_query.from.id
         const chatId = ctx.update.callback_query.message?.chat.id
 
-        updateUsersStash(userId, {guild})
-        ctx.reply('Your user data has now been saved! What distance did you travel?')
 
-        if (!chatId) return ctx.reply('No chat id?')
-
-        conversationPhase.set(chatId, 'dist')
         return next()
     })
 })
@@ -74,12 +70,7 @@ TRANSP.forEach(transp => {
         const chatId = ctx.update.callback_query.message?.chat.id
         if (!chatId) return ctx.reply('No chat id?')
 
-        updateEntryStash(chatId, {transp})
 
-        ctx.reply('Send proof as a picture')
-        conversationPhase.set(chatId, 'proof')
-
-        return next()
     })
 })
 
@@ -90,6 +81,37 @@ bot.on('message', (ctx: any, next) => {
     const userId = ctx.update.message.from.id
 
     switch (conversationPhase.get(chatId)) {
+        case 'year':
+            const asNum = parseFloat(text)    
+            if (isNaN(asNum)) {
+                ctx.reply('That is not a number')
+            }
+    
+            updateUsersStash(userId, {year: asNum})
+            ctx.reply('From which guild are you?', guildKeyboard)
+            conversationPhase.set(chatId, 'guild')
+            break
+
+        case 'guild':
+            if(isGuild(text)){
+                updateUsersStash(userId, {guild: text})
+                ctx.reply('Your user data has now been saved! Did you ski or run/walk?', transpKeyboard)
+                conversationPhase.set(chatId, 'transp')
+            } else {
+                ctx.reply('Please give a proper guild')
+            }
+            break
+
+        case 'transp':
+            if(isTransp(text)) {
+                updateEntryStash(chatId, {transp: text})
+                ctx.reply(`What distance (km) did you ${text}?`)
+                conversationPhase.set(chatId, 'dist')
+            } else {
+                ctx.reply('Please give a proper transportation method')
+            }
+            break
+            
         case 'dist':
             const distance = parseFloat(text)
             if (!isNaN(distance) && distance > 0 ) {
@@ -97,19 +119,24 @@ bot.on('message', (ctx: any, next) => {
                     userId,
                     distance,
                 })
-                ctx.reply("What form of transport?", transpKeyboard)
+                ctx.reply("Please give proof as a picture")
+                conversationPhase.set(chatId, 'proof')
             } else {
                 ctx.reply("Please give a positive number?")
             }
             break
         
         case 'proof':
-            const fileId = ctx.message?.photo[3].file_id
-            savePic(ctx, fileId)
-            updateEntryStash(chatId, {fileId})
-            entriesToDb()
-            usersToDb()
-            ctx.reply('Well done!')
+            try {                
+                const fileId = ctx.message?.photo[3].file_id
+                savePic(ctx, fileId)
+                updateEntryStash(chatId, {fileId})
+                entriesToDb()
+                usersToDb()
+                ctx.reply('Well done!')
+            } catch {
+                ctx.reply('That did not work. Please try again')
+            }
             break;
     }
         

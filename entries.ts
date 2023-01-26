@@ -15,12 +15,17 @@ const updateEntryStash = (chatId: number, update: Partial<Entry>) => {
         ...entries.get(entryId),
         ...update
     })
-} 
+}
+
+const getEntry = (chatId: number) => {
+    return  entries.get(entryIds.get(chatId))
+}
 
 const entriesToDb = () => writeToDb('entries_db.json', entries)
 
 export {
     initEntryId,
     updateEntryStash,
-    entriesToDb
+    entriesToDb,
+    getEntry
 }
