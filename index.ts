@@ -17,17 +17,9 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const conversationPhase = new Map<number, Phase>()
 
-const guildKeyboard = Markup.keyboard(GUILDS.map(g => 
-    Markup.button.callback(g, g)
-)).oneTime()
-
-const yearKeyboard = Markup.keyboard(YEARS.map(g => 
-    Markup.button.callback(g, g)
-)).oneTime()
-
-const transpKeyboard = Markup.keyboard(SPORTS.map(g => 
-    Markup.button.callback(g, g)
-)).oneTime()
+const guildKeyboard = Markup.keyboard(GUILDS).oneTime()
+const yearKeyboard = Markup.keyboard(YEARS).oneTime()
+const transpKeyboard = Markup.keyboard(SPORTS).oneTime()
 
 bot.start(async (ctx, next) => {
     const userId = ctx.message.from.id
