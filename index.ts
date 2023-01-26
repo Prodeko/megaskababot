@@ -41,39 +41,6 @@ bot.start(async (ctx, next) => {
     }
 })
 
-GUILDS.forEach(guild => {
-    bot.action(guild, (ctx, next) => {
-        const userId = ctx.update.callback_query.from.id
-        const chatId = ctx.update.callback_query.message?.chat.id
-
-
-        return next()
-    })
-})
-
-YEARS.forEach(year => {
-    bot.action(year, (ctx, next) => {
-        const asNum = parseFloat(year)
-        const userId = ctx.update.callback_query.from.id
-
-        if (isNaN(asNum)) throw new Error('Year is not a number!')
-
-        updateUsersStash(userId, {year: asNum})
-
-        ctx.reply('From which guild are you?', guildKeyboard)
-        return next()
-    })
-})
-
-SPORTS.forEach(transp => {
-    bot.action(transp, (ctx, next) => {
-        const chatId = ctx.update.callback_query.message?.chat.id
-        if (!chatId) return ctx.reply('No chat id?')
-
-
-    })
-})
-
 
 bot.on('message', (ctx: any, next) => {
     const chatId = ctx.chat?.id
@@ -87,7 +54,7 @@ bot.on('message', (ctx: any, next) => {
                 ctx.reply('That is not a number')
             }
     
-            updateUsersStash(userId, {year: asNum})
+            updateUsersStash(userId, {freshmanYear: asNum})
             ctx.reply('From which guild are you?', guildKeyboard)
             conversationPhase.set(chatId, 'guild')
             break
@@ -104,7 +71,7 @@ bot.on('message', (ctx: any, next) => {
 
         case 'transp':
             if(isSport(text)) {
-                updateEntryStash(chatId, {transp: text})
+                updateEntryStash(chatId, {sport: text})
                 ctx.reply(`What distance (km) did you ${text}?`)
                 conversationPhase.set(chatId, 'dist')
             } else {
