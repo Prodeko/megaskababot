@@ -112,7 +112,16 @@ bot.on('message', (ctx: any, next) => {
     return next()
 })
 
-bot.launch();
+const portStr = process.env?.PORT
+const port = portStr && !isNaN(parseInt(portStr)) ? parseInt(portStr) : undefined
+
+bot.launch({
+    webhook: {
+      // Public domain for webhook; e.g.: example.com
+      domain: process.env.WEBHOOK_DOMAIN ?? "localhost",
+      port
+    },
+  });
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));
