@@ -30,14 +30,14 @@ jobs:
 
       - name: Build and push
         run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
 
       - name: Deploy from ACR
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'megaskaba'
-          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba
+          app-name: 'megaskababot'
+          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
     
       - name: Azure logout
         run: |
