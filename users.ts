@@ -1,5 +1,4 @@
 import { prisma } from "./config"
-import { writeToDb } from "./db"
 import { User } from "./types"
 import { isCompleteUser } from "./validators"
 

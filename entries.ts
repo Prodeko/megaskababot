@@ -1,8 +1,6 @@
-import { writeToDb } from "./db"
-import { Entry, User } from "./types"
-import { v4 } from 'uuid';
-import { isCompleteEntry, isCompleteUser, isEntry } from "./validators";
 import { prisma } from "./config";
+import { Entry } from "./types";
+import { isCompleteEntry } from "./validators";
 
 const entries = new Map<number, Partial<Entry>>()
 const entryIds = new Map()
@@ -67,4 +65,4 @@ export {
     getRandomNotValidEntry,
     setEntryValidation,
     removeLatest
-}
+};

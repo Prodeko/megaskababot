@@ -1,13 +1,12 @@
 import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 import { Context, Markup, Telegraf } from "telegraf";
 import { GUILDS, SPORTS, YEARS } from "./constants";
-import { savePic } from "./db";
 import { entryToDb, getAllEntries, getEntries, getRandomNotValidEntry, removeLatest, setEntryValidation, updateEntryStash } from "./entries";
-import { Entry, EntryWithUser, Phase, User } from "./types";
+import { EntryWithUser, Phase } from "./types";
 import { isUser, updateUsersStash, userToDb } from "./users";
 import { arrayToCSV, formatEntry, formatEntryWithUser } from './utils';
 import { isEntry, isGuild, isSport } from './validators';
-import * as fs from 'fs'
 
 dotenv.config();
 
@@ -188,7 +187,6 @@ bot.on('message', (ctx: any, next) => {
         case 'proof':
             try {                
                 const fileId = ctx.message?.photo[3].file_id
-                savePic(ctx, fileId)
                 updateEntryStash(chatId, {fileId})
                 entryToDb(chatId)
                 ctx.reply('Well done!')
