@@ -2,10 +2,12 @@ import * as dotenv from 'dotenv';
 import { Markup, Telegraf } from "telegraf";
 import { GUILDS, SPORTS, YEARS } from "./constants";
 import { savePic } from "./db";
-import { entryToDb, getEntries, updateEntryStash } from "./entries";
-import { Phase } from "./types";
+import { entryToDb, getAllEntries, getEntries, getRandomEntry, updateEntryStash } from "./entries";
+import { Entry, EntryWithUser, Phase, User } from "./types";
 import { isUser, updateUsersStash, userToDb } from "./users";
-import { isGuild, isSport } from './validators';
+import { arrayToCSV, formatEntry, formatEntryWithUser } from './utils';
+import { isEntry, isGuild, isSport } from './validators';
+import * as fs from 'fs'
 
 dotenv.config();
 
@@ -16,10 +18,12 @@ if (!process.env.BOT_TOKEN) {
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const conversationPhase = new Map<number, Phase>()
+const admins = new Set()
+
 
 const guildKeyboard = Markup.keyboard(GUILDS).oneTime()
 const yearKeyboard = Markup.keyboard(YEARS).oneTime()
-const transpKeyboard = Markup.keyboard(SPORTS).oneTime()
+const transpKeyboard = Markup.keyboard(SPORTS).oneTime().resize()
 
 bot.start(async (ctx, next) => {
     const userId = ctx.message.from.id
@@ -41,7 +45,46 @@ bot.start(async (ctx, next) => {
 
 bot.command('entries', async (ctx) => {
     const entries = await getEntries(ctx.message.from.id)
-    ctx.reply(JSON.stringify(entries))
+    if(entries.length > 0){
+        const points = entries.map(e => e.distance * (e.sport === "ski" ? 1 : 1.5)).reduce((p, e) => p+e, 0)
+        ctx.reply(entries.map(formatEntry).concat([`Total points: ${points}`]).join("\n\n"))
+    } else {
+        ctx.reply("No entries yet!")
+    }
+})
+
+bot.command('help', (ctx => {
+    ctx.reply("Type /start to log in or add a new entry\n\nType /entries to get a list of your entries")
+}))
+
+bot.hears(process.env.ADMIN_PASSWORD ?? "admin", ctx => {
+    const userId = ctx.message.from.id
+    admins.add(userId)
+    ctx.reply("You are now an admin! Send /csv to get all entries in csv or /pistokoe to examine one entry")
+})
+
+bot.command("csv", async ctx => {
+    const entries = (await getAllEntries()) as any[]
+    console.log(entries[0].user)
+    const flattenedEntries = entries.map(e => ({
+        ...e,
+        ...e.user,
+        user: undefined
+    }))
+    const csv = arrayToCSV(flattenedEntries)
+    fs.writeFileSync("entries.csv", csv)
+    ctx.telegram.sendDocument(ctx.from.id, 
+    {source: fs.readFileSync("entries.csv"), filename: "entries.csv"},)
+})
+
+bot.command('pistokoe', async ctx => {
+    const entry = (await getRandomEntry())
+
+    if(!entry) return ctx.reply("No entries found")
+    if(!isEntry(entry)) ctx.reply("Found entry is not an entry?")
+
+    ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
+    ctx.replyWithPhoto(entry?.fileId)
 })
 
 bot.on('message', (ctx: any, next) => {
@@ -115,13 +158,7 @@ bot.on('message', (ctx: any, next) => {
 const portStr = process.env?.PORT
 const port = portStr && !isNaN(parseInt(portStr)) ? parseInt(portStr) : undefined
 
-bot.launch({
-    webhook: {
-      // Public domain for webhook; e.g.: example.com
-      domain: process.env.WEBHOOK_DOMAIN ?? "localhost",
-      port
-    },
-  });
+bot.launch();
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));

@@ -28,3 +28,5 @@ export type Entry = EntryWithoutId & {
     id: number,
     createdAt: Date
 }
+
+export type EntryWithUser = Entry & {user: User}

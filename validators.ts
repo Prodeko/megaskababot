@@ -25,9 +25,19 @@ const isCompleteEntry = (entry: Partial<Entry>): entry is EntryWithoutId => {
     isSport(entry?.sport)
 }
 
+const isEntry = (entry: any): entry is Entry => {
+    return typeof entry?.distance === "number" &&
+    typeof entry?.fileId === "string" &&
+    typeof entry?.userId === "number" &&
+    typeof entry?.id === "number" &&
+    typeof entry?.createdAt === "object" &&
+    isSport(entry?.sport)
+}
+
 export {
     isSport,
     isGuild,
     isCompleteUser,
-    isCompleteEntry
+    isCompleteEntry,
+    isEntry
 }
