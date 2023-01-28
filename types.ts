@@ -1,33 +1,32 @@
 export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
 
 export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta'
-export type Sport = "run/walk" | "ski"
+export type Sport = 'run/walk' | 'ski'
 
 export type UserWithoutTime = {
-    telegramUserId:  number,
-    telegramUsername: string,
-    firstName: string,
-    lastName: string,
-    freshmanYear: number,
-    guild: Guild
+  telegramUserId: number
+  telegramUsername: string
+  firstName: string
+  lastName: string
+  freshmanYear: number
+  guild: Guild
 }
 
 export type User = UserWithoutTime & {
-    createdAt: Date
+  createdAt: Date
 }
 
-
 export type EntryWithoutId = {
-    distance: number,
-    fileId: string,
-    sport: Sport,
-    userId: number
+  distance: number
+  fileId: string
+  sport: Sport
+  userId: number
 }
 
 export type Entry = EntryWithoutId & {
-    id: number,
-    createdAt: Date,
-    valid: boolean,
+  id: number
+  createdAt: Date
+  valid: boolean
 }
 
-export type EntryWithUser = Entry & {user: User}
+export type EntryWithUser = Entry & { user: User }
