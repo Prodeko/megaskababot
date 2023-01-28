@@ -1,0 +1,44 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Production'
+      url: 'https://megaskababot.azurewebsites.net/'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Docker login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push
+        run: |
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba
+
+      - name: Deploy from ACR
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'megaskaba'
+          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba
+    
+      - name: Azure logout
+        run: |
+          az logout
