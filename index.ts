@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import { Context, Markup, Telegraf } from "telegraf";
 import { GUILDS, SPORTS, YEARS } from "./constants";
 import { savePic } from "./db";
-import { entryToDb, getAllEntries, getEntries, getRandomNotValidEntry, setEntryValidation, updateEntryStash } from "./entries";
+import { entryToDb, getAllEntries, getEntries, getRandomNotValidEntry, removeLatest, setEntryValidation, updateEntryStash } from "./entries";
 import { Entry, EntryWithUser, Phase, User } from "./types";
 import { isUser, updateUsersStash, userToDb } from "./users";
 import { arrayToCSV, formatEntry, formatEntryWithUser } from './utils';
@@ -58,6 +58,15 @@ bot.command('entries', async (ctx) => {
 bot.command('help', (ctx => {
     ctx.reply("Type /start to log in or add a new entry\n\nType /entries to get a list of your entries")
 }))
+
+bot.command('removeLatest', async (ctx) => {
+    const result = await removeLatest(ctx.from.id)
+    if(result) {
+        ctx.reply("Removed latest entry!")
+    } else {
+        ctx.reply("No entries to remove")
+    }
+})
 
 bot.hears(process.env.ADMIN_PASSWORD ?? "admin", ctx => {
     const userId = ctx.message.from.id

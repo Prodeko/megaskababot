@@ -36,6 +36,19 @@ const setEntryValidation = async (entryId: number, valid: boolean) => {
     await prisma.entry.update({where: {id: entryId}, data: {valid}})
 }
 
+const removeLatest = async (userId: number) => {
+    const latest = await prisma.entry.findFirst({select: {id: true}, where: {userId}, orderBy: {createdAt: "desc"}})
+
+    if(!latest) return false
+
+    await prisma.entry.delete({
+        where: {
+            id: latest.id
+        }})
+
+    return true
+}
+
 const entryToDb = async (chatId: number) => {
     const entry = entries.get(chatId)
     if(!entry || !isCompleteEntry(entry)) throw new Error("Entry is not complete!")
@@ -52,5 +65,6 @@ export {
     getAllEntries,
     getEntries,
     getRandomNotValidEntry,
-    setEntryValidation
+    setEntryValidation,
+    removeLatest
 }
