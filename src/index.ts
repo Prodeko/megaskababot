@@ -34,10 +34,15 @@ bot.hears('Stop validation', stopValidation)
 // Message handling
 bot.on('message', message)
 
-/* const portStr = process.env?.PORT
-const port = portStr && !isNaN(parseInt(portStr)) ? parseInt(portStr) : undefined
- */
-bot.launch()
+const launchOptions = process.env.NODE_ENV === 'production'
+  ? {
+    webhook: {
+      domain: process.env.DOMAIN!,
+      port: parseInt(process.env.PORT!),
+    }
+  } : undefined
+
+bot.launch(launchOptions)
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
