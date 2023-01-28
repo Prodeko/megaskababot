@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv'
 import { Telegraf } from 'telegraf'
+import express from 'express'
 
 import { adminLogin, csv, invalid, pistokoe, stopValidation, valid } from './commands/admin'
 import entries from './commands/entries'
@@ -9,12 +10,21 @@ import removeLatestCommand from './commands/removeLatest'
 import start from './commands/start'
 
 dotenv.config()
+const port = parseInt(process.env.PORT!)
+
+const app = express();
 
 if (!process.env.BOT_TOKEN) {
   throw new Error('Bot token not defined!')
 }
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
+
+// Workaround to avoid issue with TSconfig
+const createWebhookListener = async () => {
+  app.use(await bot.createWebhook({domain: process.env.DOMAIN!}))
+}
+createWebhookListener()
 
 bot.start(start)
 
@@ -34,15 +44,14 @@ bot.hears('Stop validation', stopValidation)
 // Message handling
 bot.on('message', message)
 
-const launchOptions = process.env.NODE_ENV === 'production'
-  ? {
-    webhook: {
-      domain: process.env.DOMAIN!,
-      port: parseInt(process.env.PORT!),
-    }
-  } : undefined
+// bot.launch(launchOptions)
 
-bot.launch(launchOptions)
+// Necessary because of Azure App Service health check on startup
+app.get('/', (_req,res) => {
+  res.send('Kovaa tulee')
+})
+
+app.listen(port, () => console.log('Running on port ', port))
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
