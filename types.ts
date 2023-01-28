@@ -21,9 +21,10 @@ export type EntryWithoutId = {
     distance: number,
     fileId: string,
     sport: Sport,
-    userId: number,
+    userId: number
 }
 
 export type Entry = EntryWithoutId & {
     id: number,
+    createdAt: Date
 }

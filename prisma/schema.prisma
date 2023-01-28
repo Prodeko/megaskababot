@@ -28,4 +28,5 @@ model Entry {
   sport    String
   user     User   @relation(fields: [userId], references: [telegramUserId])
   userId   Int
+  createdAt DateTime @default(now())
 }

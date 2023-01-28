@@ -15,7 +15,7 @@ const updateEntryStash = (chatId: number, update: Partial<Entry>) => {
 }
 
 const getEntries = async (userId: number) => {
-    return await prisma.entry.findMany({where:{userId}})
+    return (await prisma.entry.findMany({where:{userId}})) as Entry[]
 }
 
 const entryToDb = async (chatId: number) => {
