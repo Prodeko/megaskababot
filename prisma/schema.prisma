@@ -22,11 +22,12 @@ model User {
 }
 
 model Entry {
-  id       Int    @id @default(autoincrement())
-  distance Float
-  fileId   String
-  sport    String
-  user     User   @relation(fields: [userId], references: [telegramUserId])
-  userId   Int
+  id        Int      @id @default(autoincrement())
+  distance  Float
+  fileId    String
+  sport     String
+  user      User     @relation(fields: [userId], references: [telegramUserId])
+  userId    Int
   createdAt DateTime @default(now())
+  valid     Boolean?
 }

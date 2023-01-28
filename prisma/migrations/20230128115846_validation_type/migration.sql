@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Entry" ALTER COLUMN "valid" DROP NOT NULL,
+ALTER COLUMN "valid" DROP DEFAULT;

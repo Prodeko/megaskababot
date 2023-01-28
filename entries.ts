@@ -22,11 +22,18 @@ const getAllEntries = async () => {
     return (await prisma.entry.findMany({include: {user: true}}))
 }
 
-const getRandomEntry = async () => {
+const getRandomNotValidEntry = async () => {
     const count = await prisma.entry.count({})
     const randomId = Math.ceil(Math.random() * count)
-    const entry = await prisma.entry.findFirst({where: {id: randomId}, include: {user: true}})
+    console.log(count)
+    const entry = await prisma.entry.findFirst({where: {
+       valid: null
+    }, include: {user: true}})
     return entry
+}
+
+const setEntryValidation = async (entryId: number, valid: boolean) => {
+    await prisma.entry.update({where: {id: entryId}, data: {valid}})
 }
 
 const entryToDb = async (chatId: number) => {
@@ -44,5 +51,6 @@ export {
     entryToDb,
     getAllEntries,
     getEntries,
-    getRandomEntry
+    getRandomNotValidEntry,
+    setEntryValidation
 }
