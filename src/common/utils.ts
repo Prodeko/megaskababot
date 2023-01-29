@@ -7,7 +7,7 @@ export const arrayToCSV = <T extends { [k: string]: unknown }>(
 }
 
 export const formatEntry = (e: Entry) =>
-  `Entry ${e.id} at ${e?.createdAt.toLocaleString('fi-FI')} \nDistance: ${e.distance} \nSport: ${
+  `${e?.createdAt.toLocaleString('fi-FI', { timeStyle: "short", dateStyle: "short"})} \nDistance: ${e.distance} km \nSport: ${
     e.sport
   }`
 
