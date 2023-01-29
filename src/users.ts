@@ -4,6 +4,7 @@ import { isCompleteUser } from './common/validators'
 
 const users = new Map<number, Partial<User>>()
 
+// TODO rename this
 const isUser = async (userId: number) => {
   const user = await prisma.user.findUnique({ where: { telegramUserId: userId } })
   return !!user

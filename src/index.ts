@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv'
 import express from 'express'
 import { Telegraf } from 'telegraf'
+import { onPrivacyRejected, onPrivacyAccepted } from './commands/action/privacy'
 
 import { adminLogin, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, stopValidation, valid } from './commands/admin'
 import entries from './commands/entries'
@@ -9,25 +10,15 @@ import help from './commands/help'
 import message from './commands/message'
 import removeLatestCommand from './commands/removeLatest'
 import start from './commands/start'
+import launchBotDependingOnNodeEnv from './launchBotDependingOnNodeEnv'
 
 dotenv.config()
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const port = parseInt(process.env.PORT!)
-
-const app = express();
 
 if (!process.env.BOT_TOKEN) {
   throw new Error('Bot token not defined!')
 }
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
-
-// Workaround to avoid issue with TSconfig
-const createWebhookListener = async () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  app.use(await bot.createWebhook({domain: process.env.DOMAIN!}))
-}
-createWebhookListener()
 
 bot.start(start)
 
@@ -54,16 +45,12 @@ bot.action('cancel', cancelRemove)
 // Message handling
 bot.on('message', message)
 
-//bot.launch(launchOptions)
+// Inline keyboard handling
+bot.action('accepted', onPrivacyAccepted)
+bot.action('rejected', onPrivacyRejected)
 
-// Necessary because of Azure App Service health check on startup
- app.get('/', (_req,res) => {
-   res.send('Kovaa tulee')
-})
-
-app.listen(port, () => console.log('Running on port ', port))
-
-bot.launch()
+// Launch bot 
+launchBotDependingOnNodeEnv(bot)
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
