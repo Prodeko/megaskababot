@@ -26,7 +26,7 @@ const performPistokoe = async (ctx: CommandContext) => {
 
 export const notValidated = async (ctx: CommandContext) => {
   if (!admins.has(ctx.from.id)) return
-  
+
   const notValidated = await amountToValidate()
   ctx.reply(`Amount of entries not validated: ${notValidated}`)
 }
@@ -65,7 +65,7 @@ export const adminLogin = (ctx: CommandContext) => {
   const userId = ctx.message.from.id
   admins.add(userId)
   ctx.reply(
-    'You are now an admin! Send /csv to get all entries in csv or /pistokoe to examine one entry'
+    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [id] - remove one entry \n/numtovalidate - number of entries not yet validated'
   )
 }
 
