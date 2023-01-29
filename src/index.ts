@@ -33,7 +33,7 @@ bot.start(start)
 // Standard commands
 bot.command('entries', entries)
 bot.command('help', help)
-bot.command('removeLatest', removeLatestCommand)
+bot.command('removelatest', removeLatestCommand)
 
 // Admin commands
 bot.hears(process.env.ADMIN_PASSWORD ?? 'admin', adminLogin)
