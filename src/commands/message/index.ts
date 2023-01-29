@@ -44,7 +44,7 @@ const message = (ctx: any, next: () => Promise<void>) => {
       break
 
     case 'dist':
-      const distance = parseFloat(text)
+      const distance = parseFloat(text.replace(",", "."))
       if (!isNaN(distance) && distance > 0) {
         updateEntryStash(chatId, {
           userId,
@@ -53,7 +53,7 @@ const message = (ctx: any, next: () => Promise<void>) => {
         ctx.reply('Please give proof as a picture')
         conversationPhase.set(chatId, 'proof')
       } else {
-        ctx.reply('Please give a positive number?')
+        ctx.reply('Please give a positive number')
       }
       break
 
