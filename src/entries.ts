@@ -58,6 +58,7 @@ const entryToDb = async (chatId: number) => {
   await prisma.entry.create({
     data: entry,
   })
+  entries.delete(chatId)
 }
 
 export {

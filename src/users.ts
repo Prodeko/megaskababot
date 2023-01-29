@@ -26,6 +26,7 @@ const userToDb = async (userId: number) => {
   await prisma.user.create({
     data: user,
   })
+  users.delete(userId)
 }
 
 export { isUser, updateUsersStash, userToDb }

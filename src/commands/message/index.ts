@@ -62,6 +62,7 @@ const message = (ctx: any, next: () => Promise<void>) => {
         const fileId = ctx.message?.photo[3].file_id
         updateEntryStash(chatId, { fileId })
         entryToDb(chatId)
+        conversationPhase.delete(chatId)
         ctx.reply('Well done!')
       } catch {
         ctx.reply('That did not work. Please try again')
