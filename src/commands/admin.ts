@@ -2,11 +2,12 @@ import * as fs from 'fs';
 import { CommandContext, EntryWithUser } from '../common/types';
 import { arrayToCSV, formatEntryWithUser } from "../common/utils";
 import { isEntry } from '../common/validators';
-import { getAllEntries, getRandomNotValidEntry, setEntryValidation } from "../entries";
-import { validationKeyboard } from '../keyboards';
+import { amountToValidate, getAllEntries, getEntry, getRandomNotValidEntry, removeEntry, setEntryValidation } from "../entries";
+import { confirmationKeyboard, validationKeyboard } from '../keyboards';
 
 const admins = new Set()
 const underValidation = new Map<number, number>()
+const removeConsideration = new Map<number, number>()
 
 const performPistokoe = async (ctx: CommandContext) => {
   const entry = await getRandomNotValidEntry()
@@ -18,8 +19,16 @@ const performPistokoe = async (ctx: CommandContext) => {
 
   underValidation.set(chatId, entry.id)
 
-  ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
-  ctx.replyWithPhoto(entry?.fileId, validationKeyboard)
+  await notValidated(ctx)
+  await ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
+  await ctx.replyWithPhoto(entry?.fileId, validationKeyboard)
+}
+
+export const notValidated = async (ctx: CommandContext) => {
+  if (!admins.has(ctx.from.id)) return
+
+  const notValidated = await amountToValidate()
+  ctx.reply(`Amount of entries not validated: ${notValidated}`)
 }
 
 export const pistokoe = async (ctx: CommandContext) => {
@@ -30,6 +39,8 @@ export const pistokoe = async (ctx: CommandContext) => {
 
 
 export const invalid = async (ctx: CommandContext) => {
+  if (!admins.has(ctx.from.id)) return
+
   const entryId = underValidation.get(ctx.chat.id)
   if (!entryId) return
 
@@ -40,6 +51,8 @@ export const invalid = async (ctx: CommandContext) => {
 }
 
 export const valid = async (ctx: CommandContext) => {
+  if (!admins.has(ctx.from.id)) return
+
   const entryId = underValidation.get(ctx.chat.id)
   if (!entryId) return
 
@@ -52,8 +65,52 @@ export const adminLogin = (ctx: CommandContext) => {
   const userId = ctx.message.from.id
   admins.add(userId)
   ctx.reply(
-    'You are now an admin! Send /csv to get all entries in csv or /pistokoe to examine one entry'
+    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [id] - remove one entry \n/numtovalidate - number of entries not yet validated'
   )
+}
+
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const confirmedRemove = (ctx: any) => {
+  if (!admins.has(ctx.from.id)) return
+
+  const entryId = removeConsideration.get(ctx.chat.id)
+  if(!entryId) return
+  removeEntry(entryId)
+  removeConsideration.delete(ctx.chat.id)
+  
+  ctx.reply("Removed entry!")
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const cancelRemove = (ctx: any) => {
+  if (!admins.has(ctx.from.id)) return
+
+  removeConsideration.delete(ctx.chat.id)
+  ctx.reply("Canceled")
+}
+
+export const remove = async (ctx: CommandContext) => {
+  if (!admins.has(ctx.from.id)) return
+
+  const args = ctx.message.text.split(" ")
+  if(args.length <= 1) return ctx.reply("Please give the id to remove as an argument (eg. /remove 10)")
+
+  const idToRemove = parseInt(args[1])
+
+  if(isNaN(idToRemove)) return ctx.reply("Given id is not a number!")
+
+  try {
+    const entry = await getEntry(idToRemove)
+    removeConsideration.set(ctx.chat.id, entry.id)
+    await ctx.replyWithPhoto(entry.fileId)
+    await ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
+    await ctx.reply("Do you want to remove this entry?", confirmationKeyboard)
+  } catch (e) {
+    console.error(e)
+    ctx.reply("No such entry")
+  }
 }
 
 export const csv = async (ctx: CommandContext) => { 

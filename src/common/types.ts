@@ -1,5 +1,5 @@
-import { NarrowedContext, Context } from "telegraf"
-import { Update, Message } from "telegraf/typings/core/types/typegram"
+import { NarrowedContext, Context, Middleware } from "telegraf"
+import { Update, Message, CallbackQuery } from "telegraf/typings/core/types/typegram"
 
 export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
 
@@ -39,3 +39,7 @@ export type CommandContext = NarrowedContext<Context<Update>, {
   message: Update.New & Update.NonChannel & Message.TextMessage;
   update_id: number;
 }>
+
+export type ActionContext = Middleware<NarrowedContext<Context<Update> & {
+  match: RegExpExecArray;
+}, Update.CallbackQueryUpdate<CallbackQuery>>>
