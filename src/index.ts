@@ -8,6 +8,7 @@ import help from './commands/help'
 import message from './commands/message'
 import removeLatestCommand from './commands/removeLatest'
 import start from './commands/start'
+import { amountToValidate } from './entries'
 
 dotenv.config()
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -39,6 +40,7 @@ bot.command('removelatest', removeLatestCommand)
 bot.hears(process.env.ADMIN_PASSWORD ?? 'admin', adminLogin)
 bot.command('csv', csv)
 bot.command('pistokoe', pistokoe)
+bot.command('numtovalidate', amountToValidate)
 bot.hears('Invalid', invalid)
 bot.hears('Valid', valid)
 bot.hears('Stop validation', stopValidation)

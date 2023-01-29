@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { CommandContext, EntryWithUser } from '../common/types';
 import { arrayToCSV, formatEntryWithUser } from "../common/utils";
 import { isEntry } from '../common/validators';
-import { getAllEntries, getRandomNotValidEntry, setEntryValidation } from "../entries";
+import { amountToValidate, getAllEntries, getRandomNotValidEntry, setEntryValidation } from "../entries";
 import { validationKeyboard } from '../keyboards';
 
 const admins = new Set()
@@ -18,8 +18,14 @@ const performPistokoe = async (ctx: CommandContext) => {
 
   underValidation.set(chatId, entry.id)
 
-  ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
-  ctx.replyWithPhoto(entry?.fileId, validationKeyboard)
+  await notValidated(ctx)
+  await ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
+  await ctx.replyWithPhoto(entry?.fileId, validationKeyboard)
+}
+
+export const notValidated = async (ctx: CommandContext) => {
+  const notValidated = await amountToValidate()
+  ctx.reply(`Amount of entries not validated: ${notValidated}`)
 }
 
 export const pistokoe = async (ctx: CommandContext) => {

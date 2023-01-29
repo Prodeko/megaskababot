@@ -51,6 +51,8 @@ const removeLatest = async (userId: number) => {
   return true
 }
 
+const amountToValidate = () => prisma.entry.count({ where: { valid: null } })
+
 const entryToDb = async (chatId: number) => {
   const entry = entries.get(chatId)
   if (!entry || !isCompleteEntry(entry)) throw new Error('Entry is not complete!')
@@ -69,4 +71,5 @@ export {
   getRandomNotValidEntry,
   setEntryValidation,
   removeLatest,
+  amountToValidate
 }
