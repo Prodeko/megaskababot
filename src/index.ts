@@ -1,7 +1,6 @@
 import * as dotenv from 'dotenv'
-import express from 'express'
 import { Telegraf } from 'telegraf'
-import { onPrivacyRejected, onPrivacyAccepted } from './commands/action/privacy'
+import { onPrivacyAccepted, onPrivacyRejected } from './commands/action/privacy'
 
 import { adminLogin, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, stopValidation, valid } from './commands/admin'
 import entries from './commands/entries'

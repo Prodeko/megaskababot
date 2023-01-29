@@ -12,7 +12,7 @@ function launchLongPollBot(bot: Telegraf<Context<Update>>) {
 /**
  * Launch bot in webhook (production) mode
  */
-function launchWebhookBot(bot: Telegraf<Context<Update>>) {
+async function launchWebhookBot(bot: Telegraf<Context<Update>>) {
   const port = parseInt(process.env.PORT!)
 
   // Necessary because of Azure App Service health check on startup
@@ -27,7 +27,7 @@ function launchWebhookBot(bot: Telegraf<Context<Update>>) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     app.use(await bot.createWebhook({ domain: process.env.DOMAIN! }))
   }
-  createWebhookListener()
+  await createWebhookListener()
 
   app.listen(port, () => console.log('Running on port ', port))
 }
@@ -37,12 +37,12 @@ function launchWebhookBot(bot: Telegraf<Context<Update>>) {
  * Launches the bot in webhook mode if NODE_ENV is "production", or long polling (development) mode otherwise.
  * If webhook mode is used, the bot is also wrapped in a dummy Express API so it can be run in an Azure App Service.
  */
-export default function launchBotBasedOnNodeEnv(bot: Telegraf<Context<Update>>) {
+export default async function launchBotBasedOnNodeEnv(bot: Telegraf<Context<Update>>) {
   const useWebhook = process.env.NODE_ENV === "production"
 
   if (useWebhook) {
     console.log("Launching bot in webhook mode")
-    launchWebhookBot(bot)
+    await launchWebhookBot(bot)
   } else {
     console.log("Launching bot in long polling mode")
     launchLongPollBot(bot)
