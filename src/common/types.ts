@@ -5,6 +5,7 @@ export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
 
 export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta' | 'tietokilta'
 export type Sport = 'run/walk' | 'ski'
+export type Validation = 'Valid' | 'Invalid' | 'Stop validation'
 
 export type UserWithoutTime = {
   telegramUserId: number

@@ -10,6 +10,7 @@ import removeLatestCommand from './commands/removeLatest'
 import start from './commands/start'
 
 dotenv.config()
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const port = parseInt(process.env.PORT!)
 
 const app = express();
@@ -22,6 +23,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 
 // Workaround to avoid issue with TSconfig
 const createWebhookListener = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   app.use(await bot.createWebhook({domain: process.env.DOMAIN!}))
 }
 createWebhookListener()
@@ -31,7 +33,7 @@ bot.start(start)
 // Standard commands
 bot.command('entries', entries)
 bot.command('help', help)
-bot.command('removeLatest', removeLatestCommand)
+bot.command('removelatest', removeLatestCommand)
 
 // Admin commands
 bot.hears(process.env.ADMIN_PASSWORD ?? 'admin', adminLogin)
