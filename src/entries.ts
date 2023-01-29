@@ -29,6 +29,14 @@ const getRandomNotValidEntry = async () => {
   return entry
 }
 
+const getEntry = (id: number) => prisma.entry.findUniqueOrThrow({ where: { id }, include: {user: true}})
+
+const removeEntry = (id: number ) =>  prisma.entry.delete({
+  where: {
+    id,
+  },
+})
+
 const setEntryValidation = async (entryId: number, valid: boolean) => {
   await prisma.entry.update({ where: { id: entryId }, data: { valid } })
 }
@@ -42,11 +50,7 @@ const removeLatest = async (userId: number) => {
 
   if (!latest) return false
 
-  await prisma.entry.delete({
-    where: {
-      id: latest.id,
-    },
-  })
+  await removeEntry(latest.id)
 
   return true
 }
@@ -71,5 +75,7 @@ export {
   getRandomNotValidEntry,
   setEntryValidation,
   removeLatest,
-  amountToValidate
+  amountToValidate,
+  getEntry,
+  removeEntry
 }
