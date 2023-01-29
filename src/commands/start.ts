@@ -1,7 +1,8 @@
 import { CommandContext } from "../common/types"
 import { conversationPhase } from "../common/variables"
-import { transpKeyboard, yearKeyboard } from "../keyboards"
+import { yearKeyboard } from "../keyboards"
 import { isUser, updateUsersStash } from "../users"
+import entry from "./entry"
 
 const start = async (ctx: CommandContext) => {
   const userId = ctx.message.from.id
@@ -18,8 +19,7 @@ const start = async (ctx: CommandContext) => {
     )
     ctx.reply('What is your freshman year?', yearKeyboard)
   } else {
-    await ctx.reply('Welcome back! Did you ski or run/walk?', transpKeyboard)
-    conversationPhase.set(ctx.chat.id, 'transp')
+    await entry(ctx)
   }
 }
 
