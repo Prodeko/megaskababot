@@ -7,7 +7,6 @@ import { Update } from 'telegraf/typings/core/types/typegram';
  */
 function launchLongPollBot(bot: Telegraf<Context<Update>>) {
   bot.launch()
-  return
 }
 
 /**

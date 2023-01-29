@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { NarrowedContext, Context, Middleware } from "telegraf"
+=======
+import { NarrowedContext, Context } from "telegraf"
+>>>>>>> 9f1b260 (Force user to accept privacy policy to start)
 import { Update, Message, CallbackQuery } from "telegraf/typings/core/types/typegram"
 
 export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
@@ -40,6 +44,9 @@ export type CommandContext = NarrowedContext<Context<Update>, {
   update_id: number;
 }>
 
-export type ActionContext = Middleware<NarrowedContext<Context<Update> & {
+export type ActionContext = NarrowedContext<Context<Update> & {
   match: RegExpExecArray;
-}, Update.CallbackQueryUpdate<CallbackQuery>>>
+}, Update.CallbackQueryUpdate<CallbackQuery>>
+
+
+export type PrivacyState = 'accepted' | 'rejected'
