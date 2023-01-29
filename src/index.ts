@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv'
+import express from 'express'
 import { Telegraf } from 'telegraf'
 
 import { adminLogin, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, stopValidation, valid } from './commands/admin'
@@ -11,9 +12,9 @@ import start from './commands/start'
 
 dotenv.config()
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-// const port = parseInt(process.env.PORT!)
+const port = parseInt(process.env.PORT!)
 
-// const app = express();
+const app = express();
 
 if (!process.env.BOT_TOKEN) {
   throw new Error('Bot token not defined!')
@@ -21,12 +22,12 @@ if (!process.env.BOT_TOKEN) {
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
-// // Workaround to avoid issue with TSconfig
-// const createWebhookListener = async () => {
-//   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//   app.use(await bot.createWebhook({domain: process.env.DOMAIN!}))
-// }
-// createWebhookListener()
+// Workaround to avoid issue with TSconfig
+const createWebhookListener = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  app.use(await bot.createWebhook({domain: process.env.DOMAIN!}))
+}
+createWebhookListener()
 
 bot.start(start)
 
@@ -53,14 +54,14 @@ bot.action('cancel', cancelRemove)
 // Message handling
 bot.on('message', message)
 
-// bot.launch(launchOptions)
+//bot.launch(launchOptions)
 
 // Necessary because of Azure App Service health check on startup
-// app.get('/', (_req,res) => {
-//   res.send('Kovaa tulee')
-// })
+ app.get('/', (_req,res) => {
+   res.send('Kovaa tulee')
+})
 
-// app.listen(port, () => console.log('Running on port ', port))
+app.listen(port, () => console.log('Running on port ', port))
 
 bot.launch()
 

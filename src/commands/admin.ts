@@ -72,12 +72,12 @@ export const adminLogin = (ctx: CommandContext) => {
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const confirmedRemove = (ctx: any) => {
+export const confirmedRemove = async (ctx: any) => {
   if (!admins.has(ctx.from.id)) return
 
   const entryId = removeConsideration.get(ctx.chat.id)
   if(!entryId) return
-  removeEntry(entryId)
+  await removeEntry(entryId)
   removeConsideration.delete(ctx.chat.id)
   
   ctx.reply("Removed entry!")
