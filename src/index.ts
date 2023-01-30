@@ -54,6 +54,12 @@ bot.action('stopvalidation', stopValidation)
 bot.action('remove', confirmedRemove)
 bot.action('cancel', cancelRemove)
 
+bot.action('entry', entry)
+bot.action('entries', entries)
+bot.action('removelatest', removeLatestCommand)
+bot.action('help', help)
+
+
 // Message handling
 bot.on('message', message)
 
@@ -63,9 +69,9 @@ bot.action('rejected', onPrivacyRejected)
 
 
 // reset keyboard
-bot.use((ctx, next) => {
+bot.use(async (ctx, next) => {
   try {
-    ctx.editMessageReplyMarkup(undefined)
+    await ctx.editMessageReplyMarkup(undefined)
   } finally {
     return next()
   }

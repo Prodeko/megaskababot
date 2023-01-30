@@ -1,8 +1,10 @@
 import { HELP_TEXT } from "../common/constants"
-import { CommandContext } from "../common/types"
+import { ActionContext, CommandContext } from "../common/types"
+import { commandsKeyboard } from "../keyboards"
 
-const help = (ctx: CommandContext) => {
-  ctx.replyWithHTML(HELP_TEXT)
+const help = async (ctx: CommandContext | ActionContext) => {
+    await ctx.editMessageReplyMarkup(undefined)
+    ctx.replyWithHTML(HELP_TEXT, commandsKeyboard)
 }
 
 export default help

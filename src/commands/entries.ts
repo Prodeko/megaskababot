@@ -1,10 +1,12 @@
 import { COEFFICIENTS } from "../common/constants"
-import { CommandContext } from "../common/types"
+import { ActionContext, CommandContext } from "../common/types"
 import { formatEntry } from "../common/utils"
 import { getEntries } from "../entries"
+import { commandsKeyboard } from "../keyboards"
 
-const entries = async (ctx: CommandContext) => {
-  const entries = await getEntries(ctx.message.from.id)
+const entries = async (ctx: CommandContext | ActionContext) => {
+  const entries = await getEntries(ctx!.from!.id)
+  await ctx.editMessageReplyMarkup(undefined)
   if (entries.length > 0) {
     const points = entries
       .map(e => e.distance * COEFFICIENTS[e.sport])
@@ -13,10 +15,10 @@ const entries = async (ctx: CommandContext) => {
       entries
         .map(formatEntry)
         .concat([`Total points: ${points}`])
-        .join('\n\n')
+        .join('\n\n'), commandsKeyboard
     )
   } else {
-    ctx.reply('No entries yet!')
+    ctx.reply('No entries yet!', commandsKeyboard)
   }
 }
 

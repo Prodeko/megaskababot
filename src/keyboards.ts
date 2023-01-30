@@ -22,3 +22,11 @@ export const validationKeyboard = Markup.inlineKeyboard([
   [Markup.button.callback('Valid ✅', 'valid'), Markup.button.callback('Invalid ❌', 'invalid')],
   [Markup.button.callback('Stop validation 🛑', 'stopvalidation')],
 ])
+
+
+export const commandsKeyboard = Markup.inlineKeyboard([
+  [{text: 'New entry 🆕', callback_data: 'entry'},
+  {text: 'Previous entries 📈', callback_data: 'entries'}],[
+  {text: 'Remove latest 🗑️', callback_data: 'removelatest'},
+  {text: 'Help 💡', callback_data: 'help'},]
+])
