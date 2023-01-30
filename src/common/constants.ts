@@ -17,8 +17,12 @@ export const PRIVACY_REJECTED_MESSAGE = "Sorry, you need to accept the privacy p
 
 export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta']
 export const YEARS = [...Array.from(Array(54).keys()).map(k => `${1970 + k}`)].reverse()
-export const SPORTS: Sport[] = ["run/walk", "ski"]
-
+export const SPORTS: Sport[] = ["run/walk", "ski", "skating"]
+export const COEFFICIENTS: Record<Sport, number> = {
+  "run/walk": 1.75,
+  "skating": 0.5,
+  "ski": 1
+}
 export const STICKERS = [
   'CAACAgQAAxkBAAN9Y9fD79mLlcT-b1IuCwFcibPjfMgAAqEAA3YD_QnFW3eOjjP74C0E',
   'CAACAgQAAxkBAAN-Y9fD7-av5d8U1rXPT3vZ2MEDJxMAAqIAA3YD_Qkit76i7qnQgy0E',

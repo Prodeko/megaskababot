@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-import { NarrowedContext, Context, Middleware } from "telegraf"
-=======
 import { NarrowedContext, Context } from "telegraf"
->>>>>>> 9f1b260 (Force user to accept privacy policy to start)
 import { Update, Message, CallbackQuery } from "telegraf/typings/core/types/typegram"
 
 export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
-
 export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta' | 'tietokilta'
-export type Sport = 'run/walk' | 'ski'
+export type Sport = 'run/walk' | 'ski' | 'skating'
 export type Validation = 'Valid' | 'Invalid' | 'Stop validation'
 
 export type UserWithoutTime = {
