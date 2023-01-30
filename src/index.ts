@@ -34,9 +34,9 @@ bot.command('pistokoe', pistokoe)
 bot.command('numtovalidate', notValidated)
 bot.command('remove', remove)
 
-bot.action('Invalid', invalid)
-bot.action('Valid', valid)
-bot.action('Stop validation', stopValidation)
+bot.action('invalid', invalid)
+bot.action('valid', valid)
+bot.action('stopvalidation', stopValidation)
 
 bot.action('remove', confirmedRemove)
 bot.action('cancel', cancelRemove)
