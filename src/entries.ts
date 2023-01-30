@@ -69,9 +69,22 @@ const entryToDb = async (chatId: number) => {
   entries.delete(chatId)
 }
 
-const fileIdsForUser = async (userId: number) =>
+const fileIdsForUserId = async (userId: number) =>
   prisma.entry.findMany({ select: { fileId: true }, where: { userId } })
 
+const fileIdsForUsername = async (username: string) => {
+  const result = await prisma.user.findFirst({
+    select: { telegramUserId: true },
+    where: { telegramUsername: username },
+  })
+
+  if (result) {
+    return await fileIdsForUserId(result.telegramUserId)
+  } else {
+    return null
+  }
+
+}
 export {
   updateEntryStash,
   entryToDb,
@@ -83,5 +96,6 @@ export {
   amountToValidate,
   getEntry,
   removeEntry,
-  fileIdsForUser,
+  fileIdsForUserId,
+  fileIdsForUsername,
 }

@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as fs from 'fs'
+import _ from 'lodash'
+import { MediaGroup } from 'telegraf/typings/telegram-types'
 
 import { ActionContext, CommandContext, EntryWithUser } from '../common/types'
 import { arrayToCSV, formatEntryWithUser } from '../common/utils'
 import { isEntry } from '../common/validators'
 import {
   amountToValidate,
-  fileIdsForUser,
+  fileIdsForUserId,
+  fileIdsForUsername,
   getAllEntries,
   getEntry,
   getRandomNotValidEntry,
@@ -85,19 +88,34 @@ export const adminLogin = (ctx: CommandContext) => {
 export const allPhotosFromUser = async (ctx: CommandContext) => {
   if (!admins.has(ctx!.from!.id)) return
   const args = ctx.message.text.split(' ')
+
   if (args.length <= 1)
-    return ctx.reply('Please give the id to remove as an argument (eg. /allphotos 10)')
+    return ctx.reply(
+      'Please give the id or username to get all photos from as an argument (eg. /allphotos mediakeisari)'
+    )
 
-  const idToGet = parseInt(args[1])
+  const possibleNum = parseInt(args[1])
 
-  if (isNaN(idToGet)) return ctx.reply('Given id is not a number!')
+  let fileIds
+  if (isNaN(possibleNum)) {
+    fileIds = await fileIdsForUsername(args[1])
+  } else {
+    fileIds = await fileIdsForUserId(possibleNum)
+  }
 
-  const fileIds = await fileIdsForUser(ctx.from.id)
-  fileIds.forEach(({ fileId }) => {
+  if(!fileIds) return await ctx.reply("No such user 👀")
+
+  const chunks = _.chunk(
+    fileIds.map(f => ({ media: f.fileId, type: 'photo' })),
+    10
+  ) as MediaGroup[]
+
+  chunks.forEach(async chunk => {
     try {
-      ctx.replyWithPhoto(fileId)
-    } catch {
-      console.log('Failed fetching file id: ', fileId)
+      await ctx.replyWithMediaGroup(chunk)
+    } catch (e) {
+      console.log(e)
+      await ctx.reply('Possibily invalid fileId')
     }
   })
 }
