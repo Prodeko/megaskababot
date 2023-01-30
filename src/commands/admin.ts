@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as fs from 'fs';
-import { CommandContext, EntryWithUser } from '../common/types';
+import { ActionContext, CommandContext, EntryWithUser } from '../common/types';
 import { arrayToCSV, formatEntryWithUser } from "../common/utils";
 import { isEntry } from '../common/validators';
 import { amountToValidate, getAllEntries, getEntry, getRandomNotValidEntry, removeEntry, setEntryValidation } from "../entries";
@@ -9,9 +10,10 @@ const admins = new Set()
 const underValidation = new Map<number, number>()
 const removeConsideration = new Map<number, number>()
 
-const performPistokoe = async (ctx: CommandContext) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const performPistokoe = async (ctx: any) => {
   const entry = await getRandomNotValidEntry()
-  const chatId = ctx?.chat?.id ?? ctx.message?.chat.id
+  const chatId = ctx!.chat!.id
 
   if (!chatId) throw new Error('No chat id found')
   if (!entry) return ctx.reply('No entries found')
@@ -38,25 +40,28 @@ export const pistokoe = async (ctx: CommandContext) => {
 }
 
 
-export const invalid = async (ctx: CommandContext) => {
-  if (!admins.has(ctx.from.id)) return
+export const invalid = async (ctx: ActionContext) => {
+  if (!admins.has(ctx!.from!.id)) return
 
-  const entryId = underValidation.get(ctx.chat.id)
+  const entryId = underValidation.get(ctx!.chat!.id)
   if (!entryId) return
 
   await setEntryValidation(entryId, false)
+  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
 
   ctx.reply('Marked invalid')
   await performPistokoe(ctx)
 }
 
-export const valid = async (ctx: CommandContext) => {
-  if (!admins.has(ctx.from.id)) return
+export const valid = async (ctx: ActionContext) => {
+  if (!admins.has(ctx!.from!.id)) return
 
-  const entryId = underValidation.get(ctx.chat.id)
+  const entryId = underValidation.get(ctx!.chat!.id)
   if (!entryId) return
 
   await setEntryValidation(entryId, true)
+  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
+
   ctx.reply('Marked valid')
   await performPistokoe(ctx)
 }
@@ -78,15 +83,16 @@ export const confirmedRemove = async (ctx: any) => {
   const entryId = removeConsideration.get(ctx.chat.id)
   if(!entryId) return
   await removeEntry(entryId)
+  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
   removeConsideration.delete(ctx.chat.id)
   
   ctx.reply("Removed entry!")
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const cancelRemove = (ctx: any) => {
+export const cancelRemove = async (ctx: any) => {
   if (!admins.has(ctx.from.id)) return
-
+  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
   removeConsideration.delete(ctx.chat.id)
   ctx.reply("Canceled")
 }
@@ -132,6 +138,6 @@ export const csv = async (ctx: CommandContext) => {
   })
 }
 
-export const stopValidation = async (ctx: CommandContext) => {
-  underValidation.delete(ctx.chat.id)
+export const stopValidation = async (ctx: ActionContext) => {
+  underValidation.delete(ctx!.chat!.id)
 }

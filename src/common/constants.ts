@@ -1,4 +1,4 @@
-import { Guild, Sport, Validation } from "./types"
+import { Guild, Sport } from "./types"
 
 export const INTRODUCTORY_MESSAGE = "Welcome to Megaskaba! I help you record entries from your sports tracker app to the competition. \
 Firstly, you need to accept this privacy policy to continue."
@@ -18,4 +18,3 @@ export const PRIVACY_REJECTED_MESSAGE = "Sorry, you need to accept the privacy p
 export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta']
 export const YEARS = ["13", "14", "15", "16", "17", "18", "19", "20", "21", "22"].reverse()
 export const SPORTS: Sport[] = ["run/walk", "ski"]
-export const VALIDATIONS: Validation[] = ['Valid', 'Invalid', 'Stop validation']

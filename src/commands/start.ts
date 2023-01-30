@@ -1,7 +1,7 @@
-import { INTRODUCTORY_MESSAGE, START_REGISTRATION_MESSAGE, PRIVACY_POLICY } from "../common/constants"
+import { INTRODUCTORY_MESSAGE, PRIVACY_POLICY, START_REGISTRATION_MESSAGE } from "../common/constants"
 import { CommandContext } from "../common/types"
 import { conversationPhase } from "../common/variables"
-import { inlinePrivacyKeyboard, transpKeyboard, yearKeyboard } from "../keyboards"
+import { inlinePrivacyKeyboard, yearKeyboard } from "../keyboards"
 import { isUser, updateUsersStash } from "../users"
 import entry from "./entry"
 
