@@ -14,7 +14,7 @@ const isCompleteUser = (user: Partial<User>): user is UserWithoutTime => {
     typeof user?.telegramUserId === 'number' &&
     typeof user?.telegramUsername === 'string' &&
     typeof user?.firstName === 'string' &&
-    typeof user?.lastName === 'string' &&
+    (user.lastName === undefined || typeof user?.lastName === 'string') &&
     typeof user?.freshmanYear === 'number' &&
     typeof user?.guild === 'string'
   )

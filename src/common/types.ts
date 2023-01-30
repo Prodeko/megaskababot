@@ -10,7 +10,7 @@ export type UserWithoutTime = {
   telegramUserId: number
   telegramUsername: string
   firstName: string
-  lastName: string
+  lastName?: string
   freshmanYear: number
   guild: Guild
 }
