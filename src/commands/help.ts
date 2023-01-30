@@ -1,9 +1,8 @@
+import { HELP_TEXT } from "../common/constants"
 import { CommandContext } from "../common/types"
 
 const help = (ctx: CommandContext) => {
-  ctx.reply(
-    'Type /start to log in or add a new entry\n\nType /entries to get a list of your entries'
-  )
+  ctx.replyWithHTML(HELP_TEXT)
 }
 
 export default help

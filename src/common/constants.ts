@@ -1,4 +1,5 @@
 import { Guild, Sport } from "./types"
+import * as fs from 'fs'
 
 export const INTRODUCTORY_MESSAGE = "Welcome to Megasciba! I help you record entries from your sports tracker app to the competition. \
 Firstly, you need to accept this privacy policy to continue."
@@ -14,6 +15,10 @@ and will perform spot checks to verify the integrity of the competition."
 export const START_REGISTRATION_MESSAGE = "You have not registered previously, so I'll ask you a few questions first."
 
 export const PRIVACY_REJECTED_MESSAGE = "Sorry, you need to accept the privacy policy to continue. Restart the chat with /start."
+
+
+export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString()
+
 
 export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta']
 export const YEARS = [...Array.from(Array(54).keys()).map(k => `${1970 + k}`)].reverse()
