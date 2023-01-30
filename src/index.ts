@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv'
 import { Telegraf } from 'telegraf'
 import { onPrivacyAccepted, onPrivacyRejected } from './commands/action/privacy'
 
-import { adminLogin, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, stopValidation, valid } from './commands/admin'
+import { adminLogin, allPhotosFromUser, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, stopValidation, valid } from './commands/admin'
 import entries from './commands/entries'
 import entry from './commands/entry'
 import help from './commands/help'
@@ -45,6 +45,7 @@ bot.command('csv', csv)
 bot.command('pistokoe', pistokoe)
 bot.command('numtovalidate', notValidated)
 bot.command('remove', remove)
+bot.command('allphotos', allPhotosFromUser)
 
 bot.action('invalid', invalid)
 bot.action('valid', valid)

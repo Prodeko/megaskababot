@@ -28,7 +28,7 @@ const start = async (ctx: CommandContext) => {
       telegramUserId: ctx.message.from.id,
     })
     ctx.reply(
-      `Welcome to megaskaba! ${START_REGISTRATION_MESSAGE}`
+      `Welcome to MEGASCIBA! ${START_REGISTRATION_MESSAGE}`
     )
     ctx.reply('What is your freshman year?', yearKeyboard)
   } else {

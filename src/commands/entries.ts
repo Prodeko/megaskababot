@@ -6,7 +6,7 @@ const entries = async (ctx: CommandContext) => {
   const entries = await getEntries(ctx.message.from.id)
   if (entries.length > 0) {
     const points = entries
-      .map(e => e.distance * (e.sport === 'ski' ? 1 : 1.5))
+      .map(e => e.distance * (e.sport === 'ski' ? 1 : 1.75))
       .reduce((p, e) => p + e, 0)
     ctx.reply(
       entries

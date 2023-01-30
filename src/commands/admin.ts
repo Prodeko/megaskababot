@@ -1,10 +1,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as fs from 'fs';
-import { ActionContext, CommandContext, EntryWithUser } from '../common/types';
-import { arrayToCSV, formatEntryWithUser } from "../common/utils";
-import { isEntry } from '../common/validators';
-import { amountToValidate, getAllEntries, getEntry, getRandomNotValidEntry, removeEntry, setEntryValidation } from "../entries";
-import { confirmationKeyboard, validationKeyboard } from '../keyboards';
+import * as fs from 'fs'
+
+import { ActionContext, CommandContext, EntryWithUser } from '../common/types'
+import { arrayToCSV, formatEntryWithUser } from '../common/utils'
+import { isEntry } from '../common/validators'
+import {
+  amountToValidate,
+  fileIdsForUser,
+  getAllEntries,
+  getEntry,
+  getRandomNotValidEntry,
+  removeEntry,
+  setEntryValidation,
+} from '../entries'
+import { confirmationKeyboard, validationKeyboard } from '../keyboards'
 
 const admins = new Set()
 const underValidation = new Map<number, number>()
@@ -38,7 +47,6 @@ export const pistokoe = async (ctx: CommandContext) => {
   console.log('pistokoe')
   await performPistokoe(ctx)
 }
-
 
 export const invalid = async (ctx: ActionContext) => {
   if (!admins.has(ctx!.from!.id)) return
@@ -74,19 +82,37 @@ export const adminLogin = (ctx: CommandContext) => {
   )
 }
 
+export const allPhotosFromUser = async (ctx: CommandContext) => {
+  if (!admins.has(ctx!.from!.id)) return
+  const args = ctx.message.text.split(' ')
+  if (args.length <= 1)
+    return ctx.reply('Please give the id to remove as an argument (eg. /allphotos 10)')
 
+  const idToGet = parseInt(args[1])
+
+  if (isNaN(idToGet)) return ctx.reply('Given id is not a number!')
+
+  const fileIds = await fileIdsForUser(ctx.from.id)
+  fileIds.forEach(({ fileId }) => {
+    try {
+      ctx.replyWithPhoto(fileId)
+    } catch {
+      console.log('Failed fetching file id: ', fileId)
+    }
+  })
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const confirmedRemove = async (ctx: any) => {
   if (!admins.has(ctx.from.id)) return
 
   const entryId = removeConsideration.get(ctx.chat.id)
-  if(!entryId) return
+  if (!entryId) return
   await removeEntry(entryId)
   await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
   removeConsideration.delete(ctx.chat.id)
-  
-  ctx.reply("Removed entry!")
+
+  ctx.reply('Removed entry!')
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,32 +120,33 @@ export const cancelRemove = async (ctx: any) => {
   if (!admins.has(ctx.from.id)) return
   await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
   removeConsideration.delete(ctx.chat.id)
-  ctx.reply("Canceled")
+  ctx.reply('Canceled')
 }
 
 export const remove = async (ctx: CommandContext) => {
   if (!admins.has(ctx.from.id)) return
 
-  const args = ctx.message.text.split(" ")
-  if(args.length <= 1) return ctx.reply("Please give the id to remove as an argument (eg. /remove 10)")
+  const args = ctx.message.text.split(' ')
+  if (args.length <= 1)
+    return ctx.reply('Please give the id to remove as an argument (eg. /remove 10)')
 
   const idToRemove = parseInt(args[1])
 
-  if(isNaN(idToRemove)) return ctx.reply("Given id is not a number!")
+  if (isNaN(idToRemove)) return ctx.reply('Given id is not a number!')
 
   try {
     const entry = await getEntry(idToRemove)
     removeConsideration.set(ctx.chat.id, entry.id)
     await ctx.replyWithPhoto(entry.fileId)
     await ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
-    await ctx.reply("Do you want to remove this entry?", confirmationKeyboard)
+    await ctx.reply('Do you want to remove this entry?', confirmationKeyboard)
   } catch (e) {
     console.error(e)
-    ctx.reply("No such entry")
+    ctx.reply('No such entry')
   }
 }
 
-export const csv = async (ctx: CommandContext) => { 
+export const csv = async (ctx: CommandContext) => {
   if (!admins.has(ctx.from.id)) return
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
