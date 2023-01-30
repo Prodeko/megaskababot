@@ -1,4 +1,4 @@
-import { STICKERS } from '../../common/constants'
+import { STICKERS, YEARS } from '../../common/constants'
 import { isGuild, isSport } from '../../common/validators'
 import { conversationPhase } from '../../common/variables'
 import { entryToDb, updateEntryStash } from '../../entries'
@@ -14,8 +14,8 @@ const message = async (ctx: any, next: () => Promise<void>) => {
   switch (conversationPhase.get(chatId)) {
     case 'year':
       const asNum = parseFloat(text)
-      if (isNaN(asNum)) {
-        ctx.reply('That is not a number 🤔')
+      if (!YEARS.includes(text)) {
+        ctx.reply('Please give a number beatween 1950 - 2023 👀')
       }
 
       updateUsersStash(userId, { freshmanYear: asNum })

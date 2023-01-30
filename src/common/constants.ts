@@ -16,7 +16,7 @@ export const START_REGISTRATION_MESSAGE = "You have not registered previously, s
 export const PRIVACY_REJECTED_MESSAGE = "Sorry, you need to accept the privacy policy to continue. Restart the chat with /start."
 
 export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta']
-export const YEARS = ["13", "14", "15", "16", "17", "18", "19", "20", "21", "22"].reverse()
+export const YEARS = [...Array.from(Array(54).keys()).map(k => `${1970 + k}`)].reverse()
 export const SPORTS: Sport[] = ["run/walk", "ski"]
 
 export const STICKERS = [
