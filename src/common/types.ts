@@ -3,7 +3,7 @@ import { Update, Message, CallbackQuery } from "telegraf/typings/core/types/type
 
 export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
 export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta' | 'tietokilta' | 'data guild'
-export type Sport = 'run/walk' | 'ski' | 'skating'
+export type Sport = 'run/walk' | 'ski' | 'skate'
 export type Validation = 'Valid' | 'Invalid' | 'Stop validation'
 
 export type UserWithoutTime = {

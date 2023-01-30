@@ -22,10 +22,10 @@ export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString()
 
 export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta', 'data guild']
 export const YEARS = [...Array.from(Array(54).keys()).map(k => `${1970 + k}`)].reverse()
-export const SPORTS: Sport[] = ["run/walk", "ski", "skating"]
+export const SPORTS: Sport[] = ["run/walk", "ski", "skate"]
 export const COEFFICIENTS: Record<Sport, number> = {
   "run/walk": 1.75,
-  "skating": 0.5,
+  "skate": 0.5,
   "ski": 1
 }
 export const STICKERS = [
