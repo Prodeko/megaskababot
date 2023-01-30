@@ -11,6 +11,7 @@ import removeLatestCommand from './commands/removeLatest'
 import start from './commands/start'
 import launchBotDependingOnNodeEnv from './launchBotDependingOnNodeEnv'
 
+
 dotenv.config()
 
 if (!process.env.BOT_TOKEN) {
@@ -26,6 +27,17 @@ bot.command('entries', entries)
 bot.command('help', help)
 bot.command('entry', entry)
 bot.command('removelatest', removeLatestCommand)
+
+// Middleware to get stickerids
+// eslint-disable-next-line prefer-const
+// let fileIds: string[] = []
+// bot.use((ctx:any, next) => {
+//   if (!ctx?.message?.sticker) return next()
+//   const fileId = ctx?.message?.sticker?.file_id
+//   fileIds.push(fileId)
+//   console.log(fileIds)
+//   return next()
+// })
 
 // Admin commands
 bot.hears(process.env.ADMIN_PASSWORD ?? 'admin', adminLogin)

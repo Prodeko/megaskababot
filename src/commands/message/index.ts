@@ -1,3 +1,4 @@
+import { STICKERS } from '../../common/constants'
 import { isGuild, isSport } from '../../common/validators'
 import { conversationPhase } from '../../common/variables'
 import { entryToDb, updateEntryStash } from '../../entries'
@@ -5,7 +6,7 @@ import { guildKeyboard, transpKeyboard } from '../../keyboards'
 import { updateUsersStash, userToDb } from '../../users'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const message = (ctx: any, next: () => Promise<void>) => {
+const message = async (ctx: any, next: () => Promise<void>) => {
   const chatId = ctx.chat?.id
   const text = ctx.update.message?.text
   const userId = ctx.update.message.from.id
@@ -14,7 +15,7 @@ const message = (ctx: any, next: () => Promise<void>) => {
     case 'year':
       const asNum = parseFloat(text)
       if (isNaN(asNum)) {
-        ctx.reply('That is not a number')
+        ctx.reply('That is not a number 🤔')
       }
 
       updateUsersStash(userId, { freshmanYear: asNum })
@@ -26,7 +27,7 @@ const message = (ctx: any, next: () => Promise<void>) => {
       if (isGuild(text)) {
         updateUsersStash(userId, { guild: text })
         userToDb(userId)
-        ctx.reply('Your user data has now been saved! Did you ski or run/walk?', transpKeyboard)
+        ctx.reply('Your user data has now been saved! Did you ski ⛷️ or run/walk 🏃‍♀️?', transpKeyboard)
         conversationPhase.set(chatId, 'transp')
       } else {
         ctx.reply('Please give a proper guild')
@@ -50,10 +51,10 @@ const message = (ctx: any, next: () => Promise<void>) => {
           userId,
           distance,
         })
-        ctx.reply('Please give proof as a picture')
+        ctx.reply('Please give proof as a picture 📷')
         conversationPhase.set(chatId, 'proof')
       } else {
-        ctx.reply('Please give a positive number')
+        ctx.reply('Please give a positive number 👀')
       }
       break
 
@@ -62,10 +63,10 @@ const message = (ctx: any, next: () => Promise<void>) => {
         const fileId = ctx.message?.photo[3].file_id
         updateEntryStash(chatId, { fileId })
         entryToDb(chatId)
+        await ctx.replyWithSticker(STICKERS[Math.floor(Math.random()*STICKERS.length)])
         conversationPhase.delete(chatId)
-        ctx.reply('Well done!')
       } catch {
-        ctx.reply('That did not work. Please try again')
+        ctx.reply('That did not work 😔 Please try again')
       }
       break
   }
