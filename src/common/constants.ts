@@ -1,14 +1,14 @@
 import { Guild, Sport } from "./types"
 
-export const INTRODUCTORY_MESSAGE = "Welcome to Megaskaba! I help you record entries from your sports tracker app to the competition. \
+export const INTRODUCTORY_MESSAGE = "Welcome to Megasciba! I help you record entries from your sports tracker app to the competition. \
 Firstly, you need to accept this privacy policy to continue."
 
-export const PRIVACY_POLICY = "Megaskababot stores your name, Telegram user ID and username, \
+export const PRIVACY_POLICY = "Megascibabot stores your name, Telegram user ID and username, \
 guild and the year you started your studies in, in a database that is maintained by Prodeko. \
 Additionally, for every entry that you make, its timestamp, the distance travelled, and the sport are saved to the same database. \
 Images that you send are handled by Telegram. \
 \
-The developers of Megaskababot and the competition's administrators have access to all the data that you have sent, \
+The developers of Megascibabot and the competition's administrators have access to all the data that you have sent, \
 and will perform spot checks to verify the integrity of the competition."
 
 export const START_REGISTRATION_MESSAGE = "You have not registered previously, so I'll ask you a few questions first."

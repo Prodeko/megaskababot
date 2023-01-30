@@ -65,7 +65,8 @@ const message = async (ctx: any, next: () => Promise<void>) => {
         entryToDb(chatId)
         await ctx.replyWithSticker(STICKERS[Math.floor(Math.random()*STICKERS.length)])
         conversationPhase.delete(chatId)
-      } catch {
+      } catch (e) {
+        console.log(e)
         ctx.reply('That did not work 😔 Please try again')
       }
       break

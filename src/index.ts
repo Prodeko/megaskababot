@@ -60,6 +60,16 @@ bot.on('message', message)
 bot.action('accepted', onPrivacyAccepted)
 bot.action('rejected', onPrivacyRejected)
 
+
+// reset keyboard
+bot.use((ctx, next) => {
+  try {
+    ctx.editMessageReplyMarkup(undefined)
+  } finally {
+    return next()
+  }
+})
+
 // Launch bot 
 launchBotDependingOnNodeEnv(bot)
 
