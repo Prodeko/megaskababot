@@ -15,7 +15,7 @@ model User {
   telegramUserId   Int   @id
   telegramUsername String
   firstName        String
-  lastName         String
+  lastName         String?
   freshmanYear     Int
   guild            String
   createdAt        DateTime @default(now())
