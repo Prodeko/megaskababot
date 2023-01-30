@@ -2,7 +2,7 @@ import { STICKERS, YEARS } from '../../common/constants'
 import { isGuild, isSport } from '../../common/validators'
 import { conversationPhase } from '../../common/variables'
 import { entryToDb, updateEntryStash } from '../../entries'
-import { guildKeyboard, transpKeyboard } from '../../keyboards'
+import { guildKeyboard } from '../../keyboards'
 import { updateUsersStash, userToDb } from '../../users'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,9 +26,8 @@ const message = async (ctx: any, next: () => Promise<void>) => {
     case 'guild':
       if (isGuild(text)) {
         updateUsersStash(userId, { guild: text })
-        userToDb(userId)
-        ctx.reply('Your user data has now been saved! Did you ski ⛷️ or run/walk 🏃‍♀️?', transpKeyboard)
-        conversationPhase.set(chatId, 'transp')
+        await userToDb(userId)
+        conversationPhase.delete(chatId)
       } else {
         ctx.reply('Please give a proper guild')
       }

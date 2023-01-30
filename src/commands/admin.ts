@@ -81,7 +81,7 @@ export const adminLogin = (ctx: CommandContext) => {
   const userId = ctx.message.from.id
   admins.add(userId)
   ctx.reply(
-    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [id] - remove one entry \n/numtovalidate - number of entries not yet validated'
+    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [id or username] - gets all uploaded photos by user'
   )
 }
 

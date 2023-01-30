@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { Markup } from 'telegraf'
 
 import { GUILDS, SPORTS, YEARS } from './common/constants'
@@ -9,7 +10,7 @@ export const inlinePrivacyKeyboard = Markup.inlineKeyboard([
   ],
 ])
 
-export const guildKeyboard = Markup.keyboard(GUILDS).oneTime()
+export const guildKeyboard = Markup.keyboard(GUILDS.map(_.capitalize)).oneTime()
 export const yearKeyboard = Markup.keyboard(YEARS).oneTime()
 export const transpKeyboard = Markup.keyboard(SPORTS).oneTime().resize()
 export const confirmationKeyboard = Markup.inlineKeyboard([

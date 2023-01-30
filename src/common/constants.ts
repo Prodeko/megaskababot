@@ -20,7 +20,7 @@ export const PRIVACY_REJECTED_MESSAGE = "Sorry, you need to accept the privacy p
 export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString()
 
 
-export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta']
+export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta', 'data guild']
 export const YEARS = [...Array.from(Array(54).keys()).map(k => `${1970 + k}`)].reverse()
 export const SPORTS: Sport[] = ["run/walk", "ski", "skating"]
 export const COEFFICIENTS: Record<Sport, number> = {

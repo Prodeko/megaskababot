@@ -2,7 +2,7 @@ import { NarrowedContext, Context } from "telegraf"
 import { Update, Message, CallbackQuery } from "telegraf/typings/core/types/typegram"
 
 export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'transp'
-export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta' | 'tietokilta'
+export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta' | 'tietokilta' | 'data guild'
 export type Sport = 'run/walk' | 'ski' | 'skating'
 export type Validation = 'Valid' | 'Invalid' | 'Stop validation'
 
