@@ -4,7 +4,9 @@ import { commandsKeyboard } from "../keyboards"
 
 const removeLatestCommand = async (ctx: CommandContext | ActionContext) => {
   const result = await removeLatest(ctx!.from!.id)
-  await ctx.editMessageReplyMarkup(undefined)
+  try {
+    await ctx.editMessageReplyMarkup(undefined)
+  } catch {}
   if (result) {
     ctx.reply('Removed latest entry!', commandsKeyboard)
   } else {

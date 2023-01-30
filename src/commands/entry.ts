@@ -6,8 +6,11 @@ import { isUser } from "../users";
 const entry = async (ctx: CommandContext | ActionContext) => {
   if(!isUser(ctx!.from!.id)) return ctx.reply("Not an user yet!")
   await ctx.reply('Welcome back! Did you ski ⛷️, run/walk 🏃‍♀️ or skate ⛸️?', transpKeyboard)
-  await ctx.editMessageReplyMarkup(undefined)
-  conversationPhase.set(ctx!.chat!.id, 'transp')
+  try {
+    await ctx.editMessageReplyMarkup(undefined)
+  } finally {
+    conversationPhase.set(ctx!.chat!.id, 'transp')
+  }
 }
 
 export default entry

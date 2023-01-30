@@ -6,7 +6,9 @@ import { commandsKeyboard } from "../keyboards"
 
 const entries = async (ctx: CommandContext | ActionContext) => {
   const entries = await getEntries(ctx!.from!.id)
-  await ctx.editMessageReplyMarkup(undefined)
+  try {
+    await ctx.editMessageReplyMarkup(undefined)
+  } catch {}
   if (entries.length > 0) {
     const points = entries
       .map(e => e.distance * COEFFICIENTS[e.sport])
