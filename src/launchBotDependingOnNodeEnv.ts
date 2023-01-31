@@ -19,7 +19,7 @@ async function launchWebhookBot(bot: Telegraf<Context<Update>>) {
   const app = express();
 
   app.get('/', (_req, res) => {
-    res.send('Kovaa tulee')
+    res.status(200).send('Kovaa tulee')
   })
 
   // Workaround to avoid issue with TSconfig
