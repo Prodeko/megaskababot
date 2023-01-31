@@ -17,7 +17,7 @@ const text = async (ctx: TextCtxType, next: () => Promise<void>) => {
       break
 
     case 'guild':
-      await guild(ctx, text, userId, chatId)
+      await guild(ctx, text, userId)
       break
 
     case 'sport':
