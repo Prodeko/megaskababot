@@ -72,6 +72,8 @@ bot.action('rejected', onPrivacyRejected)
 bot.use(async (ctx, next) => {
   try {
     await ctx.editMessageReplyMarkup(undefined)
+  } catch (e) {
+    console.log(e)
   } finally {
     return next()
   }

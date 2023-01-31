@@ -12,7 +12,7 @@ const message = async (ctx: any, next: () => Promise<void>) => {
   const chatId = ctx.chat?.id
   const text = ctx.update.message?.text
   const userId = ctx.update.message.from.id
-
+  console.log("Phase: ", conversationPhase.get(chatId))
   switch (conversationPhase.get(chatId)) {
     case 'year':
       const asNum = parseFloat(text)
@@ -30,7 +30,7 @@ const message = async (ctx: any, next: () => Promise<void>) => {
         updateUsersStash(userId, { guild: _.lowerCase(text) as Guild})
         await userToDb(userId)
         conversationPhase.delete(chatId)
-        ctx.reply("User data saved 💾!", commandsKeyboard)
+        await ctx.reply("User data saved 💾!", commandsKeyboard)
       } else {
         ctx.reply('Please give a proper guild')
       }
@@ -40,7 +40,7 @@ const message = async (ctx: any, next: () => Promise<void>) => {
       console.log(text)
       if (isSport(text)) {
         updateEntryStash(chatId, { sport: text })
-        ctx.reply(`What distance (km) did you ${text}?`)
+        await ctx.reply(`What distance (km) did you ${text}?`)
         conversationPhase.set(chatId, 'dist')
       } else {
         ctx.reply('Please give a proper transportation method')
@@ -54,7 +54,7 @@ const message = async (ctx: any, next: () => Promise<void>) => {
           userId,
           distance,
         })
-        ctx.reply('Please give proof as a picture 📷')
+        await ctx.reply('Please give proof as a picture 📷')
         conversationPhase.set(chatId, 'proof')
       } else {
         ctx.reply('Please give a positive number 👀')

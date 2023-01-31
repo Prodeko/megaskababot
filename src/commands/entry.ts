@@ -8,7 +8,9 @@ const entry = async (ctx: CommandContext | ActionContext) => {
   await ctx.reply('Welcome back! Did you ski ⛷️, run/walk 🏃‍♀️ or skate ⛸️?', transpKeyboard)
   try {
     await ctx.editMessageReplyMarkup(undefined)
-  } finally {
+  } catch (e) {
+    console.log(e)
+  }finally {
     conversationPhase.set(ctx!.chat!.id, 'transp')
   }
 }

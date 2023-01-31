@@ -1,7 +1,7 @@
 import { INTRODUCTORY_MESSAGE, PRIVACY_POLICY, START_REGISTRATION_MESSAGE } from "../common/constants"
 import { CommandContext } from "../common/types"
 import { conversationPhase } from "../common/variables"
-import { inlinePrivacyKeyboard, yearKeyboard } from "../keyboards"
+import { commandsKeyboard, inlinePrivacyKeyboard, yearKeyboard } from "../keyboards"
 import { isUser, updateUsersStash } from "../users"
 import entry from "./entry"
 
@@ -32,7 +32,7 @@ const start = async (ctx: CommandContext) => {
     )
     ctx.reply('What is your freshman year?', yearKeyboard)
   } else {
-    await entry(ctx)
+    await ctx.reply("Welcome back to MEGASCIBA! What would you like to do?", commandsKeyboard)
   }
 }
 
