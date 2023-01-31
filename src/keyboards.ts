@@ -18,6 +18,11 @@ export const confirmationKeyboard = Markup.inlineKeyboard([
   Markup.button.callback('Cancel 🚫', 'cancel'),
 ])
 
+export const loginConfiramtionKeyboard = Markup.inlineKeyboard([
+  Markup.button.callback('Yes, thats correct ✅', 'login'),
+  Markup.button.callback('No, try again 🚫', 'cancel_login'),
+])
+
 export const validationKeyboard = Markup.inlineKeyboard([
   [Markup.button.callback('Valid ✅', 'valid'), Markup.button.callback('Invalid ❌', 'invalid')],
   [Markup.button.callback('Stop validation 🛑', 'stopvalidation')],

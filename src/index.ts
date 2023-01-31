@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv'
 import { Telegraf } from 'telegraf'
+import cancelLogin from './commands/action/cancelLogin'
+import confirmLogin from './commands/action/confirmLogin'
 import { onPrivacyAccepted, onPrivacyRejected } from './commands/action/privacy'
 
 import { adminLogin, allPhotosFromUser, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, stopValidation, valid } from './commands/admin'
@@ -54,6 +56,9 @@ bot.action('stopvalidation', stopValidation)
 
 bot.action('remove', confirmedRemove)
 bot.action('cancel', cancelRemove)
+
+bot.action('login', confirmLogin)
+bot.action('cancel_login', cancelLogin)
 
 bot.action('entry', entry)
 bot.action('entries', entries)

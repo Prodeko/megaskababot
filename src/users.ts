@@ -17,6 +17,10 @@ const updateUsersStash = (userId: number, update: Partial<User>) => {
   })
 }
 
+const getUserStash = (userId: number) => {
+  return users.get(userId)
+}
+
 const userToDb = async (userId: number) => {
   const user = users.get(userId)
   if (!user || !isCompleteUser(user)) {
@@ -31,4 +35,4 @@ const userToDb = async (userId: number) => {
 }
 
 
-export { isUser, updateUsersStash, userToDb }
+export { isUser, updateUsersStash, userToDb, getUserStash }
