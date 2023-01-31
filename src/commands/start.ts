@@ -3,7 +3,6 @@ import { CommandContext } from "../common/types"
 import { conversationPhase } from "../common/variables"
 import { commandsKeyboard, inlinePrivacyKeyboard, yearKeyboard } from "../keyboards"
 import { isUser, updateUsersStash } from "../users"
-import entry from "./entry"
 
 
 const start = async (ctx: CommandContext) => {

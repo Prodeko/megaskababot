@@ -6,9 +6,10 @@ import { adminLogin, allPhotosFromUser, cancelRemove, confirmedRemove, csv, inva
 import entries from './commands/entries'
 import entry from './commands/entry'
 import help from './commands/help'
-import message from './commands/message'
+import photo from './commands/photo'
 import removeLatestCommand from './commands/removeLatest'
 import start from './commands/start'
+import text from './commands/text'
 import launchBotDependingOnNodeEnv from './launchBotDependingOnNodeEnv'
 
 
@@ -61,23 +62,16 @@ bot.action('help', help)
 
 
 // Message handling
-bot.on('message', message)
+bot.on('text', text)
+bot.on('photo', photo)
 
 // Inline keyboard handling
 bot.action('accepted', onPrivacyAccepted)
+
 bot.action('rejected', onPrivacyRejected)
 
+bot.on('chosen_inline_result', ctx => ctx.editMessageReplyMarkup(undefined) )
 
-// reset keyboard
-bot.use(async (ctx, next) => {
-  try {
-    await ctx.editMessageReplyMarkup(undefined)
-  } catch (e) {
-    console.log(e)
-  } finally {
-    return next()
-  }
-})
 
 // Launch bot 
 launchBotDependingOnNodeEnv(bot)

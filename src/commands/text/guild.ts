@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { TextCtxType } from '../../common/types'
 
 import { isGuild } from '../../common/validators'
 import { conversationPhase } from '../../common/variables'
@@ -6,7 +7,7 @@ import { commandsKeyboard } from '../../keyboards'
 import { updateUsersStash, userToDb } from '../../users'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function guild(ctx: any, guildStr: string, userId: number, chatId: number) {
+export default async function guild(ctx: TextCtxType, guildStr: string, userId: number, chatId: number) {
   const guild = _.lowerCase(guildStr)
   if (isGuild(guild)) {
     updateUsersStash(userId, { guild })

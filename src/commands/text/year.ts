@@ -1,10 +1,11 @@
 import { YEARS } from "../../common/constants"
+import { TextCtxType } from "../../common/types"
 import { conversationPhase } from "../../common/variables"
 import { guildKeyboard } from "../../keyboards"
 import { updateUsersStash } from "../../users"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function year(ctx:any, yearStr: string, userId: number, chatId: number) {
+export default async function year(ctx: TextCtxType, yearStr: string, userId: number, chatId: number) {
   const asNum = parseFloat(yearStr)
   if (!YEARS.includes(yearStr)) {
     await ctx.reply('Please give a number beatween 1950 - 2023 👀')
