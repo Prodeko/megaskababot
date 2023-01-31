@@ -22,6 +22,10 @@ async function launchWebhookBot(bot: Telegraf<Context<Update>>) {
     res.status(200).send('Kovaa tulee')
   })
 
+  app.get('/health', (_req, res) => {
+    res.status(200).send('OK')
+  })
+
   // Workaround to avoid issue with TSconfig
   const createWebhookListener = async () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
