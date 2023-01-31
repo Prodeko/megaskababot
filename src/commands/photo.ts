@@ -13,6 +13,7 @@ export default async function proof(ctx:PhotoCtxType, next: any) {
     updateEntryStash(chatId, { fileId })
     entryToDb(chatId)
     await ctx.replyWithSticker(STICKERS[Math.floor(Math.random()*STICKERS.length)], commandsKeyboard)
+    await ctx.reply("Entry added!")
     conversationPhase.delete(chatId)
   } catch (e) {
     console.log(e)

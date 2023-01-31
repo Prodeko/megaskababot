@@ -19,7 +19,7 @@ export const confirmationKeyboard = Markup.inlineKeyboard([
 ])
 
 export const loginConfiramtionKeyboard = Markup.inlineKeyboard([
-  Markup.button.callback('Yes, thats correct ✅', 'login'),
+  Markup.button.callback('Yes, that\'s correct ✅', 'login'),
   Markup.button.callback('No, try again 🚫', 'cancel_login'),
 ])
 
