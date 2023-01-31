@@ -5,7 +5,7 @@ import { MediaGroup } from 'telegraf/typings/telegram-types'
 
 import { ActionContext, CommandContext, EntryWithUser } from '../common/types'
 import { arrayToCSV, formatEntryWithUser } from '../common/utils'
-import { isEntry } from '../common/validators'
+import { isBigInteger, isEntry } from '../common/validators'
 import {
   amountToValidate,
   fileIdsForUserId,
@@ -23,7 +23,7 @@ const underValidation = new Map<number, number>()
 const removeConsideration = new Map<number, number>()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const performPistokoe = async (ctx: any) => {
+const performPistokoe = async (ctx: ActionContext | CommandContext) => {
   const entry = await getRandomNotValidEntry()
   const chatId = ctx!.chat!.id
 
@@ -34,13 +34,11 @@ const performPistokoe = async (ctx: any) => {
   underValidation.set(chatId, entry.id)
 
   await notValidated(ctx)
-  await ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
+  await ctx.replyWithHTML(formatEntryWithUser(entry as unknown as EntryWithUser))
   await ctx.replyWithPhoto(entry?.fileId, validationKeyboard)
 }
 
-export const notValidated = async (ctx: CommandContext) => {
-  if (!admins.has(ctx.from.id)) return
-
+export const notValidated = async (ctx: ActionContext | CommandContext) => {
   const notValidated = await amountToValidate()
   await ctx.reply(`Amount of entries not validated: ${notValidated}`)
 }
@@ -97,10 +95,10 @@ export const allPhotosFromUser = async (ctx: CommandContext) => {
   const possibleNum = parseInt(args[1])
 
   let fileIds
-  if (isNaN(possibleNum)) {
-    fileIds = await fileIdsForUsername(args[1])
-  } else {
+  if (isBigInteger(possibleNum)) {
     fileIds = await fileIdsForUserId(possibleNum)
+  } else {
+    fileIds = await fileIdsForUsername(args[1])
   }
 
   if(!fileIds) return await ctx.reply("No such user 👀")
@@ -156,7 +154,7 @@ export const remove = async (ctx: CommandContext) => {
     const entry = await getEntry(idToRemove)
     removeConsideration.set(ctx.chat.id, entry.id)
     await ctx.replyWithPhoto(entry.fileId)
-    await ctx.replyWithHTML(formatEntryWithUser(entry as EntryWithUser))
+    await ctx.replyWithHTML(formatEntryWithUser(entry as unknown as EntryWithUser))
     await ctx.reply('Do you want to remove this entry?', confirmationKeyboard)
   } catch (e) {
     console.error(e)

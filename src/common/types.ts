@@ -7,7 +7,7 @@ export type Sport = 'run/walk' | 'ski' | 'skate'
 export type Validation = 'Valid' | 'Invalid' | 'Stop validation'
 
 export type UserWithoutTime = {
-  telegramUserId: number
+  telegramUserId: bigint
   telegramUsername: string
   firstName: string
   lastName?: string
