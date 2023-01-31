@@ -16,11 +16,11 @@ const message = async (ctx: any, next: () => Promise<void>) => {
     case 'year':
       const asNum = parseFloat(text)
       if (!YEARS.includes(text)) {
-        ctx.reply('Please give a number beatween 1950 - 2023 👀')
+        await ctx.reply('Please give a number beatween 1950 - 2023 👀')
       }
 
       updateUsersStash(userId, { freshmanYear: asNum })
-      ctx.reply('From which guild are you?', guildKeyboard)
+      await ctx.reply('From which guild are you?', guildKeyboard)
       conversationPhase.set(chatId, 'guild')
       break
 
@@ -32,7 +32,7 @@ const message = async (ctx: any, next: () => Promise<void>) => {
         conversationPhase.delete(chatId)
         await ctx.reply("User data saved 💾!", commandsKeyboard)
       } else {
-        ctx.reply('Please give a proper guild')
+        await ctx.reply('Please give a proper guild')
       }
       break
 
@@ -43,13 +43,13 @@ const message = async (ctx: any, next: () => Promise<void>) => {
         await ctx.reply(`What distance (km) did you ${text}?`)
         conversationPhase.set(chatId, 'dist')
       } else {
-        ctx.reply('Please give a proper transportation method')
+        await ctx.reply('Please give a proper transportation method')
       }
       break
 
     case 'dist':
       if(!text) {
-        ctx.reply("Please input  text 👀")
+        await ctx.reply("Please input text 👀")
         break
       }
 
@@ -62,7 +62,7 @@ const message = async (ctx: any, next: () => Promise<void>) => {
         await ctx.reply('Please give proof as a picture 📷')
         conversationPhase.set(chatId, 'proof')
       } else {
-        ctx.reply('Please give a positive number 👀')
+        await ctx.reply('Please give a positive number 👀')
       }
       break
 
@@ -75,7 +75,7 @@ const message = async (ctx: any, next: () => Promise<void>) => {
         conversationPhase.delete(chatId)
       } catch (e) {
         console.log(e)
-        ctx.reply('That did not work 😔 Please try again')
+        await ctx.reply('That did not work 😔 Please try again')
       }
       break
   }

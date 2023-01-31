@@ -8,9 +8,9 @@ const removeLatestCommand = async (ctx: CommandContext | ActionContext) => {
     await ctx.editMessageReplyMarkup(undefined)
   } catch {}
   if (result) {
-    ctx.reply('Removed latest entry!', commandsKeyboard)
+    await ctx.reply('Removed latest entry!', commandsKeyboard)
   } else {
-    ctx.reply('No entries to remove', commandsKeyboard)
+    await ctx.reply('No entries to remove', commandsKeyboard)
   }
 }
 

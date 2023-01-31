@@ -15,7 +15,7 @@ export async function onPrivacyAccepted(ctx: ActionContext) {
     telegramUserId: ctx!.from!.id,
   })
   await ctx.reply(START_REGISTRATION_MESSAGE)
-  ctx.reply('What is your freshman year?', yearKeyboard)
+  await ctx.reply('What is your freshman year?', yearKeyboard)
 }
 
 export async function onPrivacyRejected(ctx: ActionContext) {
