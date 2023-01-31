@@ -26,8 +26,9 @@ const message = async (ctx: any, next: () => Promise<void>) => {
       break
 
     case 'guild':
-      if (isGuild(text)) {
-        updateUsersStash(userId, { guild: _.lowerCase(text) as Guild})
+      const lower = _.lowerCase(text)
+      if (isGuild(lower)) {
+        updateUsersStash(userId, { guild: lower})
         await userToDb(userId)
         conversationPhase.delete(chatId)
         await ctx.reply("User data saved 💾!", commandsKeyboard)
