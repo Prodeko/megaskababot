@@ -27,10 +27,10 @@ const start = async (ctx: CommandContext) => {
       telegramUsername: ctx.message.from.username,
       telegramUserId: ctx.message.from.id,
     })
-    ctx.reply(
+    await ctx.reply(
       `Welcome to MEGASCIBA! ${START_REGISTRATION_MESSAGE}`
     )
-    ctx.reply('What is your freshman year?', yearKeyboard)
+    await ctx.reply('What is your freshman year?', yearKeyboard)
   } else {
     await ctx.reply("Welcome back to MEGASCIBA! What would you like to do?", commandsKeyboard)
   }

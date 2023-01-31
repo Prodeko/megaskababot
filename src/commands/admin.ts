@@ -28,8 +28,8 @@ const performPistokoe = async (ctx: any) => {
   const chatId = ctx!.chat!.id
 
   if (!chatId) throw new Error('No chat id found')
-  if (!entry) return ctx.reply('No entries found')
-  if (!isEntry(entry)) ctx.reply('Found entry is not an entry?')
+  if (!entry) return await ctx.reply('No entries found')
+  if (!isEntry(entry)) await ctx.reply('Found entry is not an entry?')
 
   underValidation.set(chatId, entry.id)
 
@@ -42,7 +42,7 @@ export const notValidated = async (ctx: CommandContext) => {
   if (!admins.has(ctx.from.id)) return
 
   const notValidated = await amountToValidate()
-  ctx.reply(`Amount of entries not validated: ${notValidated}`)
+  await ctx.reply(`Amount of entries not validated: ${notValidated}`)
 }
 
 export const pistokoe = async (ctx: CommandContext) => {
@@ -60,7 +60,7 @@ export const invalid = async (ctx: ActionContext) => {
   await setEntryValidation(entryId, false)
   await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
 
-  ctx.reply('Marked invalid')
+  await ctx.reply('Marked invalid')
   await performPistokoe(ctx)
 }
 
@@ -73,14 +73,14 @@ export const valid = async (ctx: ActionContext) => {
   await setEntryValidation(entryId, true)
   await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
 
-  ctx.reply('Marked valid')
+  await ctx.reply('Marked valid')
   await performPistokoe(ctx)
 }
 
-export const adminLogin = (ctx: CommandContext) => {
+export const adminLogin = async (ctx: CommandContext) => {
   const userId = ctx.message.from.id
   admins.add(userId)
-  ctx.reply(
+  await ctx.reply(
     'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [id or username] - gets all uploaded photos by user'
   )
 }
@@ -130,7 +130,7 @@ export const confirmedRemove = async (ctx: any) => {
   await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
   removeConsideration.delete(ctx.chat.id)
 
-  ctx.reply('Removed entry!')
+  await ctx.reply('Removed entry!')
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -138,7 +138,7 @@ export const cancelRemove = async (ctx: any) => {
   if (!admins.has(ctx.from.id)) return
   await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
   removeConsideration.delete(ctx.chat.id)
-  ctx.reply('Canceled')
+  await ctx.reply('Canceled')
 }
 
 export const remove = async (ctx: CommandContext) => {
@@ -146,11 +146,11 @@ export const remove = async (ctx: CommandContext) => {
 
   const args = ctx.message.text.split(' ')
   if (args.length <= 1)
-    return ctx.reply('Please give the id to remove as an argument (eg. /remove 10)')
+    return await ctx.reply('Please give the id to remove as an argument (eg. /remove 10)')
 
   const idToRemove = parseInt(args[1])
 
-  if (isNaN(idToRemove)) return ctx.reply('Given id is not a number!')
+  if (isNaN(idToRemove)) return await ctx.reply('Given id is not a number!')
 
   try {
     const entry = await getEntry(idToRemove)
@@ -160,7 +160,7 @@ export const remove = async (ctx: CommandContext) => {
     await ctx.reply('Do you want to remove this entry?', confirmationKeyboard)
   } catch (e) {
     console.error(e)
-    ctx.reply('No such entry')
+    await ctx.reply('No such entry')
   }
 }
 

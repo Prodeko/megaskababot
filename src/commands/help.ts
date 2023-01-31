@@ -6,7 +6,7 @@ const help = async (ctx: CommandContext | ActionContext) => {
   try {
     await ctx.editMessageReplyMarkup(undefined)
   } catch {}
-  ctx.replyWithHTML(HELP_TEXT, commandsKeyboard)
+  await ctx.replyWithHTML(HELP_TEXT, commandsKeyboard)
 }
 
 export default help
