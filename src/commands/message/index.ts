@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import { STICKERS, YEARS } from '../../common/constants'
-import { Guild } from '../../common/types'
 import { isGuild, isSport } from '../../common/validators'
 import { conversationPhase } from '../../common/variables'
 import { entryToDb, updateEntryStash } from '../../entries'
@@ -49,6 +48,11 @@ const message = async (ctx: any, next: () => Promise<void>) => {
       break
 
     case 'dist':
+      if(!text) {
+        ctx.reply("Please input  text 👀")
+        break
+      }
+
       const distance = parseFloat(text.replace(",", "."))
       if (!isNaN(distance) && distance > 0) {
         updateEntryStash(chatId, {
