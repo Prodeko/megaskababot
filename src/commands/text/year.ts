@@ -8,7 +8,7 @@ import { updateUsersStash } from "../../users"
 export default async function year(ctx: TextCtxType, yearStr: string, userId: number, chatId: number) {
   const asNum = parseFloat(yearStr)
   if (!YEARS.includes(yearStr)) {
-    await ctx.reply('Please give a number beatween 1950 - 2023 👀')
+    return await ctx.reply('Please give a number between 1950 - 2023 👀')
   }
 
   updateUsersStash(userId, { freshmanYear: asNum })
