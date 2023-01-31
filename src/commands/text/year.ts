@@ -6,7 +6,7 @@ import { updateUsersStash } from "../../users"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function year(ctx: TextCtxType, yearStr: string, userId: number, chatId: number) {
-  const asNum = parseFloat(yearStr)
+  const asNum = parseInt(yearStr)
   if (!YEARS.includes(yearStr)) {
     return await ctx.reply('Please give a number between 1950 - 2023 👀')
   }
