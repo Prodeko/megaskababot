@@ -12,7 +12,7 @@ export const inlinePrivacyKeyboard = Markup.inlineKeyboard([
 
 export const guildKeyboard = Markup.keyboard(GUILDS.map(_.capitalize)).oneTime()
 export const yearKeyboard = Markup.keyboard(YEARS).oneTime()
-export const transpKeyboard = Markup.keyboard(SPORTS).oneTime().resize()
+export const sportKeyboard = Markup.keyboard(SPORTS).oneTime().resize()
 export const confirmationKeyboard = Markup.inlineKeyboard([
   Markup.button.callback('Remove 🗑️', 'remove'),
   Markup.button.callback('Cancel 🚫', 'cancel'),
