@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"]
 }
 
@@ -12,7 +12,7 @@ datasource db {
 }
 
 model User {
-  telegramUserId   Int   @id
+  telegramUserId   BigInt   @id
   telegramUsername String
   firstName        String
   lastName         String?
@@ -28,7 +28,7 @@ model Entry {
   fileId    String
   sport     String
   user      User     @relation(fields: [userId], references: [telegramUserId])
-  userId    Int
+  userId    BigInt
   createdAt DateTime @default(now())
   valid     Boolean?
 }
