@@ -1,5 +1,6 @@
 import { INTRODUCTORY_MESSAGE, PRIVACY_POLICY, START_REGISTRATION_MESSAGE } from "../common/constants"
 import { CommandContext } from "../common/types"
+import { isBigInteger } from "../common/validators"
 import { conversationPhase } from "../common/variables"
 import { commandsKeyboard, inlinePrivacyKeyboard, yearKeyboard } from "../keyboards"
 import { isUser, updateUsersStash } from "../users"
@@ -18,13 +19,18 @@ const start = async (ctx: CommandContext) => {
     return
   }
 
+  const telegramUserId = ctx.message.from.id
+  if (!isBigInteger(telegramUserId)) {
+    throw TypeError("Invalid user ID received from ctx")
+  }
+
   if (!userExistsInDatabase) {
     conversationPhase.set(ctx.chat.id, 'year')
     updateUsersStash(userId, {
       firstName: ctx.message.from.first_name,
       lastName: ctx.message.from.last_name,
       telegramUsername: ctx.message.from.username,
-      telegramUserId: ctx.message.from.id,
+      telegramUserId,
     })
     await ctx.reply(
       `Welcome to MEGASCIBA! ${START_REGISTRATION_MESSAGE}`

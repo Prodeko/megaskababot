@@ -41,4 +41,8 @@ const isEntry = (entry: any): entry is Entry => {
   )
 }
 
-export { isSport, isGuild, isCompleteUser, isCompleteEntry, isEntry }
+const isBigInteger = (number: unknown): number is bigint => {
+  return Number.isInteger(number)
+}
+
+export { isSport, isGuild, isCompleteUser, isCompleteEntry, isEntry, isBigInteger }
