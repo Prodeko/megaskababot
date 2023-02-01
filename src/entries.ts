@@ -1,6 +1,8 @@
+import * as fs from 'fs'
 
 import { prisma } from '../config'
-import { Entry } from './common/types'
+import { Entry, EntryWithUser } from './common/types'
+import { arrayToCSV } from './common/utils'
 import { isBigInteger, isCompleteEntry } from './common/validators'
 
 const entries = new Map<number, Partial<Entry>>()
@@ -95,6 +97,38 @@ const updateEntry = (id: number, data: Partial<Entry>) =>
     data,
   })
 
+const saveEntriesAsCSV = async () => {
+  const entries = (await getAllEntries()) as unknown as EntryWithUser[]
+  const headers = [
+    {
+      id: 'id',
+      distance: 'distance',
+      fileId: 'fileId',
+      sport: 'sport',
+      userId: 'userId',
+      createdAt: 'createdAt',
+      valid: 'valid',
+      user: 'user',
+      telegramUserId: 'telegramUserId',
+      telegramUsername: 'telegramUsername',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      freshmanYear: 'freshmanYear',
+      guild: 'guild',
+    },
+  ]
+  const flattenedEntries = headers.concat(
+    entries.map<any>(e => ({
+      ...e,
+      ...e.user,
+      createdAt: e.createdAt,
+      user: undefined,
+    }))
+  )
+  const csv = arrayToCSV(flattenedEntries)
+  fs.writeFileSync('entries.csv', csv)
+}
+
 export {
   updateEntryStash,
   entryToDb,
@@ -109,4 +143,5 @@ export {
   fileIdsForUserId,
   fileIdsForUsername,
   updateEntry,
+  saveEntriesAsCSV
 }

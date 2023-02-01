@@ -4,18 +4,17 @@ import _ from 'lodash'
 import { MediaGroup } from 'telegraf/typings/telegram-types'
 
 import { ActionContext, CommandContext, Entry, EntryWithUser } from '../common/types'
-import { arrayToCSV, formatEntry, formatEntryWithUser } from '../common/utils'
+import { formatEntry, formatEntryWithUser } from '../common/utils'
 import { isBigInteger, isEntry } from '../common/validators'
 import {
   amountToValidate,
   fileIdsForUserId,
-  fileIdsForUsername,
-  getAllEntries,
-  getEntry,
+  fileIdsForUsername, getEntry,
   getRandomNotValidEntry,
   removeEntry,
+  saveEntriesAsCSV,
   setEntryValidation,
-  updateEntry,
+  updateEntry
 } from '../entries'
 import { confirmationKeyboard, validationKeyboard } from '../keyboards'
 
@@ -167,35 +166,7 @@ export const csv = async (ctx: CommandContext) => {
   if (!admins.has(ctx.from.id)) return
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const entries = (await getAllEntries()) as any[]
-  const headers = [
-    {
-      id: 'id',
-      distance: 'distance',
-      fileId: 'fileId',
-      sport: 'sport',
-      userId: 'userId',
-      createdAt: 'createdAt',
-      valid: 'valid',
-      user: 'user',
-      telegramUserId: 'telegramUserId',
-      telegramUsername: 'telegramUsername',
-      firstName: 'firstName',
-      lastName: 'lastName',
-      freshmanYear: 'freshmanYear',
-      guild: 'guild',
-    },
-  ]
-  const flattenedEntries = headers.concat(
-    entries.map(e => ({
-      ...e,
-      ...e.user,
-      createdAt: e.createdAt,
-      user: undefined,
-    }))
-  )
-  const csv = arrayToCSV(flattenedEntries)
-  fs.writeFileSync('entries.csv', csv)
+  await saveEntriesAsCSV()
   ctx.telegram.sendDocument(ctx.from.id, {
     source: fs.readFileSync('entries.csv'),
     filename: 'entries.csv',
