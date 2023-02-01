@@ -101,7 +101,7 @@ export const allPhotosFromUser = async (ctx: CommandContext) => {
     fileIds = await fileIdsForUsername(args[1])
   }
 
-  if(!fileIds) return await ctx.reply("No such user 👀")
+  if (!fileIds) return await ctx.reply('No such user 👀')
 
   const chunks = _.chunk(
     fileIds.map(f => ({ media: f.fileId, type: 'photo' })),
@@ -167,12 +167,32 @@ export const csv = async (ctx: CommandContext) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const entries = (await getAllEntries()) as any[]
-  console.log(entries[0].user)
-  const flattenedEntries = entries.map(e => ({
-    ...e,
-    ...e.user,
-    user: undefined,
-  }))
+  const headers = [
+    {
+      id: 'id',
+      distance: 'distance',
+      fileId: 'fileId',
+      sport: 'sport',
+      userId: 'userId',
+      createdAt: 'createdAt',
+      valid: 'valid',
+      user: 'user',
+      telegramUserId: 'telegramUserId',
+      telegramUsername: 'telegramUsername',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      freshmanYear: 'freshmanYear',
+      guild: 'guild',
+    },
+  ]
+  const flattenedEntries = headers.concat(
+    entries.map(e => ({
+      ...e,
+      ...e.user,
+      createdAt: e.createdAt,
+      user: undefined,
+    }))
+  )
   const csv = arrayToCSV(flattenedEntries)
   fs.writeFileSync('entries.csv', csv)
   ctx.telegram.sendDocument(ctx.from.id, {
