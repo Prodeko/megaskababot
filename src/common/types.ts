@@ -29,7 +29,7 @@ export type EntryWithoutId = {
 export type Entry = EntryWithoutId & {
   id: number
   createdAt: Date
-  valid: boolean
+  valid: boolean | null
 }
 
 export type EntryWithUser = Entry & { user: User }
