@@ -5,8 +5,8 @@ import { Update } from 'telegraf/typings/core/types/typegram';
 /**
  * Launch bot in long polling (development) mode
  */
-function launchLongPollBot(bot: Telegraf<Context<Update>>) {
-  bot.launch()
+async function launchLongPollBot(bot: Telegraf<Context<Update>>) {
+  await bot.launch()
 }
 
 /**
@@ -49,6 +49,8 @@ export default async function launchBotBasedOnNodeEnv(bot: Telegraf<Context<Upda
     await launchWebhookBot(bot)
   } else {
     console.log("Launching bot in long polling mode")
-    launchLongPollBot(bot)
+    await launchLongPollBot(bot)
   }
+
+  console.log("Launched bot")
 }
