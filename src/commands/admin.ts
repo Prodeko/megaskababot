@@ -41,7 +41,7 @@ const performPistokoe = async (ctx: ActionContext | CommandContext) => {
 
 export const notValidated = async (ctx: ActionContext | CommandContext) => {
   const notValidated = await amountToValidate()
-  await ctx.reply(`Amount of entries not validated: ${notValidated}`)
+  await ctx.reply(`Number of entries not validated: ${notValidated}`)
 }
 
 export const pistokoe = async (ctx: CommandContext) => {
