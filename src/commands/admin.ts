@@ -80,7 +80,7 @@ export const adminLogin = async (ctx: CommandContext) => {
   const userId = ctx.message.from.id
   admins.add(userId)
   await ctx.reply(
-    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [id or username] - gets all uploaded photos by user'
+    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [entry id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [user id or username] - gets all uploaded photos by user \n/updatedistance [entry id] [distance] - sets a new distance on an entry \n/resetvalidation [entry id] - resets the validation of entry'
   )
 }
 
