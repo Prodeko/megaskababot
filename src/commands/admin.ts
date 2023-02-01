@@ -3,8 +3,8 @@ import * as fs from 'fs'
 import _ from 'lodash'
 import { MediaGroup } from 'telegraf/typings/telegram-types'
 
-import { ActionContext, CommandContext, EntryWithUser } from '../common/types'
-import { arrayToCSV, formatEntryWithUser } from '../common/utils'
+import { ActionContext, CommandContext, Entry, EntryWithUser } from '../common/types'
+import { arrayToCSV, formatEntry, formatEntryWithUser } from '../common/utils'
 import { isBigInteger, isEntry } from '../common/validators'
 import {
   amountToValidate,
@@ -15,6 +15,7 @@ import {
   getRandomNotValidEntry,
   removeEntry,
   setEntryValidation,
+  updateEntry,
 } from '../entries'
 import { confirmationKeyboard, validationKeyboard } from '../keyboards'
 
@@ -29,7 +30,7 @@ const performPistokoe = async (ctx: ActionContext | CommandContext) => {
 
   if (!chatId) throw new Error('No chat id found')
   if (!entry) return await ctx.reply('No entries found')
-  if (!isEntry(entry)) await ctx.reply('Found entry is not an entry?')
+  if (!isEntry(entry)) return await ctx.reply('Found entry is not an entry?')
 
   underValidation.set(chatId, entry.id)
 
@@ -79,7 +80,7 @@ export const adminLogin = async (ctx: CommandContext) => {
   const userId = ctx.message.from.id
   admins.add(userId)
   await ctx.reply(
-    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [id or username] - gets all uploaded photos by user'
+    'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [entry id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [user id or username] - gets all uploaded photos by user \n/updatedistance [entry id] [distance] - sets a new distance on an entry \n/resetvalidation [entry id] - resets the validation of entry'
   )
 }
 
@@ -199,6 +200,51 @@ export const csv = async (ctx: CommandContext) => {
     source: fs.readFileSync('entries.csv'),
     filename: 'entries.csv',
   })
+}
+
+export const resetValidation = async (ctx: CommandContext) => {
+  if (!admins.has(ctx.from.id)) return
+
+  const args = ctx.message.text.split(' ')
+  if (args.length <= 1)
+    return await ctx.reply('Please give the id to update as an argument (eg. /resetvalidation 10)')
+
+  const idToReset = parseInt(args[1])
+
+  if (isNaN(idToReset)) return await ctx.reply('Given id is not a number!')
+
+  try {
+    const entry = await updateEntry(idToReset, {
+      valid: null
+    })
+    await ctx.reply(`Resetted valdation for entry ${entry.id}: \n${formatEntry(entry as unknown as Entry)}`)
+  } catch (e) {
+    console.log(e)
+    await ctx.reply("That did not work! (Most likely there is no such entry)")
+  }
+}
+
+export const setDistance = async (ctx: CommandContext) => {
+  if (!admins.has(ctx.from.id)) return
+
+  const args = ctx.message.text.split(' ')
+  if (args.length <= 2)
+    return await ctx.reply('Please give the id to update and new distance as an argument (eg. /setdistance 10 10.4)')
+
+  const idToUpdate = parseInt(args[1])
+  const distance = parseFloat(args[2].replace(",", "."))
+
+  if (isNaN(idToUpdate) || isNaN(distance) || !(idToUpdate && distance)) return await ctx.reply('Either of the given arguments is not a number!')
+
+  try {
+    const entry = await updateEntry(idToUpdate, {
+      distance
+    })
+    await ctx.reply(`Updated distance for entry ${entry.id}: \n${formatEntry(entry as unknown as Entry)}`)
+  } catch (e) {
+    console.log(e)
+    await ctx.reply("That did not work! (Most likely there is no such entry)")
+  }
 }
 
 export const stopValidation = async (ctx: ActionContext) => {

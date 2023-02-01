@@ -1,4 +1,4 @@
-import { isBigIntLiteral } from 'typescript'
+
 import { prisma } from '../config'
 import { Entry } from './common/types'
 import { isBigInteger, isCompleteEntry } from './common/validators'
@@ -14,7 +14,7 @@ const updateEntryStash = (chatId: number, update: Partial<Entry>) => {
 
 const getEntries = async (userId: unknown): Promise<Entry[]> => {
   if (!isBigInteger(userId)) {
-    throw TypeError("userId should be a long")
+    throw TypeError('userId should be a long')
   }
   return (await prisma.entry.findMany({ where: { userId } })) as unknown as Entry[]
 }
@@ -83,12 +83,18 @@ const fileIdsForUsername = async (username: string) => {
   })
 
   if (result) {
-    return await fileIdsForUserId(result.telegramUserId)
+    return await fileIdsForUserId(result.telegramUserId as unknown as bigint)
   } else {
     return null
   }
-
 }
+
+const updateEntry = (id: number, data: Partial<Entry>) =>
+  prisma.entry.update({
+    where: { id },
+    data,
+  })
+
 export {
   updateEntryStash,
   entryToDb,
@@ -102,4 +108,5 @@ export {
   removeEntry,
   fileIdsForUserId,
   fileIdsForUsername,
+  updateEntry,
 }

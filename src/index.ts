@@ -4,7 +4,7 @@ import cancelLogin from './commands/action/cancelLogin'
 import confirmLogin from './commands/action/confirmLogin'
 import { onPrivacyAccepted, onPrivacyRejected } from './commands/action/privacy'
 
-import { adminLogin, allPhotosFromUser, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, stopValidation, valid } from './commands/admin'
+import { adminLogin, allPhotosFromUser, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, resetValidation, setDistance, stopValidation, valid } from './commands/admin'
 import entries from './commands/entries'
 import entry from './commands/entry'
 import help from './commands/help'
@@ -49,6 +49,8 @@ bot.command('pistokoe', pistokoe)
 bot.command('numtovalidate', notValidated)
 bot.command('remove', remove)
 bot.command('allphotos', allPhotosFromUser)
+bot.command('resetvalidation', resetValidation)
+bot.command('updatedistance', setDistance)
 
 bot.action('invalid', invalid)
 bot.action('valid', valid)
