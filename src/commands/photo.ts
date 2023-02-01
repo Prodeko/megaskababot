@@ -10,8 +10,10 @@ export default async function proof(ctx:PhotoCtxType, next: any) {
   if(conversationPhase.get(ctx.chat.id) !== 'proof') return next()
   try {
     const fileId = ctx.message?.photo[3]?.file_id ?? ctx.message?.photo[2]?.file_id ?? ctx.message?.photo[1]?.file_id
-    updateEntryStash(chatId, { fileId })
-    entryToDb(chatId)
+    const unixTimestampSeconds = ctx.message.date
+    const createdAt = new Date(unixTimestampSeconds * 1000)
+    updateEntryStash(chatId, { fileId, createdAt })
+    await entryToDb(chatId)
     await ctx.replyWithSticker(STICKERS[Math.floor(Math.random()*STICKERS.length)], commandsKeyboard)
     await ctx.reply("Entry added!")
     conversationPhase.delete(chatId)
