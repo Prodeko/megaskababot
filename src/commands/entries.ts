@@ -13,10 +13,13 @@ const entries = async (ctx: CommandContext | ActionContext) => {
     const points = entries
       .map(e => e.distance * COEFFICIENTS[e.sport])
       .reduce((p, e) => p + e, 0)
+
+    const distance = entries.reduce((p, e) => p + e.distance, 0)
+
     await ctx.reply(
       entries
         .map(formatEntry)
-        .concat([`Total points: ${points}`])
+        .concat([`Total distance: ${distance} km\nTotal points: ${points} points`])
         .join('\n\n'), commandsKeyboard
     )
   } else {
