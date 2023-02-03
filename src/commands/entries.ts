@@ -19,7 +19,7 @@ const entries = async (ctx: CommandContext | ActionContext) => {
     await ctx.reply(
       entries
         .map(formatEntry)
-        .concat([`Total distance: ${distance} km\nTotal points: ${points} points`])
+        .concat([`Total distance: ${distance.toFixed(2)} km\nTotal points: ${points.toFixed(2)} points`])
         .join('\n\n'), commandsKeyboard
     )
   } else {
