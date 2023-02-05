@@ -77,8 +77,11 @@ bot.action('accepted', onPrivacyAccepted)
 
 bot.action('rejected', onPrivacyRejected)
 
-bot.on('chosen_inline_result', ctx => ctx.editMessageReplyMarkup(undefined) )
-
+bot.use(async ctx => {
+  try {
+    await ctx.editMessageReplyMarkup(undefined)
+  } catch {}
+})
 
 // Launch bot 
 launchBotDependingOnNodeEnv(bot)

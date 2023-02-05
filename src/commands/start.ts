@@ -1,12 +1,15 @@
-import { INTRODUCTORY_MESSAGE, PRIVACY_POLICY, START_REGISTRATION_MESSAGE } from "../common/constants"
-import { CommandContext } from "../common/types"
-import { isBigInteger } from "../common/validators"
-import { conversationPhase } from "../common/variables"
-import { commandsKeyboard, inlinePrivacyKeyboard, yearKeyboard } from "../keyboards"
-import { isUser, updateUsersStash } from "../users"
+import {
+  INTRODUCTORY_MESSAGE,
+  PRIVACY_POLICY,
+  START_REGISTRATION_MESSAGE,
+} from '../common/constants'
+import { CommandContext } from '../common/types'
+import { isBigInteger } from '../common/validators'
+import { conversationPhase } from '../common/variables'
+import { commandsKeyboard, inlinePrivacyKeyboard, yearKeyboard } from '../keyboards'
+import { isUser, updateUsersStash } from '../users'
 
-
-const start = async (ctx: CommandContext) => {
+const start = async (ctx: CommandContext, next: () => Promise<void>) => {
   const userId = ctx.message.from.id
 
   // Assuming that all users that have their data in the database have accepted the privacy policy.
@@ -21,7 +24,7 @@ const start = async (ctx: CommandContext) => {
 
   const telegramUserId = ctx.message.from.id
   if (!isBigInteger(telegramUserId)) {
-    throw TypeError("Invalid user ID received from ctx")
+    throw TypeError('Invalid user ID received from ctx')
   }
 
   if (!userExistsInDatabase) {
@@ -32,13 +35,12 @@ const start = async (ctx: CommandContext) => {
       telegramUsername: ctx.message.from.username,
       telegramUserId,
     })
-    await ctx.reply(
-      `Welcome to MEGASCIBA! ${START_REGISTRATION_MESSAGE}`
-    )
+    await ctx.reply(`Welcome to MEGASCIBA! ${START_REGISTRATION_MESSAGE}`)
     await ctx.reply('What is your freshman year?', yearKeyboard)
   } else {
-    await ctx.reply("Welcome back to MEGASCIBA! What would you like to do?", commandsKeyboard)
+    await ctx.reply('Welcome back to MEGASCIBA! What would you like to do?', commandsKeyboard)
   }
+  return next()
 }
 
 export default start

@@ -9,12 +9,13 @@ import { isBigInteger, isEntry } from '../common/validators'
 import {
   amountToValidate,
   fileIdsForUserId,
-  fileIdsForUsername, getEntry,
+  fileIdsForUsername,
+  getEntry,
   getRandomNotValidEntry,
   removeEntry,
   saveEntriesAsCSV,
   setEntryValidation,
-  updateEntry
+  updateEntry,
 } from '../entries'
 import { confirmationKeyboard, validationKeyboard } from '../keyboards'
 
@@ -49,41 +50,42 @@ export const pistokoe = async (ctx: CommandContext) => {
   await performPistokoe(ctx)
 }
 
-export const invalid = async (ctx: ActionContext) => {
+export const invalid = async (ctx: ActionContext, next: () => Promise<void>) => {
   if (!admins.has(ctx!.from!.id)) return
 
   const entryId = underValidation.get(ctx!.chat!.id)
   if (!entryId) return
 
   await setEntryValidation(entryId, false)
-  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
 
   await ctx.reply('Marked invalid')
   await performPistokoe(ctx)
+  return next()
 }
 
-export const valid = async (ctx: ActionContext) => {
+export const valid = async (ctx: ActionContext, next: () => Promise<void>) => {
   if (!admins.has(ctx!.from!.id)) return
 
   const entryId = underValidation.get(ctx!.chat!.id)
   if (!entryId) return
 
   await setEntryValidation(entryId, true)
-  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
 
   await ctx.reply('Marked valid')
   await performPistokoe(ctx)
+  return next()
 }
 
-export const adminLogin = async (ctx: CommandContext) => {
+export const adminLogin = async (ctx: CommandContext, next: () => Promise<void>) => {
   const userId = ctx.message.from.id
   admins.add(userId)
   await ctx.reply(
     'You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [entry id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [user id or username] - gets all uploaded photos by user \n/updatedistance [entry id] [distance] - sets a new distance on an entry \n/resetvalidation [entry id] - resets the validation of entry'
   )
+  return next()
 }
 
-export const allPhotosFromUser = async (ctx: CommandContext) => {
+export const allPhotosFromUser = async (ctx: CommandContext, next: () => Promise<void>) => {
   if (!admins.has(ctx!.from!.id)) return
   const args = ctx.message.text.split(' ')
 
@@ -116,30 +118,31 @@ export const allPhotosFromUser = async (ctx: CommandContext) => {
       await ctx.reply('Possibily invalid fileId')
     }
   })
+  return next()
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const confirmedRemove = async (ctx: any) => {
+export const confirmedRemove = async (ctx: any, next: () => Promise<void>) => {
   if (!admins.has(ctx.from.id)) return
 
   const entryId = removeConsideration.get(ctx.chat.id)
   if (!entryId) return
   await removeEntry(entryId)
-  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
   removeConsideration.delete(ctx.chat.id)
 
   await ctx.reply('Removed entry!')
+  return next()
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const cancelRemove = async (ctx: any) => {
-  if (!admins.has(ctx.from.id)) return
-  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
+export const cancelRemove = async (ctx: any, next: () => Promise<void>) => {
+  if (!admins.has(ctx.from.id)) return next()
   removeConsideration.delete(ctx.chat.id)
   await ctx.reply('Canceled')
+  return next()
 }
 
-export const remove = async (ctx: CommandContext) => {
+export const remove = async (ctx: CommandContext, next: () => Promise<void>) => {
   if (!admins.has(ctx.from.id)) return
 
   const args = ctx.message.text.split(' ')
@@ -160,9 +163,10 @@ export const remove = async (ctx: CommandContext) => {
     console.error(e)
     await ctx.reply('No such entry')
   }
+  return next()
 }
 
-export const csv = async (ctx: CommandContext) => {
+export const csv = async (ctx: CommandContext, next: () => Promise<void>) => {
   if (!admins.has(ctx.from.id)) return
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -171,9 +175,10 @@ export const csv = async (ctx: CommandContext) => {
     source: fs.readFileSync('entries.csv'),
     filename: 'entries.csv',
   })
+  return next()
 }
 
-export const resetValidation = async (ctx: CommandContext) => {
+export const resetValidation = async (ctx: CommandContext, next: () => Promise<void>) => {
   if (!admins.has(ctx.from.id)) return
 
   const args = ctx.message.text.split(' ')
@@ -186,38 +191,48 @@ export const resetValidation = async (ctx: CommandContext) => {
 
   try {
     const entry = await updateEntry(idToReset, {
-      valid: null
+      valid: null,
     })
-    await ctx.reply(`Resetted valdation for entry ${entry.id}: \n${formatEntry(entry as unknown as Entry)}`)
+    await ctx.reply(
+      `Resetted valdation for entry ${entry.id}: \n${formatEntry(entry as unknown as Entry)}`
+    )
   } catch (e) {
     console.log(e)
-    await ctx.reply("That did not work! (Most likely there is no such entry)")
+    await ctx.reply('That did not work! (Most likely there is no such entry)')
   }
+  return next()
 }
 
-export const setDistance = async (ctx: CommandContext) => {
+export const setDistance = async (ctx: CommandContext, next: () => Promise<void>) => {
   if (!admins.has(ctx.from.id)) return
 
   const args = ctx.message.text.split(' ')
   if (args.length <= 2)
-    return await ctx.reply('Please give the id to update and new distance as an argument (eg. /setdistance 10 10.4)')
+    return await ctx.reply(
+      'Please give the id to update and new distance as an argument (eg. /setdistance 10 10.4)'
+    )
 
   const idToUpdate = parseInt(args[1])
-  const distance = parseFloat(args[2].replace(",", "."))
+  const distance = parseFloat(args[2].replace(',', '.'))
 
-  if (isNaN(idToUpdate) || isNaN(distance) || !(idToUpdate && distance)) return await ctx.reply('Either of the given arguments is not a number!')
+  if (isNaN(idToUpdate) || isNaN(distance) || !(idToUpdate && distance))
+    return await ctx.reply('Either of the given arguments is not a number!')
 
   try {
     const entry = await updateEntry(idToUpdate, {
-      distance
+      distance,
     })
-    await ctx.reply(`Updated distance for entry ${entry.id}: \n${formatEntry(entry as unknown as Entry)}`)
+    await ctx.reply(
+      `Updated distance for entry ${entry.id}: \n${formatEntry(entry as unknown as Entry)}`
+    )
   } catch (e) {
     console.log(e)
-    await ctx.reply("That did not work! (Most likely there is no such entry)")
+    await ctx.reply('That did not work! (Most likely there is no such entry)')
   }
+  return next()
 }
 
-export const stopValidation = async (ctx: ActionContext) => {
+export const stopValidation = async (ctx: ActionContext, next: () => Promise<void>) => {
   underValidation.delete(ctx!.chat!.id)
+  return next()
 }

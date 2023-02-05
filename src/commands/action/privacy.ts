@@ -6,9 +6,8 @@ import { conversationPhase } from "../../common/variables";
 import { yearKeyboard } from "../../keyboards";
 import { updateUsersStash } from "../../users";
 
-export async function onPrivacyAccepted(ctx: ActionContext) {
+export async function onPrivacyAccepted(ctx: ActionContext,  next: () => Promise<void>) {
   conversationPhase.set(ctx.chat!.id, 'year')
-  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
 
   const telegramUserId = ctx!.from!.id
 
@@ -24,9 +23,11 @@ export async function onPrivacyAccepted(ctx: ActionContext) {
   })
   await ctx.reply(START_REGISTRATION_MESSAGE)
   await ctx.reply('What is your freshman year?', yearKeyboard)
+  return next()
 }
 
-export async function onPrivacyRejected(ctx: ActionContext) {
-  await ctx.editMessageReplyMarkup(undefined) // Clear inline keyboard
+export async function onPrivacyRejected(ctx: ActionContext,  next: () => Promise<void>) {
+ 
   await ctx.reply(PRIVACY_REJECTED_MESSAGE)
+  return next()
 }
