@@ -25,6 +25,10 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 
 bot.start(start)
 
+// Message handling
+bot.on('text', text)
+bot.on('photo', photo)
+
 // Standard commands
 bot.command('entries', entries)
 bot.command('help', help)
@@ -66,11 +70,6 @@ bot.action('entry', entry)
 bot.action('entries', entries)
 bot.action('removelatest', removeLatestCommand)
 bot.action('help', help)
-
-
-// Message handling
-bot.on('text', text)
-bot.on('photo', photo)
 
 // Inline keyboard handling
 bot.action('accepted', onPrivacyAccepted)
