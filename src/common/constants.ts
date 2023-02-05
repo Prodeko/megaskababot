@@ -18,6 +18,7 @@ export const PRIVACY_REJECTED_MESSAGE = "Sorry, you need to accept the privacy p
 
 
 export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString()
+export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString()
 
 
 export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta', 'data guild']
