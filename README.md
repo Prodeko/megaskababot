@@ -7,6 +7,7 @@ Telegram-botti urheilusuoritusten kirjaamiseen
 `/entries` - Tarkastele suorituksiasi  
 `/removelatest` - Poista viimeisin suorituksesi  
 `/help` - Näytä avulias infopläjäys  
+`/rules` - Näytä kisan säännöt  
 
 ## Lokaaliajo
 

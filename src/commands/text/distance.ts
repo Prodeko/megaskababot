@@ -13,7 +13,7 @@ export default async function distance(ctx: TextCtxType, distStr: string, chatId
       userId,
       distance,
     })
-    await ctx.reply('Please give proof as a picture 📷')
+    await ctx.reply('Please give proof as an image 📷. The distance travelled and time taken should be visible.')
     conversationPhase.set(chatId, 'proof')
   } else if(distance >= 1000) {
     await ctx.replyWithSticker(randomInvalidInputSticker())

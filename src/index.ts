@@ -13,6 +13,7 @@ import removeLatestCommand from './commands/removeLatest'
 import start from './commands/start'
 import text from './commands/text'
 import launchBotDependingOnNodeEnv from './launchBotDependingOnNodeEnv'
+import rules from './commands/rules'
 
 
 dotenv.config()
@@ -32,6 +33,7 @@ bot.on('photo', photo)
 // Standard commands
 bot.command('entries', entries)
 bot.command('help', help)
+bot.command('rules', rules)
 bot.command('entry', entry)
 bot.command('removelatest', removeLatestCommand)
 
@@ -70,6 +72,7 @@ bot.action('entry', entry)
 bot.action('entries', entries)
 bot.action('removelatest', removeLatestCommand)
 bot.action('help', help)
+bot.action('rules', rules)
 
 // Inline keyboard handling
 bot.action('accepted', onPrivacyAccepted)

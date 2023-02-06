@@ -33,5 +33,6 @@ export const commandsKeyboard = Markup.inlineKeyboard([
   [{text: 'New entry 🆕', callback_data: 'entry'},
   {text: 'Previous entries 📈', callback_data: 'entries'}],[
   {text: 'Remove latest 🗑️', callback_data: 'removelatest'},
-  {text: 'Help 💡', callback_data: 'help'},]
+  {text: 'Rules 📖', callback_data: 'rules'},],
+  [{text: 'Help 💡', callback_data: 'help'},],
 ])
