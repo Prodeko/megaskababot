@@ -8,13 +8,27 @@ export const arrayToCSV = <T extends { [k: string]: unknown }>(
   return array.map(t => Object.values(t).join(';')).join('\n')
 }
 
-export const formatEntry = (e: Entry) =>
-  `${e?.createdAt.toLocaleString('fi-FI', { timeStyle: "short", dateStyle: "short", timeZone: "EET"})} \nDistance: ${e.distance} km \nSport: ${
-    e.sport
-  }`
+export const formatEntry = (e: Entry) => {
+  const localeDateString = e?.createdAt.toLocaleString('fi-FI', { timeStyle: "short", dateStyle: "short", timeZone: "EET" })
+    ?? 'Unknown date'
 
-export const formatEntryWithUser = (e: Entry & { user: User }) =>
-  `Username: <a href="tg://user?id=${e.userId}">@${e.user.telegramUsername}</a>\n` + formatEntry(e)
+  return (
+`${localeDateString}
+Distance: ${e.distance} km
+Sport: ${e.sport}`
+  )
+}
+
+export const formatEntryWithUser = (e: Entry & { user: User }) => {
+  const usernameLink = `<a href="tg://user?id=${e.userId}">@${e.user.telegramUsername}</a>`
+
+  return (
+`Username: ${usernameLink}
+Entry #${e.id}
+${formatEntry(e)}`
+  )
+
+}
 
 
 export const randomInvalidInputSticker = () => _.shuffle(INVALID_INPUT_STICKERS)[0]
