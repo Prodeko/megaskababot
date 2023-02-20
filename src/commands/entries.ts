@@ -8,8 +8,7 @@ import { commandsKeyboard } from '../keyboards'
 
 const entries = async (ctx: CommandContext | ActionContext, next: () => Promise<void>) => {
   const entries = await getEntries(ctx!.from!.id)
-  try {
-  } catch {}
+
   if (entries.length > 0) {
     const points = entries.map(e => e.distance * COEFFICIENTS[e.sport]).reduce((p, e) => p + e, 0)
 
@@ -19,18 +18,18 @@ const entries = async (ctx: CommandContext | ActionContext, next: () => Promise<
       ([key, value]) => [key, value.reduce((p, e) => p + e.distance, 0)]
     )
 
+    // there is a limit to the size of a tg message, 100 entries should fit
+    const chunks = _.chunk(entries, 100)
+
+    chunks.forEach(async chunk => await ctx.replyWithHTML(chunk.map(formatEntry).join('\n\n')))
+
     await ctx.replyWithHTML(
-      entries
-        .map(formatEntry)
-        .concat(
-          ['<strong>Totals</strong>']
-            .concat(distanceBySport.map(([sport, dist]) => `${sport}: ${dist} km`))
-            .join('\n')
-        )
-        .concat([
+      ['<strong>Totals</strong>']
+        .concat(distanceBySport.map(([sport, dist]) => `${sport}: ${dist} km`))
+        .join('\n') +
+        [
           `Total distance: ${distance.toFixed(2)} km\nTotal points: ${points.toFixed(2)} points`,
-        ])
-        .join('\n\n'),
+        ].join('\n\n'),
       commandsKeyboard
     )
   } else {
