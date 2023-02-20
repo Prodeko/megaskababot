@@ -26,7 +26,7 @@ const entries = async (ctx: CommandContext | ActionContext, next: () => Promise<
     await ctx.replyWithHTML(
       ['<strong>Totals</strong>']
         .concat(distanceBySport.map(([sport, dist]) => `${sport}: ${dist} km`))
-        .join('\n') +
+        .join('\n') + "\n" +
         [
           `Total distance: ${distance.toFixed(2)} km\nTotal points: ${points.toFixed(2)} points`,
         ].join('\n\n'),
