@@ -21,7 +21,10 @@ const entries = async (ctx: CommandContext | ActionContext, next: () => Promise<
     // there is a limit to the size of a tg message, 50 entries should fit (100 didn't!)
     const chunks = _.chunk(entries, 50)
 
-    chunks.forEach(async chunk => await ctx.replyWithHTML(chunk.map(formatEntry).join('\n\n')))
+    // This has to be a for-of loop to avoid messages arriving out of orded
+    for (let chunk of chunks) {
+      await ctx.replyWithHTML(chunk.map(formatEntry).join('\n\n'))
+    }
 
     await ctx.replyWithHTML(
       ['<strong>Totals</strong>']
