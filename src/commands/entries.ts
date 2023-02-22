@@ -18,8 +18,8 @@ const entries = async (ctx: CommandContext | ActionContext, next: () => Promise<
       ([key, value]) => [key, value.reduce((p, e) => p + e.distance, 0)]
     )
 
-    // there is a limit to the size of a tg message, 100 entries should fit
-    const chunks = _.chunk(entries, 100)
+    // there is a limit to the size of a tg message, 50 entries should fit (100 didn't!)
+    const chunks = _.chunk(entries, 50)
 
     chunks.forEach(async chunk => await ctx.replyWithHTML(chunk.map(formatEntry).join('\n\n')))
 
