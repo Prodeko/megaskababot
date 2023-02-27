@@ -10,7 +10,9 @@ const entries = async (ctx: CommandContext | ActionContext, next: () => Promise<
   const entries = await getEntries(ctx!.from!.id)
 
   if (entries.length > 0) {
-    const points = entries.map(e => e.distance * COEFFICIENTS[e.sport]).reduce((p, e) => p + e, 0)
+    const points = entries
+      .map(e => e.distance * COEFFICIENTS[e.sport] * (e.doublePoints ? 2 : 1))
+      .reduce((p, e) => p + e, 0)
 
     const distance = entries.reduce((p, e) => p + e.distance, 0)
 
@@ -29,7 +31,8 @@ const entries = async (ctx: CommandContext | ActionContext, next: () => Promise<
     await ctx.replyWithHTML(
       ['<strong>Totals</strong>']
         .concat(distanceBySport.map(([sport, dist]) => `${sport}: ${dist} km`))
-        .join('\n') + "\n" +
+        .join('\n') +
+        '\n' +
         [
           `Total distance: ${distance.toFixed(2)} km\nTotal points: ${points.toFixed(2)} points`,
         ].join('\n\n'),
