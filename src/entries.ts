@@ -18,7 +18,14 @@ const getEntries = async (userId: unknown): Promise<Entry[]> => {
   if (!isBigInteger(userId)) {
     throw TypeError('userId should be a long')
   }
-  return (await prisma.entry.findMany({ where: { userId } })) as unknown as Entry[]
+  return (await prisma.entry.findMany({
+    where: { userId },
+    orderBy: [
+      {
+        createdAt: 'asc',
+      },
+    ],
+  })) as unknown as Entry[]
 }
 
 const getAllEntries = async () => {
@@ -143,5 +150,5 @@ export {
   fileIdsForUserId,
   fileIdsForUsername,
   updateEntry,
-  saveEntriesAsCSV
+  saveEntriesAsCSV,
 }
