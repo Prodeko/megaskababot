@@ -14,6 +14,7 @@ import {
   getRandomNotValidEntry,
   removeEntry,
   saveEntriesAsCSV,
+  setEntryDoublePoints,
   setEntryValidation,
   updateEntry,
 } from '../entries'
@@ -63,17 +64,30 @@ export const invalid = async (ctx: ActionContext, next: () => Promise<void>) => 
   return next()
 }
 
-export const valid = async (ctx: ActionContext, next: () => Promise<void>) => {
+export const validx = async (
+  doublePoints: boolean,
+  ctx: ActionContext,
+  next: () => Promise<void>
+) => {
   if (!admins.has(ctx!.from!.id)) return
 
   const entryId = underValidation.get(ctx!.chat!.id)
   if (!entryId) return
 
   await setEntryValidation(entryId, true)
+  await setEntryDoublePoints(entryId, doublePoints)
 
-  await ctx.reply('Marked valid')
+  await ctx.reply(`Marked valid${doublePoints ? ' (2️⃣x)' : ''}`)
   await performPistokoe(ctx)
   return next()
+}
+
+export const valid1x = async (ctx: ActionContext, next: () => Promise<void>) => {
+  validx(false, ctx, next)
+}
+
+export const valid2x = async (ctx: ActionContext, next: () => Promise<void>) => {
+  validx(true, ctx, next)
 }
 
 export const adminLogin = async (ctx: CommandContext, next: () => Promise<void>) => {

@@ -56,6 +56,10 @@ const setEntryValidation = async (entryId: number, valid: boolean) => {
   await prisma.entry.update({ where: { id: entryId }, data: { valid } })
 }
 
+const setEntryDoublePoints = async (entryId: number, doublePoints: boolean) => {
+  await prisma.entry.update({ where: { id: entryId }, data: { doublePoints } })
+}
+
 const removeLatest = async (userId: number) => {
   const latest = await prisma.entry.findFirst({
     select: { id: true },
@@ -143,6 +147,7 @@ export {
   getEntries,
   getRandomNotValidEntry,
   setEntryValidation,
+  setEntryDoublePoints,
   removeLatest,
   amountToValidate,
   getEntry,
