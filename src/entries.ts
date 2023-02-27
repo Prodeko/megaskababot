@@ -56,6 +56,10 @@ const setEntryValidation = async (entryId: number, valid: boolean) => {
   await prisma.entry.update({ where: { id: entryId }, data: { valid } })
 }
 
+const setEntryDoublePoints = async (entryId: number, doublePoints: boolean) => {
+  await prisma.entry.update({ where: { id: entryId }, data: { doublePoints } })
+}
+
 const removeLatest = async (userId: number) => {
   const latest = await prisma.entry.findFirst({
     select: { id: true },
@@ -106,6 +110,7 @@ const updateEntry = (id: number, data: Partial<Entry>) =>
 
 const saveEntriesAsCSV = async () => {
   const entries = (await getAllEntries()) as unknown as EntryWithUser[]
+
   const headers = [
     {
       id: 'id',
@@ -115,6 +120,7 @@ const saveEntriesAsCSV = async () => {
       userId: 'userId',
       createdAt: 'createdAt',
       valid: 'valid',
+      doublePoints: 'doublePoints',
       user: 'user',
       telegramUserId: 'telegramUserId',
       telegramUsername: 'telegramUsername',
@@ -143,6 +149,7 @@ export {
   getEntries,
   getRandomNotValidEntry,
   setEntryValidation,
+  setEntryDoublePoints,
   removeLatest,
   amountToValidate,
   getEntry,

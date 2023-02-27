@@ -1,20 +1,34 @@
 import * as dotenv from 'dotenv'
 import { Telegraf } from 'telegraf'
+
 import cancelLogin from './commands/action/cancelLogin'
 import confirmLogin from './commands/action/confirmLogin'
 import { onPrivacyAccepted, onPrivacyRejected } from './commands/action/privacy'
-
-import { adminLogin, allPhotosFromUser, cancelRemove, confirmedRemove, csv, invalid, notValidated, pistokoe, remove, resetValidation, setDistance, stopValidation, valid } from './commands/admin'
+import {
+  adminLogin,
+  allPhotosFromUser,
+  cancelRemove,
+  confirmedRemove,
+  csv,
+  invalid,
+  notValidated,
+  pistokoe,
+  remove,
+  resetValidation,
+  setDistance,
+  stopValidation,
+  valid1x,
+  valid2x,
+} from './commands/admin'
 import entries from './commands/entries'
 import entry from './commands/entry'
 import help from './commands/help'
 import photo from './commands/photo'
 import removeLatestCommand from './commands/removeLatest'
+import rules from './commands/rules'
 import start from './commands/start'
 import text from './commands/text'
 import launchBotDependingOnNodeEnv from './launchBotDependingOnNodeEnv'
-import rules from './commands/rules'
-
 
 dotenv.config()
 
@@ -59,7 +73,8 @@ bot.command('resetvalidation', resetValidation)
 bot.command('updatedistance', setDistance)
 
 bot.action('invalid', invalid)
-bot.action('valid', valid)
+bot.action('valid1x', valid1x)
+bot.action('valid2x', valid2x)
 bot.action('stopvalidation', stopValidation)
 
 bot.action('remove', confirmedRemove)
@@ -85,7 +100,7 @@ bot.use(async ctx => {
   } catch {}
 })
 
-// Launch bot 
+// Launch bot
 launchBotDependingOnNodeEnv(bot)
 
 // Enable graceful stop

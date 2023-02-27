@@ -24,6 +24,7 @@ export type EntryWithoutId = {
   fileId: string
   sport: Sport
   userId: number
+  doublePoints: boolean
 }
 
 export type Entry = EntryWithoutId & {
@@ -54,9 +55,12 @@ export type TextCtxType = NarrowedContext<
   { message: Update.New & Update.NonChannel & Message.TextMessage; update_id: number }
 >
 
-export type PhotoCtxType = NarrowedContext<Context<Update>, {
-  message: Update.New & Update.NonChannel & Message.PhotoMessage;
-  update_id: number;
-}>
+export type PhotoCtxType = NarrowedContext<
+  Context<Update>,
+  {
+    message: Update.New & Update.NonChannel & Message.PhotoMessage
+    update_id: number
+  }
+>
 
 export type PrivacyState = 'accepted' | 'rejected'
