@@ -112,33 +112,31 @@ const saveEntriesAsCSV = async () => {
   const entries = (await getAllEntries()) as unknown as EntryWithUser[]
 
   const headers = [
-    {
-      id: 'id',
-      distance: 'distance',
-      fileId: 'fileId',
-      sport: 'sport',
-      userId: 'userId',
-      createdAt: 'createdAt',
-      valid: 'valid',
-      doublePoints: 'doublePoints',
-      user: 'user',
-      telegramUserId: 'telegramUserId',
-      telegramUsername: 'telegramUsername',
-      firstName: 'firstName',
-      lastName: 'lastName',
-      freshmanYear: 'freshmanYear',
-      guild: 'guild',
-    },
+    'id',
+    'distance',
+    'fileId',
+    'sport',
+    'userId',
+    'createdAt',
+    'valid',
+    'doublePoints',
+    'user',
+    'telegramUserId',
+    'telegramUsername',
+    'firstName',
+    'lastName',
+    'freshmanYear',
+    'guild',
   ]
-  const flattenedEntries = headers.concat(
-    entries.map<any>(e => ({
-      ...e,
-      ...e.user,
-      createdAt: e.createdAt,
-      user: undefined,
-    }))
-  )
-  const csv = arrayToCSV(flattenedEntries)
+
+  const flattenedEntries = entries.map<any>(e => ({
+    ...e,
+    ...e.user,
+    createdAt: e.createdAt,
+    user: undefined,
+  }))
+
+  const csv = arrayToCSV(headers, flattenedEntries)
   fs.writeFileSync('entries.csv', csv)
 }
 

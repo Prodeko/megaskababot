@@ -3,8 +3,13 @@ import _ from 'lodash'
 import { INVALID_INPUT_STICKERS } from './constants'
 import { Entry, User } from './types'
 
-export const arrayToCSV = <T extends { [k: string]: unknown }>(array: T[]): string => {
-  return array.map(t => Object.values(t).join(';')).join('\n')
+export const arrayToCSV = <T extends Record<string, unknown>>(
+  headers: (keyof T)[],
+  data: T[]
+): string => {
+  const dataRows = data.map(d => headers.map(h => d[h]))
+  const array = [headers, ...dataRows]
+  return array.map(t => t.join(';')).join('\n')
 }
 
 export const formatEntry = (e: Entry) => {
