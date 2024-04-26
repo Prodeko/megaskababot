@@ -1,7 +1,7 @@
-import { TextCtxType } from "../../common/types"
-import { isSport } from "../../common/validators"
-import { conversationPhase } from "../../common/variables"
-import { updateEntryStash } from "../../entries"
+import { TextCtxType } from '../../common/types'
+import { isSport } from '../../common/validators'
+import { conversationPhase } from '../../common/variables'
+import { updateEntryStash } from '../../entries'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function sport(ctx: TextCtxType, text: string, chatId: number) {
