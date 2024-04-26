@@ -9,7 +9,8 @@
     "migrate": "bunx prisma migrate dev",
     "generate": "bunx prisma generate",
     "sync-prisma": "bun migrate && bun generate",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "biome": "bunx @biomejs/biome check **/*.ts **/*.js"
   },
   "repository": {
     "type": "git",
