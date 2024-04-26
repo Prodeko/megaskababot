@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  bot:
+    build:
+      context: ..
+      dockerfile: .devcontainer/dev.Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+    volumes:
+      - ..:/megaskababot:cached
+      - ${SSH_KEY_PATH:-~/.ssh/id_rsa}:/root/.ssh/id_rsa:ro
+    environment:
+      - "DATABASE_URL=postgres://dev-user:dev-password@db:5432/dev-megaskababot"
+      - "NODE_ENV=development"
+      - "PORT=3000"
+      - "DOMAIN=http://localhost"
+    command: /bin/sh -c "while sleep 1000; do :; done"
+  db:
+    image: postgres:14
+    restart: always
+    tty: true
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=dev-user
+      - POSTGRES_DB=dev-megaskababot
+      - POSTGRES_PASSWORD=dev-password
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+
+volumes:
+  db-data:
