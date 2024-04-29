@@ -21,13 +21,18 @@ export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString()
 export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString()
 
 
-export const GUILDS: Guild[] = ['prodeko', 'athene', 'fyysikkokilta', 'tietokilta', 'data guild']
+export const GUILDS = ['prodeko', 'athene', 'fyysikkokilta', 'rakennusinsinöörikilta'] as const
 export const YEARS = [...Array.from(Array(54).keys()).map(k => `${1970 + k}`)].reverse()
-export const SPORTS: Sport[] = ["run/walk", "ski", "skate"]
+export const SPORTS = ['swimming', 'running', 'walking', 'skiing', 'rollerskiing', 'rollerblading', 'skateboarding', 'cycling'] as const
 export const COEFFICIENTS: Record<Sport, number> = {
-  "run/walk": 1.75,
-  "skate": 0.5,
-  "ski": 1
+  'swimming': 5,
+  'running': 1,
+  'walking': 1,
+  'skiing': 0.5,
+  'rollerskiing': 0.5,
+  'rollerblading': 0.5,
+  'skateboarding': 0.5,
+  'cycling': 0.2,
 }
 
 export const INVALID_INPUT_STICKERS = [

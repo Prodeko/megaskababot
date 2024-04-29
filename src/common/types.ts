@@ -1,9 +1,13 @@
 import { Context, NarrowedContext } from 'telegraf'
 import { CallbackQuery, Message, Update } from 'telegraf/typings/core/types/typegram'
+import { GUILDS, SPORTS } from './constants'
 
 export type Phase = 'year' | 'guild' | 'dist' | 'proof' | 'sport'
-export type Guild = 'prodeko' | 'athene' | 'fyysikkokilta' | 'tietokilta' | 'data guild'
-export type Sport = 'run/walk' | 'ski' | 'skate'
+type GuildTuple = typeof GUILDS
+export type Guild = GuildTuple[number]
+// TODO split these to their own categories
+type SportTuple = typeof SPORTS
+export type Sport = SportTuple[number]
 export type Validation = 'Valid' | 'Invalid' | 'Stop validation'
 
 export type UserWithoutTime = {

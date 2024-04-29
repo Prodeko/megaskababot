@@ -14,7 +14,7 @@ export const guildKeyboard = Markup.keyboard(GUILDS.map(_.capitalize)).oneTime(
 	true,
 );
 export const yearKeyboard = Markup.keyboard(YEARS).oneTime(true);
-export const sportKeyboard = Markup.keyboard(SPORTS).oneTime(true);
+export const sportKeyboard = Markup.keyboard([...SPORTS]).oneTime(true);
 export const confirmationKeyboard = Markup.inlineKeyboard([
 	Markup.button.callback("Remove 🗑️", "remove"),
 	Markup.button.callback("Cancel 🚫", "cancel"),
