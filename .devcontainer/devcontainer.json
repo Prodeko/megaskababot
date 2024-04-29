@@ -8,7 +8,8 @@
 			"extensions": [
 				"Prisma.prisma",
 				"biomejs.biome",
-				"bradlc.vscode-tailwindcss"
+				"bradlc.vscode-tailwindcss",
+				"Prisma.prisma"
 			],
 			"settings": {
 				"editor.defaultFormatter": "biomejs.biome"
