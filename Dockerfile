@@ -1,4 +1,4 @@
-FROM node:16-alpine3.16
+FROM node:20-alpine3.19
 WORKDIR /usr/src/app
 ENV BUN_INSTALL="$HOME/.bun/"
 RUN curl -fsSL https://bun.sh/install | bash

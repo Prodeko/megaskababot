@@ -1,3 +1,3 @@
-import { Phase } from "./types";
+import type { Phase } from "./types";
 
-export const conversationPhase = new Map<number, Phase>()
+export const conversationPhase = new Map<number, Phase>();
