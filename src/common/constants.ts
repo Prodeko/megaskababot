@@ -23,16 +23,16 @@ export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString()
 
 export const GUILDS = ['prodeko', 'athene', 'fyysikkokilta', 'rakennusinsinöörikilta'] as const
 export const YEARS = [...Array.from(Array(54).keys()).map(k => `${1970 + k}`)].reverse()
-export const SPORTS = ['swimming', 'running', 'walking', 'skiing', 'rollerskiing', 'rollerblading', 'skateboarding', 'cycling'] as const
+export const SPORTS = ['swim', 'run', 'walk', 'ski', 'rollerski', 'rollerblade', 'skateboard', 'cycle'] as const
 export const COEFFICIENTS: Record<Sport, number> = {
-  'swimming': 5,
-  'running': 1,
-  'walking': 1,
-  'skiing': 0.5,
-  'rollerskiing': 0.5,
-  'rollerblading': 0.5,
-  'skateboarding': 0.5,
-  'cycling': 0.2,
+  'swim': 5,
+  'run': 1,
+  'walk': 1,
+  'ski': 0.5,
+  'rollerski': 0.5,
+  'rollerblade': 0.5,
+  'skateboard': 0.5,
+  'cycle': 0.2,
 }
 
 export const INVALID_INPUT_STICKERS = [
