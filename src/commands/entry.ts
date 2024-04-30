@@ -10,7 +10,7 @@ const entry = async (
 	if (!(await isUser(ctx!.from!.id)))
 		return await ctx.reply("Not an user yet! Use /start to make an user");
 	await ctx.reply(
-		"Welcome back! Did you ski ⛷️, run/walk 🏃‍♀️ or skate ⛸️?",
+		"Welcome back! How did you cover ground today?",
 		sportKeyboard,
 	);
 
