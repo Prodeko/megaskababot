@@ -1,0 +1,20 @@
+{
+	"name": "megaskababot",
+	"dockerComposeFile": ["./docker-compose.devcontainer.yml"],
+	"service": "bot",
+	"workspaceFolder": "/megaskababot",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Prisma.prisma",
+				"biomejs.biome",
+				"bradlc.vscode-tailwindcss",
+				"Prisma.prisma"
+			],
+			"settings": {
+				"editor.defaultFormatter": "biomejs.biome"
+			}
+		}
+	},
+	"postAttachCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}"
+}

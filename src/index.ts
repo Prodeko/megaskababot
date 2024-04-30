@@ -1,55 +1,58 @@
-import * as dotenv from 'dotenv'
-import { Telegraf } from 'telegraf'
+import * as dotenv from "dotenv";
+import { Telegraf } from "telegraf";
 
-import cancelLogin from './commands/action/cancelLogin'
-import confirmLogin from './commands/action/confirmLogin'
-import { onPrivacyAccepted, onPrivacyRejected } from './commands/action/privacy'
+import cancelLogin from "./commands/action/cancelLogin";
+import confirmLogin from "./commands/action/confirmLogin";
 import {
-  adminLogin,
-  allPhotosFromUser,
-  cancelRemove,
-  confirmedRemove,
-  csv,
-  invalid,
-  notValidated,
-  pistokoe,
-  remove,
-  resetValidation,
-  setDistance,
-  stopValidation,
-  valid1x,
-  valid2x,
-} from './commands/admin'
-import entries from './commands/entries'
-import entry from './commands/entry'
-import help from './commands/help'
-import photo from './commands/photo'
-import removeLatestCommand from './commands/removeLatest'
-import rules from './commands/rules'
-import start from './commands/start'
-import text from './commands/text'
-import launchBotDependingOnNodeEnv from './launchBotDependingOnNodeEnv'
+	onPrivacyAccepted,
+	onPrivacyRejected,
+} from "./commands/action/privacy";
+import {
+	adminLogin,
+	allPhotosFromUser,
+	cancelRemove,
+	confirmedRemove,
+	csv,
+	invalid,
+	notValidated,
+	pistokoe,
+	remove,
+	resetValidation,
+	setDistance,
+	stopValidation,
+	valid1x,
+	valid2x,
+} from "./commands/admin";
+import entries from "./commands/entries";
+import entry from "./commands/entry";
+import help from "./commands/help";
+import photo from "./commands/photo";
+import removeLatestCommand from "./commands/removeLatest";
+import rules from "./commands/rules";
+import start from "./commands/start";
+import text from "./commands/text";
+import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv";
 
-dotenv.config()
+dotenv.config();
 
 if (!process.env.BOT_TOKEN) {
-  throw new Error('Bot token not defined!')
+	throw new Error("Bot token not defined!");
 }
 
-const bot = new Telegraf(process.env.BOT_TOKEN)
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
-bot.start(start)
+bot.start(start);
 
 // Message handling
-bot.on('text', text)
-bot.on('photo', photo)
+bot.on("text", text);
+bot.on("photo", photo);
 
 // Standard commands
-bot.command('entries', entries)
-bot.command('help', help)
-bot.command('rules', rules)
-bot.command('entry', entry)
-bot.command('removelatest', removeLatestCommand)
+bot.command("entries", entries);
+bot.command("help", help);
+bot.command("rules", rules);
+bot.command("entry", entry);
+bot.command("removelatest", removeLatestCommand);
 
 // Middleware to get stickerids
 // eslint-disable-next-line prefer-const
@@ -63,46 +66,46 @@ bot.command('removelatest', removeLatestCommand)
 // })
 
 // Admin commands
-bot.hears(process.env.ADMIN_PASSWORD ?? 'admin', adminLogin)
-bot.command('csv', csv)
-bot.command('pistokoe', pistokoe)
-bot.command('numtovalidate', notValidated)
-bot.command('remove', remove)
-bot.command('allphotos', allPhotosFromUser)
-bot.command('resetvalidation', resetValidation)
-bot.command('updatedistance', setDistance)
+bot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
+bot.command("csv", csv);
+bot.command("pistokoe", pistokoe);
+bot.command("numtovalidate", notValidated);
+bot.command("remove", remove);
+bot.command("allphotos", allPhotosFromUser);
+bot.command("resetvalidation", resetValidation);
+bot.command("updatedistance", setDistance);
 
-bot.action('invalid', invalid)
-bot.action('valid1x', valid1x)
-bot.action('valid2x', valid2x)
-bot.action('stopvalidation', stopValidation)
+bot.action("invalid", invalid);
+bot.action("valid1x", valid1x);
+bot.action("valid2x", valid2x);
+bot.action("stopvalidation", stopValidation);
 
-bot.action('remove', confirmedRemove)
-bot.action('cancel', cancelRemove)
+bot.action("remove", confirmedRemove);
+bot.action("cancel", cancelRemove);
 
-bot.action('login', confirmLogin)
-bot.action('cancel_login', cancelLogin)
+bot.action("login", confirmLogin);
+bot.action("cancel_login", cancelLogin);
 
-bot.action('entry', entry)
-bot.action('entries', entries)
-bot.action('removelatest', removeLatestCommand)
-bot.action('help', help)
-bot.action('rules', rules)
+bot.action("entry", entry);
+bot.action("entries", entries);
+bot.action("removelatest", removeLatestCommand);
+bot.action("help", help);
+bot.action("rules", rules);
 
 // Inline keyboard handling
-bot.action('accepted', onPrivacyAccepted)
+bot.action("accepted", onPrivacyAccepted);
 
-bot.action('rejected', onPrivacyRejected)
+bot.action("rejected", onPrivacyRejected);
 
-bot.use(async ctx => {
-  try {
-    await ctx.editMessageReplyMarkup(undefined)
-  } catch {}
-})
+bot.use(async (ctx) => {
+	try {
+		await ctx.editMessageReplyMarkup(undefined);
+	} catch {}
+});
 
 // Launch bot
-launchBotDependingOnNodeEnv(bot)
+launchBotDependingOnNodeEnv(bot);
 
 // Enable graceful stop
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
