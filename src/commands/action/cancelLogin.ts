@@ -17,7 +17,7 @@ export default async function cancelLogin(
 	});
 
 	await ctx.reply("Alright, lets try again");
-	await ctx.reply(`Welcome to MEGASCIBA! ${START_REGISTRATION_MESSAGE}`);
+	await ctx.reply(`Welcome to GIGASKABA! ${START_REGISTRATION_MESSAGE}`);
 	await ctx.reply("What is your freshman year?", yearKeyboard);
 	return next();
 }
