@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -16,10 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Login via Azure CLI
-        uses: azure/login@v1
+      - name: Log in to Azure
+      - uses: actions/checkout@v2
+        uses: Azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          allow-no-subscriptions: true
 
       - name: Docker login to ACR
         uses: azure/docker-login@v1
@@ -38,7 +44,7 @@ jobs:
         with:
           app-name: 'megaskababot'
           images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
-    
+
       - name: Azure logout
         run: |
           az logout
