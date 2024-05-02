@@ -11,7 +11,7 @@ export default async function guild(
 	guildStr: string,
 	userId: number,
 ) {
-	const guild = _.lowerCase(guildStr);
+	const guild = _.toLower(guildStr);
 	if (isGuild(guild)) {
 		updateUsersStash(userId, { guild });
 		const user = getUserStash(userId);
