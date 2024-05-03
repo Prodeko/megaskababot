@@ -22,6 +22,7 @@ import {
 	stopValidation,
 	valid1x,
 	valid2x,
+	validate,
 } from "./commands/admin";
 import entries from "./commands/entries";
 import entry from "./commands/entry";
@@ -74,6 +75,7 @@ bot.command("remove", remove);
 bot.command("allphotos", allPhotosFromUser);
 bot.command("resetvalidation", resetValidation);
 bot.command("updatedistance", setDistance);
+bot.command("validate", validate);
 
 bot.action("invalid", invalid);
 bot.action("valid1x", valid1x);

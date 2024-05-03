@@ -47,6 +47,28 @@ const performPistokoe = async (ctx: ActionContext | CommandContext) => {
 	await ctx.replyWithPhoto(entry?.fileId, validationKeyboard);
 };
 
+export const validate = async (ctx: CommandContext) => {
+	if (!admins.has(ctx.from.id)) return;
+
+	const args = ctx.message.text.split(" ");
+
+	if (args.length <= 1)
+		return ctx.reply(
+			"Please give the id of entry to validate as an argument (eg. /validate 10)",
+		);
+
+	const possibleNum = Number.parseInt(args[1]);	
+
+	if(Number.isNaN(possibleNum)) return ctx.reply("Given id is not a number!");
+	
+	const entry = await getEntry(possibleNum);
+	if (!entry) return ctx.reply("No such entry");
+
+	underValidation.set(ctx.chat.id, entry.id);
+	await ctx.replyWithHTML(formatEntryWithUser(entry as unknown as EntryWithUser));
+	await ctx.replyWithPhoto(entry.fileId, validationKeyboard);
+}
+
 export const notValidated = async (ctx: ActionContext | CommandContext) => {
 	const notValidated = await amountToValidate();
 	await ctx.reply(`Number of entries not validated: ${notValidated}`);
@@ -113,7 +135,7 @@ export const adminLogin = async (
 	const userId = ctx.message.from.id;
 	admins.add(userId);
 	await ctx.reply(
-		"You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [entry id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [user id or username] - gets all uploaded photos by user \n/updatedistance [entry id] [distance] - sets a new distance on an entry \n/resetvalidation [entry id] - resets the validation of entry",
+		"You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [entry id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [user id or username] - gets all uploaded photos by user \n/updatedistance [entry id] [distance] - sets a new distance on an entry \n/resetvalidation [entry id] - resets the validation of entry \n/validate [entry id] - starts validation from specific entry",
 	);
 	return next();
 };

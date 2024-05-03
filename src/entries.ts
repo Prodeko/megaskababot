@@ -48,7 +48,7 @@ const getRandomNotValidEntry = async () => {
 };
 
 const getEntry = (id: number) =>
-	prisma.entry.findUniqueOrThrow({ where: { id }, include: { user: true } });
+	prisma.entry.findUnique({ where: { id }, include: { user: true } });
 
 const removeEntry = (id: number) =>
 	prisma.entry.delete({
