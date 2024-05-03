@@ -20,10 +20,11 @@ export const formatEntry = (e: Entry) => {
 			timeZone: "EET",
 		}) ?? "Unknown date";
 	const doublePointsString = e.doublePoints ? "\n2️⃣x" : "";
+	const invalidString = e.valid === false ? "\n❌ Invalid (contact admins)" : "";
 	return (
 		`${localeDateString}
 Distance: ${e.distance} km
-Sport: ${e.sport}` + doublePointsString
+Sport: ${e.sport}` + doublePointsString + invalidString
 	);
 };
 

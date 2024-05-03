@@ -13,14 +13,15 @@ const entries = async (
 	const entries = await getEntries(ctx!.from!.id);
 
 	if (entries.length > 0) {
-		const points = entries
+		const validEntries = entries.filter((e) => e.valid !== false);
+		const points = validEntries
 			.map((e) => e.distance * COEFFICIENTS[e.sport] * (e.doublePoints ? 2 : 1))
 			.reduce((p, e) => p + e, 0);
 
-		const distance = entries.reduce((p, e) => p + e.distance, 0);
+		const distance = validEntries.reduce((p, e) => p + e.distance, 0);
 
 		const distanceBySport = Object.entries(
-			_.groupBy(entries, (e) => e.sport),
+			_.groupBy(validEntries, (e) => e.sport),
 		).map<[string, number]>(([key, value]) => [
 			key,
 			value.reduce((p, e) => p + e.distance, 0),
