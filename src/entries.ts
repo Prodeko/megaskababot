@@ -33,10 +33,15 @@ const getAllEntries = async () => {
 };
 
 const getRandomNotValidEntry = async () => {
+	const count = await amountToValidate();
+	if (count === 0) return null;
+	const random = Math.floor(Math.random() * count);
+	console.log("Random", random);
 	const entry = await prisma.entry.findFirst({
 		where: {
 			valid: null,
 		},
+		skip: random,
 		include: { user: true },
 	});
 	return entry;
