@@ -1,53 +1,29 @@
 import express from 'express';
-import { isGuild } from '../../common/validators';
+import { validatePeriod } from './middleware';
+import { calculateGuildStatistics } from '../../analytics/statistics';
 
 const router = express.Router({mergeParams: true});
 
+export interface StatisticsResponse extends express.Response {
+  locals: {
+    guild: string;
+    periodStart: Date;
+    periodEnd: Date;
+  };
+}
 
-router.use((req, res, next) => {
-  const guild = req.query.guild;
-  if (!guild) {
-    return res.status(400).send('Guild query parameter is required');
+// Middleware to validate the period start and end query parameters
+router.use(validatePeriod);
+
+router.get('/', async (req, res: StatisticsResponse) => {
+  const { periodStart, periodEnd } = res.locals;
+  try {
+    const statistics = await calculateGuildStatistics(periodStart, periodEnd);
+    res.json(Object.fromEntries(statistics));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while calculating statistics');
   }
-
-  if (!isGuild(guild)) {
-    return res.status(400).send('Invalid guild query parameter');
-  }
-
-  next();
-});
-
-
-router.get('/total-points', (req, res) => {
-  // Logic to calculate and 
-});
-
-router.get('/:guild/total-kilometers', (req, res) => {
-  // Logic to calculate and return the totalKilometers
-});
-
-router.get('/:guild/total-entries', (req, res) => {
-  // Logic to calculate and return the totalEntries
-});
-
-router.get('/:guild/number-of-unique-participants', (req, res) => {
-  // Logic to calculate and return the numberOfUniqueParticipants
-});
-
-router.get('/:guild/proportion-of-continuing-participants', (req, res) => {
-  // Logic to calculate and return the proportionOfContinuingParticipants
-});
-
-router.get('/:guild/period', (req, res) => {
-  // Logic to calculate and return the period
-});
-
-router.get('/:guild/points-gained-in-period', (req, res) => {
-  // Logic to calculate and return the pointsGainedInPeriod
-});
-
-router.get('/:guild/proportion-of-milestone-achievers', (req, res) => {
-  // Logic to calculate and return the proportionOfMilestoneAchievers
 });
 
 export default router;

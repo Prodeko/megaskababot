@@ -79,10 +79,9 @@ export type PhotoCtxType = NarrowedContext<
 export type TeamStatistics = {
 	totalPoints: number;
 	totalKilometers: number;
-	totalEntires: number;
+	totalEntries: number;
 	numberOfUniqueParticipants: number;
 	proportionOfContinuingParticipants: number;
-	period: number;
 	pointsGainedInPeriod: number;
 	proportionOfMilestoneAchievers: number;
 };
