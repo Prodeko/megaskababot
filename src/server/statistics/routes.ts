@@ -16,6 +16,11 @@ export interface StatisticsResponse extends express.Response {
 router.use(validatePeriod);
 
 router.get('/', async (req, res: StatisticsResponse) => {
+  if (req.query.pass !== process.env.ADMIN_PASSWORD) {
+		console.log("Wrong password");
+		return res.status(401).send("Wrong password!");
+	}
+  
   const { periodStart, periodEnd } = res.locals;
   try {
     const statistics = await calculateGuildStatistics(periodStart, periodEnd);
