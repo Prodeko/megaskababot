@@ -33,6 +33,8 @@ export type EntryWithoutId = {
 	sport: Sport;
 	userId: number;
 	doublePoints: boolean;
+	earnedPoints: number;
+	sportMultiplier: number;
 };
 
 export type Entry = EntryWithoutId & {
@@ -73,5 +75,19 @@ export type PhotoCtxType = NarrowedContext<
 		update_id: number;
 	}
 >;
+
+export type TeamStatistics = {
+	totalPoints: number;
+	totalKilometers: number;
+	totalEntries: number;
+	numberOfUniqueParticipants: number;
+	proportionOfContinuingParticipants: number;
+	pointsGainedInPeriod: number;
+	proportionOfMilestoneAchievers: number;
+};
+
+export type Statistics = Map<Guild, TeamStatistics>;
+
+export type pointsPerGuild = Map<Guild, number>;
 
 export type PrivacyState = "accepted" | "rejected";

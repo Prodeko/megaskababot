@@ -15,7 +15,7 @@ const entries = async (
 	if (entries.length > 0) {
 		const validEntries = entries.filter((e) => e.valid !== false);
 		const points = validEntries
-			.map((e) => e.distance * COEFFICIENTS[e.sport] * (e.doublePoints ? 2 : 1))
+			.map((e) => e.earnedPoints)
 			.reduce((p, e) => p + e, 0);
 
 		const distance = validEntries.reduce((p, e) => p + e.distance, 0);

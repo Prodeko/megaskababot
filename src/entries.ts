@@ -4,6 +4,7 @@ import { prisma } from "../config";
 import type { Entry, EntryWithUser } from "./common/types";
 import { arrayToCSV } from "./common/utils";
 import { isBigInteger, isCompleteEntry } from "./common/validators";
+import { COEFFICIENTS } from "./common/constants";
 
 const entries = new Map<number, Partial<Entry>>();
 
@@ -62,7 +63,17 @@ const setEntryValidation = async (entryId: number, valid: boolean) => {
 };
 
 const setEntryDoublePoints = async (entryId: number, doublePoints: boolean) => {
-	await prisma.entry.update({ where: { id: entryId }, data: { doublePoints } });
+	const oldEntry = await prisma.entry.findUniqueOrThrow({
+		where: { id: entryId },
+	});
+	await prisma.entry.update({
+		where: { id: entryId },
+		data: {
+			doublePoints,
+			earnedPoints:
+				oldEntry.distance * oldEntry.sportMultiplier * (doublePoints ? 2 : 1),
+		},
+	});
 };
 
 const removeLatest = async (userId: number) => {
@@ -86,8 +97,17 @@ const entryToDb = async (chatId: number) => {
 	if (!entry || !isCompleteEntry(entry))
 		throw new Error("Entry is not complete!");
 
+	const sportMultiplier = COEFFICIENTS[entry.sport];
+
 	await prisma.entry.create({
-		data: entry,
+		data: {
+			...entry,
+			sportMultiplier,
+			earnedPoints:
+				entry.distance *
+				sportMultiplier *
+				(entry.doublePoints ?? false ? 2 : 1),
+		},
 	});
 	entries.delete(chatId);
 };
