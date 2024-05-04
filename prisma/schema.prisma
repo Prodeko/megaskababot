@@ -23,13 +23,15 @@ model User {
 }
 
 model Entry {
-  id           Int      @id @default(autoincrement())
-  distance     Float
-  fileId       String
-  sport        String
-  user         User     @relation(fields: [userId], references: [telegramUserId])
-  doublePoints Boolean  @default(false)
-  userId       BigInt
-  createdAt    DateTime @default(now())
-  valid        Boolean?
+  id              Int      @id @default(autoincrement())
+  distance        Float
+  fileId          String
+  sport           String
+  user            User     @relation(fields: [userId], references: [telegramUserId])
+  doublePoints    Boolean  @default(false)
+  userId          BigInt
+  createdAt       DateTime @default(now())
+  valid           Boolean?
+  sportMultiplier Float
+  earnedPoints    Float
 }
