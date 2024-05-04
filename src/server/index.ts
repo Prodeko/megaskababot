@@ -16,12 +16,15 @@ app.get("/health", (_req, res) => {
 	res.status(200).send("OK");
 });
 
-app.get("/entries", async (req, res) => {
+app.use(async (req, res, next) => {
 	if (req.query.pass !== process.env.ADMIN_PASSWORD) {
 		console.log("Wrong password");
 		return res.status(401).send("Wrong password!");
 	}
-	console.log("here");
+	next();
+})
+
+app.get("/entries", async (req, res) => {
 	await saveEntriesAsCSV();
 	res.attachment("./entries.csv");
 	res.header("Content-Type", "text/csv");
