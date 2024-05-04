@@ -74,4 +74,19 @@ export type PhotoCtxType = NarrowedContext<
 	}
 >;
 
+export type TeamStatistics = {
+	totalPoints: number;
+	totalKilometers: number;
+	totalEntires: number;
+	numberOfUniqueParticipants: number;
+	proportionOfContinuingParticipants: number;
+	period: number;
+	pointsGainedInPeriod: number;
+	proportionOfMilestoneAchievers: number;
+};
+
+export type Statistics = Map<Guild, TeamStatistics>;
+
+export type pointsPerGuild = Map<Guild, number>;
+
 export type PrivacyState = "accepted" | "rejected";
