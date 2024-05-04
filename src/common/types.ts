@@ -33,6 +33,8 @@ export type EntryWithoutId = {
 	sport: Sport;
 	userId: number;
 	doublePoints: boolean;
+	earnedPoints: number;
+	sportMultiplier: number;
 };
 
 export type Entry = EntryWithoutId & {

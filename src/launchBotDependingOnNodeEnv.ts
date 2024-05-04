@@ -41,6 +41,13 @@ async function launchWebhookBot(bot: Telegraf<Context<Update>>) {
 		res.status(200).send(fs.readFileSync("./entries.csv"));
 	});
 
+	app.get("/statistics", async (req, res) => {
+		if (req.query.pass !== process.env.ADMIN_PASSWORD) {
+			console.log("Wrong password");
+			return res.status(401).send("Wrong password!");
+		}
+	});
+
 	// Workaround to avoid issue with TSconfig
 	const createWebhookListener = async () => {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
