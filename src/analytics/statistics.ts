@@ -29,8 +29,8 @@ export async function calculateGuildStatistics(
 			SUM("earnedPoints") as "totalPoints",
 			SUM(distance) as "totalKilometers",
 			COUNT(*) as "totalEntries",
-			COUNT(DISTINCT user) as "numberOfUniqueParticipants",
-			COUNT(CASE WHEN "earnedPoints" >= 50 THEN 1 END)/COUNT(DISTINCT user) as "proportionOfMilestoneAchievers"
+			COUNT(DISTINCT "userId") as "numberOfUniqueParticipants",
+			COUNT(CASE WHEN "earnedPoints" >= 50 THEN 1 END)/COUNT(DISTINCT "userId") as "proportionOfMilestoneAchievers"
 		FROM
 			"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
 		GROUP BY
@@ -65,7 +65,7 @@ export async function calculateGuildStatistics(
 		SELECT
 			period_stats.guild,
 			"pointsGainedInPeriod",
-			CASE WHEN "previousParticipants" = 0 THEN 0 ELSE "continuingParticipants"/"previousParticipants" END as "proportionOfContinuingParticipants"
+			CASE WHEN "previousParticipants" = 0 THEN 1 ELSE "continuingParticipants"/"previousParticipants" END as "proportionOfContinuingParticipants"
 		FROM
 			period_stats LEFT JOIN previous_users ON period_stats.guild = previous_users.guild
 	`) as PeriodStats[];
