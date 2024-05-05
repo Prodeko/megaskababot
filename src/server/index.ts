@@ -1,6 +1,6 @@
 import express from "express";
 import { saveEntriesAsCSV } from "../entries";
-import statisticsRouter from "./statistics/routes";
+import statisticsRouter from "./analytics/statistics";
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 const port = Number.parseInt(process.env.PORT!);
