@@ -22,3 +22,8 @@ Telegram-botti urheilusuoritusten kirjaamiseen
 
 Tuotantotietokannan migraatiot saa luotua komennolla `npx prisma migrate deploy`. Tällöin .envin `DATABASE_URL` pitää kohdistua tuotantokantaan.
 
+## Testidata
+
+Testidataa voi luoda kommentoimalla sisään `src/index.ts`-tiedostossa olevan `createTestData`-funktion ja laittamalla botille /createtestdata -komennon. HUOM! Tämä poistaa kaikki olemassaolevat suoritukset.
+
+Jotta testidataan tulisi satunnaisia luontipäivänmääriä, tulee kantaan tehä migraatio missä `createdAt`-kentästä poistetaan `@default(now())`-attribuutti.

@@ -34,6 +34,7 @@ import rules from "./commands/rules";
 import start from "./commands/start";
 import text from "./commands/text";
 import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv";
+import createTestData from "./createTestData";
 
 dotenv.config();
 
@@ -78,6 +79,13 @@ bot.command("resetvalidation", resetValidation);
 bot.command("updatedistance", setDistance);
 bot.command("validate", validate);
 bot.command("allentries", allEntriesFromUser);
+
+// Test data creation, comment out if not needed
+// bot.command("createtestdata", async (ctx, next) => {
+// 	await createTestData(200);
+// 	ctx.reply("Test data created");
+// 	next();
+// });
 
 bot.action("invalid", invalid);
 bot.action("valid1x", valid1x);

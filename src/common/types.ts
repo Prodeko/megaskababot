@@ -31,7 +31,7 @@ export type EntryWithoutId = {
 	distance: number;
 	fileId: string;
 	sport: Sport;
-	userId: number;
+	userId: bigint;
 	doublePoints: boolean;
 	earnedPoints: number;
 	sportMultiplier: number;
