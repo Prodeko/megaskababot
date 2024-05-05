@@ -74,6 +74,8 @@ export const validate = async (ctx: CommandContext) => {
 };
 
 export const notValidated = async (ctx: ActionContext | CommandContext) => {
+	if (!admins.has(ctx.from.id)) return;
+	
 	const notValidated = await amountToValidate();
 	await ctx.reply(`Number of entries not validated: ${notValidated}`);
 };
