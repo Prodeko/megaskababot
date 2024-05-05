@@ -1,4 +1,5 @@
 import { prisma } from "../../config";
+import { MILESTONE_LIMIT } from "../common/constants";
 import type { Guild, Statistics, TeamStatistics } from "../common/types";
 
 interface PeriodStats {
@@ -13,8 +14,7 @@ interface Aggregate {
 	totalPoints: number;
 	totalKilometers: number;
 	totalEntries: number;
-	numberOfUniqueParticipants: number;
-	milestoneAchievers: number;
+	uniqueParticipants: number;
 	proportionOfMilestoneAchievers: number;
 }
 
@@ -24,17 +24,31 @@ export async function calculateGuildStatistics(
 	periodEnd: Date,
 ): Promise<Statistics> {
 	const aggregates = (await prisma.$queryRaw`
+		WITH base_satistics AS (
+			SELECT
+				guild,
+				SUM("earnedPoints") as "totalPoints",
+				SUM(distance) as "totalKilometers",
+				COUNT(*) as "totalEntries",
+				COUNT(DISTINCT "userId") as "uniqueParticipants"
+			FROM
+				"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
+			GROUP BY
+				guild
+		)
 		SELECT
-			guild,
-			SUM("earnedPoints") as "totalPoints",
-			SUM(distance) as "totalKilometers",
-			COUNT(*) as "totalEntries",
-			COUNT(DISTINCT "userId") as "numberOfUniqueParticipants",
-			COUNT(CASE WHEN "earnedPoints" >= 50 THEN 1 END)/COUNT(DISTINCT "userId") as "proportionOfMilestoneAchievers"
+			*,
+			COUNT(
+				CASE WHEN "totalPoints" >= ${MILESTONE_LIMIT} THEN 1 END
+			)/"uniqueParticipants" as "proportionOfMilestoneAchievers"
 		FROM
-			"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
+			base_satistics
 		GROUP BY
-			guild
+			guild,
+			"totalPoints",
+			"totalKilometers",
+			"totalEntries",
+			"uniqueParticipants"
 	`) as Aggregate[];
 
 	const periodStats = (await prisma.$queryRaw`
@@ -70,40 +84,18 @@ export async function calculateGuildStatistics(
 			period_stats LEFT JOIN previous_users ON period_stats.guild = previous_users.guild
 	`) as PeriodStats[];
 
-	const entriesInPeriod = await prisma.entry.findMany({
-		where: {
-			createdAt: {
-				gte: periodStart,
-				lte: periodEnd,
-			},
-		},
-	});
-
-	const previousUsers = (await prisma.$queryRaw`
-			SELECT
-				guild,
-				COUNT(DISTINCT user) as "previousParticipants"
-			FROM
-				"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
-			WHERE
-				"Entry"."createdAt" < ${periodStart}
-			GROUP BY
-				guild
-	`) as { guild: Guild; previousParticipants: number }[];
-
-	console.log(entriesInPeriod);
 	const statistics = new Map<Guild, TeamStatistics>();
 
 	for (const aggregate of aggregates) {
 		const periodStat = periodStats.find(
 			(stat) => stat.guild === aggregate.guild,
 		);
-		console.log("period", periodStats);
+		console.log("aggreage", aggregate);
 		statistics.set(aggregate.guild, {
 			totalPoints: aggregate.totalPoints,
 			totalKilometers: aggregate.totalKilometers,
 			totalEntries: Number(aggregate.totalEntries),
-			numberOfUniqueParticipants: Number(aggregate.numberOfUniqueParticipants),
+			numberOfUniqueParticipants: Number(aggregate.uniqueParticipants),
 			proportionOfContinuingParticipants:
 				Number(periodStat?.proportionOfContinuingParticipants) || 0,
 			pointsGainedInPeriod: Number(periodStat?.pointsGainedInPeriod) || 0,
