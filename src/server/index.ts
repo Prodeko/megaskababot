@@ -1,6 +1,6 @@
 import express from "express";
 import { saveEntriesAsCSV } from "../entries";
-import statisticsRouter from "./analytics/statistics";
+import analyticsRouter from "./analytics";
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 const port = Number.parseInt(process.env.PORT!);
@@ -29,7 +29,7 @@ app.get("/entries", async (req, res) => {
 	res.status(200).send(fs.readFileSync("./entries.csv"));
 });
 
-app.use("/statistics", statisticsRouter);
+app.use("/analytics", analyticsRouter);
 
 export const launchServer = async () => {
   app.listen(port, () => console.log("Running on port ", port));
