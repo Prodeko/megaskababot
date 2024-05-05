@@ -6,7 +6,7 @@ interface PeriodStats {
 	guild: Guild;
 	pointsGainedInPeriod: number;
 	continuingParticipants: number;
-	proportionOfContinuingParticipants: number;
+	previousParticipants: number;
 }
 
 interface Aggregate {
@@ -15,7 +15,6 @@ interface Aggregate {
 	totalKilometers: number;
 	totalEntries: number;
 	uniqueParticipants: number;
-	proportionOfMilestoneAchievers: number;
 }
 
 // Function to calculate and return the total points
@@ -62,7 +61,7 @@ export async function calculateGuildStatistics(
 			SELECT
 				guild,
 				SUM("earnedPoints") as "pointsGainedInPeriod",
-				COUNT(DISTINCT user) as "continuingParticipants"
+				COUNT(DISTINCT "userId") as "continuingParticipants"
 			FROM
 				"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
 			WHERE
@@ -73,7 +72,7 @@ export async function calculateGuildStatistics(
 		previous_users AS (
 			SELECT
 				guild,
-				COUNT(DISTINCT user) as "previousParticipants"
+				COUNT(DISTINCT "userId") as "previousParticipants"
 			FROM
 				"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
 			WHERE
@@ -85,7 +84,8 @@ export async function calculateGuildStatistics(
 		SELECT
 			period_stats.guild,
 			"pointsGainedInPeriod",
-			CASE WHEN "previousParticipants" = 0 THEN 1 ELSE "continuingParticipants"/"previousParticipants" END as "proportionOfContinuingParticipants"
+			"continuingParticipants",
+			"previousParticipants"
 		FROM
 			period_stats LEFT JOIN previous_users ON period_stats.guild = previous_users.guild
 	`) as PeriodStats[];
@@ -105,8 +105,7 @@ export async function calculateGuildStatistics(
 			totalKilometers: aggregate.totalKilometers,
 			totalEntries: Number(aggregate.totalEntries),
 			numberOfUniqueParticipants: Number(aggregate.uniqueParticipants),
-			proportionOfContinuingParticipants:
-				Number(periodStat?.proportionOfContinuingParticipants) || 0,
+			proportionOfContinuingParticipants: Number(periodStat?.continuingParticipants) / Number(periodStat?.previousParticipants) || 0,
 			pointsGainedInPeriod: Number(periodStat?.pointsGainedInPeriod) || 0,
 			proportionOfMilestoneAchievers: Number(
 				milestoneAchievers ? Number(milestoneAchievers) / Number(aggregate.uniqueParticipants) : 0
