@@ -12,19 +12,23 @@ export const arrayToCSV = <T extends Record<string, unknown>>(
 	return array.map((t) => t.join(";")).join("\n");
 };
 
-export const formatEntry = (e: Entry) => {
+export const formatEntry = (e: Entry, withId = false) => {
 	const localeDateString =
 		e?.createdAt.toLocaleString("fi-FI", {
 			timeStyle: "short",
 			dateStyle: "short",
 			timeZone: "EET",
 		}) ?? "Unknown date";
+	const idString = withId ? `Entry id ${e.id}\n` : "";
 	const doublePointsString = e.doublePoints ? "\n2️⃣x" : "";
-	const invalidString = e.valid === false ? "\n❌ Invalid (contact admins)" : "";
+	const invalidString =
+		e.valid === false ? "\n❌ Invalid (contact admins)" : "";
 	return (
-		`${localeDateString}
+		`${idString}${localeDateString}
 Distance: ${e.distance} km
-Sport: ${e.sport}` + doublePointsString + invalidString
+Sport: ${e.sport}` +
+		doublePointsString +
+		invalidString
 	);
 };
 

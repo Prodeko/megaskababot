@@ -32,7 +32,7 @@ const entries = async (
 
 		// This has to be a for-of loop to avoid messages arriving out of orded
 		for (const chunk of chunks) {
-			await ctx.replyWithHTML(chunk.map(formatEntry).join("\n\n"));
+			await ctx.replyWithHTML(chunk.map(e => formatEntry(e)).join("\n\n"));
 		}
 
 		await ctx.replyWithHTML(
