@@ -1,16 +1,15 @@
 import _ from "lodash";
 
-import { COEFFICIENTS } from "../common/constants";
 import type { ActionContext, CommandContext } from "../common/types";
 import { formatEntry } from "../common/utils";
-import { getEntries } from "../entries";
+import { getEntriesByUserId } from "../entries";
 import { commandsKeyboard } from "../keyboards";
 
 const entries = async (
 	ctx: CommandContext | ActionContext,
 	next: () => Promise<void>,
 ) => {
-	const entries = await getEntries(ctx!.from!.id);
+	const entries = await getEntriesByUserId(ctx!.from!.id);
 
 	if (entries.length > 0) {
 		const validEntries = entries.filter((e) => e.valid !== false);

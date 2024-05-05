@@ -15,7 +15,7 @@ const updateEntryStash = (chatId: number, update: Partial<Entry>) => {
 	});
 };
 
-const getEntries = async (userId: unknown): Promise<Entry[]> => {
+const getEntriesByUserId = async (userId: unknown): Promise<Entry[]> => {
 	if (!isBigInteger(userId)) {
 		throw TypeError("userId should be a long");
 	}
@@ -28,6 +28,19 @@ const getEntries = async (userId: unknown): Promise<Entry[]> => {
 		],
 	})) as unknown as Entry[];
 };
+
+const getEntriesByUsername = async (username: string): Promise<Entry[]> => {
+	const result = await prisma.user.findFirst({
+		select: { telegramUserId: true },
+		where: { telegramUsername: username },
+	});
+
+	if (result) {
+		return await getEntriesByUserId(result.telegramUserId);
+	}
+	return [];
+}
+
 
 const getAllEntries = async () => {
 	return await prisma.entry.findMany({ include: { user: true } });
@@ -169,7 +182,8 @@ export {
 	updateEntryStash,
 	entryToDb,
 	getAllEntries,
-	getEntries,
+	getEntriesByUserId,
+	getEntriesByUsername,
 	getRandomNotValidEntry,
 	setEntryValidation,
 	setEntryDoublePoints,

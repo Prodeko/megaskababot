@@ -49,7 +49,7 @@ const isEntry = (entry: any): entry is Entry => {
 };
 
 const isBigInteger = (number: unknown): number is bigint => {
-	return Number.isInteger(number);
+	return typeof number === "bigint" || Number.isInteger(number);
 };
 
 export {

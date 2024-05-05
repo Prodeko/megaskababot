@@ -9,6 +9,7 @@ import {
 } from "./commands/action/privacy";
 import {
 	adminLogin,
+	allEntriesFromUser,
 	allPhotosFromUser,
 	cancelRemove,
 	confirmedRemove,
@@ -76,6 +77,7 @@ bot.command("allphotos", allPhotosFromUser);
 bot.command("resetvalidation", resetValidation);
 bot.command("updatedistance", setDistance);
 bot.command("validate", validate);
+bot.command("allentries", allEntriesFromUser);
 
 bot.action("invalid", invalid);
 bot.action("valid1x", valid1x);

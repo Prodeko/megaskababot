@@ -15,6 +15,8 @@ import {
 	amountToValidate,
 	fileIdsForUserId,
 	fileIdsForUsername,
+	getEntriesByUserId,
+	getEntriesByUsername,
 	getEntry,
 	getRandomNotValidEntry,
 	removeEntry,
@@ -57,17 +59,19 @@ export const validate = async (ctx: CommandContext) => {
 			"Please give the id of entry to validate as an argument (eg. /validate 10)",
 		);
 
-	const possibleNum = Number.parseInt(args[1]);	
+	const possibleNum = Number.parseInt(args[1]);
 
-	if(Number.isNaN(possibleNum)) return ctx.reply("Given id is not a number!");
-	
+	if (Number.isNaN(possibleNum)) return ctx.reply("Given id is not a number!");
+
 	const entry = await getEntry(possibleNum);
 	if (!entry) return ctx.reply("No such entry");
 
 	underValidation.set(ctx.chat.id, entry.id);
-	await ctx.replyWithHTML(formatEntryWithUser(entry as unknown as EntryWithUser));
+	await ctx.replyWithHTML(
+		formatEntryWithUser(entry as unknown as EntryWithUser),
+	);
 	await ctx.replyWithPhoto(entry.fileId, validationKeyboard);
-}
+};
 
 export const notValidated = async (ctx: ActionContext | CommandContext) => {
 	const notValidated = await amountToValidate();
@@ -135,7 +139,16 @@ export const adminLogin = async (
 	const userId = ctx.message.from.id;
 	admins.add(userId);
 	await ctx.reply(
-		"You are now an admin! \n/csv - get all entries in csv  \n/pistokoe - validate entries \n/remove [entry id] - remove one entry \n/numtovalidate - number of entries not yet validated \n/allphotos [user id or username] - gets all uploaded photos by user \n/updatedistance [entry id] [distance] - sets a new distance on an entry \n/resetvalidation [entry id] - resets the validation of entry \n/validate [entry id] - starts validation from specific entry",
+		`You are now an admin! Possible commands:
+			/csv - get all entries in csv  
+			/pistokoe - validate entries 
+			/remove [entry id] - remove one entry 
+			/numtovalidate - number of entries not yet validated 
+			/allphotos [user id or username] - gets all uploaded photos by user 
+			/allentries [user id or username] - gets all entries by user
+			/updatedistance [entry id] [distance] - sets a new distance on an entry 
+			/resetvalidation [entry id] - resets the validation of entry 
+			/validate [entry id] - starts validation from specific entry`,
 	);
 	return next();
 };
@@ -154,7 +167,7 @@ export const allPhotosFromUser = async (
 
 	const possibleNum = Number.parseInt(args[1]);
 
-	let fileIds;
+	let fileIds: { fileId: string }[] | null;
 	if (isBigInteger(possibleNum)) {
 		fileIds = await fileIdsForUserId(possibleNum);
 	} else {
@@ -179,8 +192,46 @@ export const allPhotosFromUser = async (
 	return next();
 };
 
+export const allEntriesFromUser = async (
+	ctx: CommandContext,
+	next: () => Promise<void>,
+) => {
+	if (!admins.has(ctx!.from!.id)) return;
+
+	const args = ctx.message.text.split(" ");
+
+	if (args.length <= 1)
+		return ctx.reply(
+			"Please give the id or username to get all entries from as an argument (eg. /allentries mediakeisari)",
+		);
+
+	const possibleNum = Number.parseInt(args[1]);
+	
+	let entries: Entry[];
+	if (!Number.isNaN(possibleNum) && isBigInteger(possibleNum)) {
+		entries = await getEntriesByUserId(possibleNum);
+	} else {
+		entries = await getEntriesByUsername(args[1]);
+	}
+
+	if (!entries) return await ctx.reply("No such user 👀");
+
+	const chunks = _.chunk(
+		entries.map((e) => formatEntry(e, true)),
+		10,
+	);
+
+	for (const chunk of chunks) {
+		await ctx.reply(chunk.join("\n\n"));
+	}
+	return next();
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const confirmedRemove = async (ctx: any, next: () => Promise<void>) => {
+export const confirmedRemove = async (
+	ctx: CommandContext,
+	next: () => Promise<void>,
+) => {
 	if (!admins.has(ctx.from.id)) return;
 
 	const entryId = removeConsideration.get(ctx.chat.id);
@@ -264,9 +315,8 @@ export const resetValidation = async (
 			valid: null,
 		});
 		await ctx.reply(
-			`Resetted valdation for entry ${entry.id}: \n${formatEntry(
-				entry as unknown as Entry,
-			)}`,
+			`Resetted valdation for entry ${entry.id}: 
+				${formatEntry(entry as unknown as Entry)}`,
 		);
 	} catch (e) {
 		console.log(e);
@@ -298,9 +348,8 @@ export const setDistance = async (
 			distance,
 		});
 		await ctx.reply(
-			`Updated distance for entry ${entry.id}: \n${formatEntry(
-				entry as unknown as Entry,
-			)}`,
+			`Updated distance for entry ${entry.id}: 
+				${formatEntry(entry as unknown as Entry)}`,
 		);
 	} catch (e) {
 		console.log(e);
