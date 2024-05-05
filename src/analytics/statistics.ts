@@ -24,32 +24,38 @@ export async function calculateGuildStatistics(
 	periodEnd: Date,
 ): Promise<Statistics> {
 	const aggregates = (await prisma.$queryRaw`
-		WITH base_satistics AS (
-			SELECT
-				guild,
-				SUM("earnedPoints") as "totalPoints",
-				SUM(distance) as "totalKilometers",
-				COUNT(*) as "totalEntries",
-				COUNT(DISTINCT "userId") as "uniqueParticipants"
-			FROM
-				"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
-			GROUP BY
-				guild
-		)
 		SELECT
-			*,
-			COUNT(
-				CASE WHEN "totalPoints" >= ${MILESTONE_LIMIT} THEN 1 END
-			)/"uniqueParticipants" as "proportionOfMilestoneAchievers"
-		FROM
-			base_satistics
-		GROUP BY
 			guild,
-			"totalPoints",
-			"totalKilometers",
-			"totalEntries",
-			"uniqueParticipants"
+			SUM("earnedPoints") as "totalPoints",
+			SUM(distance) as "totalKilometers",
+			COUNT(*) as "totalEntries",
+			COUNT(DISTINCT "userId") as "uniqueParticipants"
+		FROM
+			"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
+		GROUP BY
+			guild
 	`) as Aggregate[];
+
+	const milestoneAchieversByGuild = (await prisma.$queryRaw`
+		WITH milestone_acchievers AS (
+			SELECT
+				"userId"
+			FROM
+				"Entry"
+			GROUP BY
+				"userId"
+			HAVING
+				SUM("earnedPoints") >= ${MILESTONE_LIMIT}
+		)
+
+		SELECT
+			guild,
+			COUNT(*) as "milestoneAchievers"
+		FROM
+			milestone_acchievers JOIN "User" ON milestone_acchievers."userId" = "User"."telegramUserId"
+		GROUP BY
+			guild
+	`) as { guild: Guild; milestoneAchievers: number }[];
 
 	const periodStats = (await prisma.$queryRaw`
 		WITH period_stats AS (
@@ -90,7 +96,10 @@ export async function calculateGuildStatistics(
 		const periodStat = periodStats.find(
 			(stat) => stat.guild === aggregate.guild,
 		);
-		console.log("aggreage", aggregate);
+		const milestoneAchievers = milestoneAchieversByGuild.find(
+			(stat) => stat.guild === aggregate.guild,
+		)?.milestoneAchievers;
+
 		statistics.set(aggregate.guild, {
 			totalPoints: aggregate.totalPoints,
 			totalKilometers: aggregate.totalKilometers,
@@ -100,7 +109,7 @@ export async function calculateGuildStatistics(
 				Number(periodStat?.proportionOfContinuingParticipants) || 0,
 			pointsGainedInPeriod: Number(periodStat?.pointsGainedInPeriod) || 0,
 			proportionOfMilestoneAchievers: Number(
-				aggregate.proportionOfMilestoneAchievers,
+				milestoneAchievers ? Number(milestoneAchievers) / Number(aggregate.uniqueParticipants) : 0
 			),
 		});
 	}
