@@ -67,7 +67,7 @@ router.get("/time-series", async (req, res) => {
 	const groupedSeries = _.groupBy(timeSeries, (e) => e.date);
 	const guildsAsColumns = _.map(groupedSeries, (entries, date) => {
 		return {
-			date,
+			date: entries[0].date.toISOString(),
 			...(Object.fromEntries(
 				entries.map((e) => [e.guild, e.totalPoints]),
 			) as Record<Guild, number>),
