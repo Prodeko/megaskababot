@@ -95,6 +95,7 @@ export type PrivacyState = "accepted" | "rejected";
 export type TimeSeriesData = [
 	{
 		date: Date;
-		points: Record<Guild, number>;
+		guild: Guild;
+		totalPoints: number;
 	}
 ]
