@@ -6,6 +6,8 @@ import { arrayToCSV } from "../common/utils";
 import { getTimeSeriesData } from "../analytics/timeseries";
 import entry from "../commands/entry";
 import { GUILDS } from "../common/constants";
+import _ from "lodash";
+import { Guild } from "../common/types";
 
 const router = express.Router({ mergeParams: true });
 
@@ -62,10 +64,20 @@ router.get("/time-series", async (req, res) => {
 
 	const timeSeries = await getTimeSeriesData();
 
-	const csv = arrayToCSV(["date", "guild", "totalPoints"], timeSeries);
+	const groupedSeries = _.groupBy(timeSeries, (e) => e.date);
+	const guildsAsColumns = _.map(groupedSeries, (entries, date) => {
+		return {
+			date,
+			...(Object.fromEntries(
+				entries.map((e) => [e.guild, e.totalPoints]),
+			) as Record<Guild, number>),
+		};
+	});
+
+	const csv = arrayToCSV(["date", ...GUILDS], guildsAsColumns);
 
 	res.header("Content-Type", "text/csv");
-  res.status(200).send(csv);
+	res.status(200).send(csv);
 });
 
 // Middleware to validate the period start and end query parameters
