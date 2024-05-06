@@ -91,3 +91,10 @@ export type Statistics = Map<Guild, TeamStatistics>;
 export type pointsPerGuild = Map<Guild, number>;
 
 export type PrivacyState = "accepted" | "rejected";
+
+export type TimeSeriesData = [
+	{
+		date: Date;
+		points: Record<Guild, number>;
+	}
+]
