@@ -1,11 +1,13 @@
 import express from "express";
-import { validatePeriod } from "./middleware";
+import { validatePeriod } from "./validators";
 import { calculateGuildStatistics } from "../analytics/statistics";
 import topUsersByGuild from "../analytics/rankings";
 import { arrayToCSV } from "../common/utils";
 import { getTimeSeriesData } from "../analytics/timeseries";
 import entry from "../commands/entry";
 import { GUILDS } from "../common/constants";
+import _ from "lodash";
+import { Guild } from "../common/types";
 
 const router = express.Router({ mergeParams: true });
 
@@ -62,14 +64,21 @@ router.get("/time-series", async (req, res) => {
 
 	const timeSeries = await getTimeSeriesData();
 
-	const csv = arrayToCSV(["date", "guild", "totalPoints"], timeSeries);
+	const groupedSeries = _.groupBy(timeSeries, (e) => e.date);
+	const guildsAsColumns = _.map(groupedSeries, (entries, date) => {
+		return {
+			date,
+			...(Object.fromEntries(
+				entries.map((e) => [e.guild, e.totalPoints]),
+			) as Record<Guild, number>),
+		};
+	});
+
+	const csv = arrayToCSV(["date", ...GUILDS], guildsAsColumns);
 
 	res.header("Content-Type", "text/csv");
-  res.status(200).send(csv);
+	res.status(200).send(csv);
 });
-
-// Middleware to validate the period start and end query parameters
-router.use(validatePeriod);
 
 router.get("/statistics", async (req, res: StatisticsResponse) => {
 	if (req.query.pass !== process.env.ADMIN_PASSWORD) {
@@ -77,13 +86,15 @@ router.get("/statistics", async (req, res: StatisticsResponse) => {
 		return res.status(401).send("Wrong password!");
 	}
 
-	const { periodStart, periodEnd } = res.locals;
+	const validatedRes = validatePeriod(req, res);
+
+	const { periodStart, periodEnd } = validatedRes.locals;
 	try {
 		const statistics = await calculateGuildStatistics(periodStart, periodEnd);
-		res.json(Object.fromEntries(statistics));
+		validatedRes.json(Object.fromEntries(statistics));
 	} catch (error) {
 		console.error(error);
-		res.status(500).send("An error occurred while calculating statistics");
+		validatedRes.status(500).send("An error occurred while calculating statistics");
 	}
 });
 
