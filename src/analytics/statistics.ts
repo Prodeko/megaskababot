@@ -92,6 +92,8 @@ export async function calculateGuildStatistics(
 
 	const statistics = new Map<Guild, TeamStatistics>();
 
+	console.log("Milstone Achievers: ", milestoneAchieversByGuild);
+	
 	for (const aggregate of aggregates) {
 		const periodStat = periodStats.find(
 			(stat) => stat.guild === aggregate.guild,
@@ -99,6 +101,7 @@ export async function calculateGuildStatistics(
 		const milestoneAchievers = milestoneAchieversByGuild.find(
 			(stat) => stat.guild === aggregate.guild,
 		)?.milestoneAchievers;
+
 
 		statistics.set(aggregate.guild, {
 			totalPoints: aggregate.totalPoints,
