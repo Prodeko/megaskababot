@@ -53,7 +53,7 @@ export const COEFFICIENTS: Record<Sport, number> = {
 	cycle: 0.2,
 };
 // The limit for the number of points that is needed to achieve the milestone
-export const MILESTONE_LIMIT = 400;
+export const MILESTONE_LIMIT = 50;
 
 export const INVALID_INPUT_STICKERS = [
 	"CAACAgQAAxkBAAIDpGPZi6i22MLQy6eNj5DQEFhhv03uAAJkAAOBtmEJhHIBjFv2YK4tBA",
