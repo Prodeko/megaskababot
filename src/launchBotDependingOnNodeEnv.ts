@@ -11,7 +11,7 @@ import app, { launchServer } from "./server";
  */
 async function launchLongPollBot(bot: Telegraf<Context<Update>>) {
 	launchServer();
-	await bot.launch();
+	// await bot.launch();
 }
 
 /**

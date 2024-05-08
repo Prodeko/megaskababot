@@ -12,7 +12,8 @@ const topUsersByGuild = async (guild: string, limit: number) => {
     FROM
       "Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
     WHERE
-      "guild" = ${guild}
+      "guild" = ${guild} AND
+      "Entry"."valid" IS NOT FALSE
     GROUP BY
       "userId",
       "telegramUsername",

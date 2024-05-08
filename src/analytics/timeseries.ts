@@ -13,6 +13,8 @@ export const getTimeSeriesData = async (): Promise<TimeSeriesData> => {
                 SUM("earnedPoints") as "totalPoints"
             FROM
                 "Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
+            WHERE
+                "Entry"."valid" IS NOT FALSE
             GROUP BY
                 "date",
                 "guild"
