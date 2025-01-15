@@ -1,27 +1,21 @@
-import type { Context, Telegraf } from "telegraf";
-import type { Update } from "telegraf/typings/core/types/typegram";
-
+import { Bot, webhookCallback } from "grammy";
 import app, { launchServer } from "./server/index.ts";
 import process from "node:process";
 
 /**
  * Launch bot in long polling (development) mode
  */
-async function launchLongPollBot(bot: Telegraf<Context<Update>>) {
+async function launchLongPollBot(bot: Bot) {
+  await bot.start();
   launchServer();
-  await bot.launch();
 }
 
 /**
  * Launch bot in webhook (production) mode
  */
-async function launchWebhookBot(bot: Telegraf<Context<Update>>) {
+async function launchWebhookBot(bot: Bot) {
   // Workaround to avoid issue with TSconfig
-  const createWebhookListener = async () => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    app.use(await bot.createWebhook({ domain: process.env.DOMAIN! }));
-  };
-  await createWebhookListener();
+  app.use(webhookCallback(bot, "express"))
   launchServer();
 }
 
@@ -30,7 +24,7 @@ async function launchWebhookBot(bot: Telegraf<Context<Update>>) {
  * If webhook mode is used, the bot is also wrapped in a dummy Express API so it can be run in an Azure App Service.
  */
 export default async function launchBotBasedOnNodeEnv(
-  bot: Telegraf<Context<Update>>,
+  bot: Bot
 ) {
   const useWebhook = process.env.NODE_ENV === "production";
 
