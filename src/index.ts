@@ -1,5 +1,4 @@
-import * as dotenv from "dotenv";
-import { Telegraf } from "telegraf";
+import { Bot } from "grammy";
 
 import cancelLogin from "./commands/action/cancelLogin.ts";
 import confirmLogin from "./commands/action/confirmLogin.ts";
@@ -36,19 +35,17 @@ import text from "./commands/text/index.ts";
 import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
 
-dotenv.config();
-
 if (!process.env.BOT_TOKEN) {
   throw new Error("Bot token not defined!");
 }
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const bot = new Bot(process.env.BOT_TOKEN);
 
-bot.start(start);
+bot.command("start", start)
 
 // Message handling
-bot.on("text", text);
-bot.on("photo", photo);
+bot.on("message:text", text);
+bot.on("msg:photo", photo);
 
 // Standard commands
 bot.command("entries", entries);
@@ -80,27 +77,27 @@ bot.command("updatedistance", setDistance);
 bot.command("validate", validate);
 bot.command("allentries", allEntriesFromUser);
 
-bot.action("invalid", invalid);
-bot.action("valid1x", valid1x);
-bot.action("valid2x", valid2x);
-bot.action("stopvalidation", stopValidation);
+bot.callbackQuery("invalid", invalid);
+bot.callbackQuery("valid1x", valid1x);
+bot.callbackQuery("valid2x", valid2x);
+bot.callbackQuery("stopvalidation", stopValidation);
 
-bot.action("remove", confirmedRemove);
-bot.action("cancel", cancelRemove);
+bot.callbackQuery("remove", confirmedRemove);
+bot.callbackQuery("cancel", cancelRemove);
 
-bot.action("login", confirmLogin);
-bot.action("cancel_login", cancelLogin);
+bot.callbackQuery("login", confirmLogin);
+bot.callbackQuery("cancel_login", cancelLogin);
 
-bot.action("entry", entry);
-bot.action("entries", entries);
-bot.action("removelatest", removeLatestCommand);
-bot.action("help", help);
-bot.action("rules", rules);
+bot.callbackQuery("entry", entry);
+bot.callbackQuery("entries", entries);
+bot.callbackQuery("removelatest", removeLatestCommand);
+bot.callbackQuery("help", help);
+bot.callbackQuery("rules", rules);
 
 // Inline keyboard handling
-bot.action("accepted", onPrivacyAccepted);
+bot.callbackQuery("accepted", onPrivacyAccepted);
 
-bot.action("rejected", onPrivacyRejected);
+bot.callbackQuery("rejected", onPrivacyRejected);
 
 bot.use(async (ctx) => {
   try {
@@ -113,5 +110,5 @@ bot.use(async (ctx) => {
 launchBotDependingOnNodeEnv(bot);
 
 // Enable graceful stop
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+process.once("SIGINT", () => bot.stop());
+process.once("SIGTERM", () => bot.stop());
