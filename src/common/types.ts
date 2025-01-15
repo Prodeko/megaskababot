@@ -1,4 +1,4 @@
-import type { Context, NarrowedContext } from "telegraf";
+import { Context, NarrowedContext } from "telegraf";
 import type {
 	CallbackQuery,
 	Message,
@@ -13,6 +13,46 @@ export type Guild = GuildTuple[number];
 type SportTuple = typeof SPORTS;
 export type Sport = SportTuple[number];
 export type Validation = "Valid" | "Invalid" | "Stop validation";
+
+interface YearPhase {
+	phase: "year";
+	year: number;
+}
+
+interface GuildPhase {
+	phase: "guild";
+	year: number;
+	guild: Guild;
+}
+
+interface SportPhase {
+	phase: "sport";
+	sport: Sport;
+}
+
+interface DistPhase {
+	phase: "dist";
+	sport: Sport;
+	distance: number;
+}
+
+interface ProofPhase {
+	phase: "proof";
+	sport: Sport;
+	distance: number;
+	fileId: string;
+}
+
+export type State =
+	| YearPhase
+	| GuildPhase
+	| SportPhase
+	| DistPhase
+	| ProofPhase;
+
+export interface MegaskabaContext extends Context {
+	session?: State;
+}
 
 export type UserWithoutTime = {
 	telegramUserId: bigint;
