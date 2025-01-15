@@ -5,12 +5,11 @@
 	"main": "index.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "bun --respawn ./src/index.ts",
-		"migrate": "bunx prisma migrate dev",
-		"generate": "bunx prisma generate",
-		"sync-prisma": "bun migrate && bun generate",
-		"start": "bun ./src/index.ts",
-		"biome": "bunx @biomejs/biome check **/*.ts **/*.js --apply ."
+		"dev": "deno run --allow-all --watch ./src/index.ts",
+		"migrate": "deno run --allow-all npm:prisma migrate dev",
+		"generate": "deno run --allow-all npm:prisma generate",
+		"sync-prisma": "deno task migrate && deno task generate",
+		"start": "deno ./src/index.ts"
 	},
 	"repository": {
 		"type": "git",

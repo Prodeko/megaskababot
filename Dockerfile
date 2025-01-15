@@ -1,9 +1,6 @@
-FROM node:20
+FROM denoland/deno:2.1.5
 WORKDIR /usr/src/app
-ENV BUN_INSTALL="$HOME/.bun/"
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH="$BUN_INSTALL/bin:$PATH"
 COPY . .
-RUN bun install
-RUN bunx prisma generate
-CMD ["bun", "start"]
+RUN deno install
+RUN deno run --allow-all npm:prisma generate
+CMD ["deno", "start"]
