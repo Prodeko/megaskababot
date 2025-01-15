@@ -25,6 +25,6 @@ const topUsersByGuild = async (guild: string, limit: number) => {
       ${limit}
   `;
   return topUsers;
-}
+};
 
 export default topUsersByGuild;

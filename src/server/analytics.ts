@@ -94,7 +94,9 @@ router.get("/statistics", async (req, res: StatisticsResponse) => {
 		validatedRes.json(Object.fromEntries(statistics));
 	} catch (error) {
 		console.error(error);
-		validatedRes.status(500).send("An error occurred while calculating statistics");
+		validatedRes.status(500).send(
+			"An error occurred while calculating statistics",
+		);
 	}
 });
 
