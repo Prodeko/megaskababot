@@ -9,7 +9,7 @@
     "migrate": "deno run --allow-all npm:prisma migrate dev",
     "generate": "deno run --allow-all npm:prisma generate",
     "sync-prisma": "deno task migrate && deno task generate",
-    "start": "deno ./src/index.ts"
+    "start": "deno run --allow-all ./src/index.ts"
   },
   "repository": {
     "type": "git",

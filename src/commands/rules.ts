@@ -1,13 +1,13 @@
-import { RULES_TEXT } from "../common/constants.js.ts";
-import type { ActionContext, CommandContext } from "../common/types.js.ts";
-import { commandsKeyboard } from "../keyboards.js.ts";
+import { RULES_TEXT } from "../common/constants.ts";
+import type { ActionContext, CommandContext } from "../common/types.ts";
+import { commandsKeyboard } from "../keyboards.ts";
 
 const rules = async (
-  ctx: CommandContext | ActionContext,
-  next: () => Promise<void>,
+	ctx: CommandContext | ActionContext,
+	next: () => Promise<void>,
 ) => {
-  await ctx.replyWithHTML(RULES_TEXT, commandsKeyboard);
-  return next();
+	await ctx.replyWithHTML(RULES_TEXT, commandsKeyboard);
+	return next();
 };
 
 export default rules;
