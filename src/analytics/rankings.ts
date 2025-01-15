@@ -1,7 +1,7 @@
-import { prisma } from "../../config.js.ts";
+import { prisma } from "../../config.ts";
 
 const topUsersByGuild = async (guild: string, limit: number) => {
-  const topUsers = await prisma.$queryRaw`
+	const topUsers = await prisma.$queryRaw`
     SELECT
       "userId",
       "telegramUsername",
@@ -23,7 +23,7 @@ const topUsersByGuild = async (guild: string, limit: number) => {
     LIMIT
       ${limit}
   `;
-  return topUsers;
+	return topUsers;
 };
 
 export default topUsersByGuild;

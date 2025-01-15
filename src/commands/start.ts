@@ -1,54 +1,54 @@
 import {
-  INTRODUCTORY_MESSAGE,
-  PRIVACY_POLICY,
-  START_REGISTRATION_MESSAGE,
-} from "../common/constants.js.ts";
-import type { CommandContext } from "../common/types.js.ts";
-import { isBigInteger } from "../common/validators.js.ts";
-import { conversationPhase } from "../common/variables.js.ts";
+	INTRODUCTORY_MESSAGE,
+	PRIVACY_POLICY,
+	START_REGISTRATION_MESSAGE,
+} from "../common/constants.ts";
+import type { CommandContext } from "../common/types.ts";
+import { isBigInteger } from "../common/validators.ts";
+import { conversationPhase } from "../common/variables.ts";
 import {
-  commandsKeyboard,
-  inlinePrivacyKeyboard,
-  yearKeyboard,
-} from "../keyboards.js.ts";
-import { isUser, updateUsersStash } from "../users.js.ts";
+	commandsKeyboard,
+	inlinePrivacyKeyboard,
+	yearKeyboard,
+} from "../keyboards.ts";
+import { isUser, updateUsersStash } from "../users.ts";
 
 const start = async (ctx: CommandContext, next: () => Promise<void>) => {
-  const userId = ctx.message.from.id;
+	const userId = ctx.message.from.id;
 
-  // Assuming that all users that have their data in the database have accepted the privacy policy.
-  const userExistsInDatabase = await isUser(userId);
-  const isNewChat = !conversationPhase.has(ctx.chat.id) &&
-    !userExistsInDatabase;
+	// Assuming that all users that have their data in the database have accepted the privacy policy.
+	const userExistsInDatabase = await isUser(userId);
+	const isNewChat =
+		!conversationPhase.has(ctx.chat.id) && !userExistsInDatabase;
 
-  if (isNewChat) {
-    await ctx.reply(INTRODUCTORY_MESSAGE);
-    await ctx.reply(PRIVACY_POLICY, inlinePrivacyKeyboard);
-    return;
-  }
+	if (isNewChat) {
+		await ctx.reply(INTRODUCTORY_MESSAGE);
+		await ctx.reply(PRIVACY_POLICY, inlinePrivacyKeyboard);
+		return;
+	}
 
-  const telegramUserId = ctx.message.from.id;
-  if (!isBigInteger(telegramUserId)) {
-    throw TypeError("Invalid user ID received from ctx");
-  }
+	const telegramUserId = ctx.message.from.id;
+	if (!isBigInteger(telegramUserId)) {
+		throw TypeError("Invalid user ID received from ctx");
+	}
 
-  if (!userExistsInDatabase) {
-    conversationPhase.set(ctx.chat.id, "year");
-    updateUsersStash(userId, {
-      firstName: ctx.message.from.first_name,
-      lastName: ctx.message.from.last_name,
-      telegramUsername: ctx.message.from.username,
-      telegramUserId,
-    });
-    await ctx.reply(`Welcome to GIGASKABA! ${START_REGISTRATION_MESSAGE}`);
-    await ctx.reply("What is your freshman year?", yearKeyboard);
-  } else {
-    await ctx.reply(
-      "Welcome back to GIGASKABA! What would you like to do?",
-      commandsKeyboard,
-    );
-  }
-  return next();
+	if (!userExistsInDatabase) {
+		conversationPhase.set(ctx.chat.id, "year");
+		updateUsersStash(userId, {
+			firstName: ctx.message.from.first_name,
+			lastName: ctx.message.from.last_name,
+			telegramUsername: ctx.message.from.username,
+			telegramUserId,
+		});
+		await ctx.reply(`Welcome to GIGASKABA! ${START_REGISTRATION_MESSAGE}`);
+		await ctx.reply("What is your freshman year?", yearKeyboard);
+	} else {
+		await ctx.reply(
+			"Welcome back to GIGASKABA! What would you like to do?",
+			commandsKeyboard,
+		);
+	}
+	return next();
 };
 
 export default start;
