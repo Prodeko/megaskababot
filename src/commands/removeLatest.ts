@@ -1,6 +1,6 @@
-import type { ActionContext, CommandContext } from "../common/types";
-import { removeLatest } from "../entries";
-import { commandsKeyboard } from "../keyboards";
+import type { ActionContext, CommandContext } from "../common/types.js.ts";
+import { removeLatest } from "../entries.js.ts";
+import { commandsKeyboard } from "../keyboards.js.ts";
 
 const removeLatestCommand = async (
   ctx: CommandContext | ActionContext,

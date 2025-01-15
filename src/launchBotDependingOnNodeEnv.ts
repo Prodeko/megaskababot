@@ -1,10 +1,7 @@
-import * as fs from "node:fs";
-import express from "express";
 import type { Context, Telegraf } from "telegraf";
 import type { Update } from "telegraf/typings/core/types/typegram";
 
-import { saveEntriesAsCSV } from "./entries";
-import app, { launchServer } from "./server";
+import app, { launchServer } from "./server/index.ts";
 import process from "node:process";
 
 /**

@@ -1,10 +1,10 @@
 import * as fs from "node:fs";
 
-import { prisma } from "../config";
-import type { Entry, EntryWithUser } from "./common/types";
-import { arrayToCSV } from "./common/utils";
-import { isBigInteger, isCompleteEntry } from "./common/validators";
-import { COEFFICIENTS } from "./common/constants";
+import { prisma } from "../config.js.ts";
+import type { Entry, EntryWithUser } from "./common/types.js.ts";
+import { arrayToCSV } from "./common/utils.js.ts";
+import { isBigInteger, isCompleteEntry } from "./common/validators.js.ts";
+import { COEFFICIENTS } from "./common/constants.js.ts";
 
 const entries = new Map<number, Partial<Entry>>();
 
@@ -124,7 +124,7 @@ const entryToDb = async (chatId: number) => {
   entries.delete(chatId);
 };
 
-const fileIdsForUserId = async (userId: bigint) =>
+const fileIdsForUserId = (userId: bigint) =>
   prisma.entry.findMany({ select: { fileId: true }, where: { userId } });
 
 const fileIdsForUsername = async (username: string) => {
@@ -166,6 +166,7 @@ const saveEntriesAsCSV = async () => {
     "guild",
   ];
 
+  // deno-lint-ignore no-explicit-any
   const flattenedEntries = entries.map<any>((e) => ({
     ...e,
     ...e.user,

@@ -1,7 +1,7 @@
-import type { TextCtxType } from "../../common/types";
-import { randomInvalidInputSticker } from "../../common/utils";
-import { conversationPhase } from "../../common/variables";
-import { updateEntryStash } from "../../entries";
+import type { TextCtxType } from "../../common/types.js.ts";
+import { randomInvalidInputSticker } from "../../common/utils.js.ts";
+import { conversationPhase } from "../../common/variables.js.ts";
+import { updateEntryStash } from "../../entries.js.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function distance(

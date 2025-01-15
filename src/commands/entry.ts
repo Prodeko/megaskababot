@@ -1,7 +1,7 @@
-import type { ActionContext, CommandContext } from "../common/types";
-import { conversationPhase } from "../common/variables";
-import { sportKeyboard } from "../keyboards";
-import { isUser } from "../users";
+import type { ActionContext, CommandContext } from "../common/types.js.ts";
+import { conversationPhase } from "../common/variables.js.ts";
+import { sportKeyboard } from "../keyboards.js.ts";
+import { isUser } from "../users.js.ts";
 
 const entry = async (
   ctx: CommandContext | ActionContext,

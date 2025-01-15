@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
 import { Telegraf } from "telegraf";
 
-import cancelLogin from "./commands/action/cancelLogin";
-import confirmLogin from "./commands/action/confirmLogin";
+import cancelLogin from "./commands/action/cancelLogin.ts";
+import confirmLogin from "./commands/action/confirmLogin.ts";
 import {
   onPrivacyAccepted,
   onPrivacyRejected,
-} from "./commands/action/privacy";
+} from "./commands/action/privacy.ts";
 import {
   adminLogin,
   allEntriesFromUser,
@@ -24,16 +24,16 @@ import {
   valid1x,
   valid2x,
   validate,
-} from "./commands/admin";
-import entries from "./commands/entries";
-import entry from "./commands/entry";
-import help from "./commands/help";
-import photo from "./commands/photo";
-import removeLatestCommand from "./commands/removeLatest";
-import rules from "./commands/rules";
-import start from "./commands/start";
-import text from "./commands/text";
-import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv";
+} from "./commands/admin.ts";
+import entries from "./commands/entries.ts";
+import entry from "./commands/entry.ts";
+import help from "./commands/help.ts";
+import photo from "./commands/photo.ts";
+import removeLatestCommand from "./commands/removeLatest.ts";
+import rules from "./commands/rules.ts";
+import start from "./commands/start.ts";
+import text from "./commands/text/index.ts";
+import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
 
 dotenv.config();
@@ -105,6 +105,7 @@ bot.action("rejected", onPrivacyRejected);
 bot.use(async (ctx) => {
   try {
     await ctx.editMessageReplyMarkup(undefined);
+    // deno-lint-ignore no-empty
   } catch {}
 });
 

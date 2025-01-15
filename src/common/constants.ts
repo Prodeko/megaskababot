@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { Guild, type Sport } from "./types";
+import type { Sport } from "./types.ts";
 
 export const INTRODUCTORY_MESSAGE =
   "Welcome to GIGASKIBA! I help you record entries from your sports tracker app to the competition. \

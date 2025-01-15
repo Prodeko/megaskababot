@@ -1,9 +1,9 @@
 import _ from "lodash";
 
-import type { ActionContext, CommandContext } from "../common/types";
-import { formatEntry } from "../common/utils";
-import { getEntriesByUserId } from "../entries";
-import { commandsKeyboard } from "../keyboards";
+import type { ActionContext, CommandContext } from "../common/types.js.ts";
+import { formatEntry } from "../common/utils.js.ts";
+import { getEntriesByUserId } from "../entries.js.ts";
+import { commandsKeyboard } from "../keyboards.js.ts";
 
 const entries = async (
   ctx: CommandContext | ActionContext,

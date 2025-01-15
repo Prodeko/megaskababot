@@ -1,8 +1,8 @@
 import express from "express";
-import { validatePeriod } from "./middleware";
-import { calculateGuildStatistics } from "../analytics/statistics";
-import topUsersByGuild from "../analytics/rankings";
-import { arrayToCSV } from "../common/utils";
+import { validatePeriod } from "./middleware.js.ts";
+import { calculateGuildStatistics } from "../analytics/statistics.js.ts";
+import topUsersByGuild from "../analytics/rankings.js.ts";
+import { arrayToCSV } from "../common/utils.js.ts";
 import process from "node:process";
 
 const router = express.Router({ mergeParams: true });
@@ -22,25 +22,28 @@ router.get("/ranking/:guild", async (req, res: StatisticsResponse) => {
   }
 
   const guild = req.params.guild;
-  if (!req.query.limit || !((typeof req.query.limit) === "string")) {
-    return res.status(400).send(
-      "Limit query parameter is required as a string",
-    );
+  if (!req.query.limit || !(typeof req.query.limit === "string")) {
+    return res
+      .status(400)
+      .send("Limit query parameter is required as a string");
   }
-  const limit = Number.parseInt(req.query.limit as string ?? "10");
+  const limit = Number.parseInt((req.query.limit as string) ?? "10");
   try {
-    const topUsers = await topUsersByGuild(guild, limit) as Record<
+    const topUsers = (await topUsersByGuild(guild, limit)) as Record<
       string,
       unknown
     >[];
-    const csv = arrayToCSV([
-      "userId",
-      "telegramUsername",
-      "firstName",
-      "lastName",
-      "totalPoints",
-      "totalEntries",
-    ], topUsers);
+    const csv = arrayToCSV(
+      [
+        "userId",
+        "telegramUsername",
+        "firstName",
+        "lastName",
+        "totalPoints",
+        "totalEntries",
+      ],
+      topUsers,
+    );
     res.header("Content-Type", "text/csv");
     res.status(200).send(csv);
   } catch (error) {

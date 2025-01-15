@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Markup } from "telegraf";
 
-import { GUILDS, SPORTS, YEARS } from "./common/constants";
+import { GUILDS, SPORTS, YEARS } from "./common/constants.js.ts";
 
 export const inlinePrivacyKeyboard = Markup.inlineKeyboard([
   [

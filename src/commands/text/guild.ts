@@ -1,9 +1,9 @@
 import _ from "lodash";
 
-import type { TextCtxType } from "../../common/types";
-import { isGuild } from "../../common/validators";
-import { loginConfiramtionKeyboard } from "../../keyboards";
-import { getUserStash, updateUsersStash } from "../../users";
+import type { TextCtxType } from "../../common/types.js.ts";
+import { isGuild } from "../../common/validators.js.ts";
+import { loginConfiramtionKeyboard } from "../../keyboards.js.ts";
+import { getUserStash, updateUsersStash } from "../../users.js.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function guild(

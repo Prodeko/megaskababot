@@ -4,7 +4,7 @@ import type {
   Message,
   Update,
 } from "telegraf/typings/core/types/typegram";
-import type { GUILDS, SPORTS } from "./constants";
+import type { GUILDS, SPORTS } from "./constants.js.ts";
 
 export type Phase = "year" | "guild" | "dist" | "proof" | "sport";
 type GuildTuple = typeof GUILDS;

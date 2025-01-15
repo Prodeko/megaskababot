@@ -1,8 +1,8 @@
-import { STICKERS } from "../common/constants";
-import type { PhotoCtxType } from "../common/types";
-import { conversationPhase } from "../common/variables";
-import { entryToDb, updateEntryStash } from "../entries";
-import { commandsKeyboard } from "../keyboards";
+import { STICKERS } from "../common/constants.js.ts";
+import type { PhotoCtxType } from "../common/types.js.ts";
+import { conversationPhase } from "../common/variables.js.ts";
+import { entryToDb, updateEntryStash } from "../entries.js.ts";
+import { commandsKeyboard } from "../keyboards.js.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function proof(
