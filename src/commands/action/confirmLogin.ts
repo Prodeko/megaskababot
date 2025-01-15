@@ -4,14 +4,14 @@ import { commandsKeyboard } from "../../keyboards.ts";
 import { userToDb } from "../../users.ts";
 
 export default async function login(
-	ctx: ActionContext,
-	next: () => Promise<void>,
+  ctx: ActionContext,
+  next: () => Promise<void>,
 ) {
-	const userId = ctx!.from!.id;
-	const chatId = ctx!.chat!.id;
+  const userId = ctx!.from!.id;
+  const chatId = ctx!.chat!.id;
 
-	await userToDb(userId);
-	conversationPhase.delete(chatId);
-	await ctx.reply("User data saved 💾!", commandsKeyboard);
-	return next();
+  await userToDb(userId);
+  conversationPhase.delete(chatId);
+  await ctx.reply("User data saved 💾!", commandsKeyboard);
+  return next();
 }
