@@ -1,13 +1,14 @@
+import { CommandContext, Context } from "grammy";
 import { HELP_TEXT } from "../common/constants.ts";
-import type { ActionContext, CommandContext } from "../common/types.ts";
 import { commandsKeyboard } from "../keyboards.ts";
 
 const help = async (
-  ctx: CommandContext | ActionContext,
-  next: () => Promise<void>,
+  ctx: CommandContext<Context>,
 ) => {
-  await ctx.replyWithHTML(HELP_TEXT, commandsKeyboard);
-  return next();
+  await ctx.reply(HELP_TEXT, {
+    parse_mode: "HTML",
+    reply_markup: commandsKeyboard,
+  });
 };
 
 export default help;
