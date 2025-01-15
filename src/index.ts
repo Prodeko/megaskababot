@@ -36,28 +36,29 @@ import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
 
 if (!process.env.BOT_TOKEN) {
-  throw new Error("Bot token not defined!");
+  throw new Error("privateBot token not defined!");
 }
 
 const bot = new Bot(process.env.BOT_TOKEN);
+const privateBot = bot.chatType("private");
 
-bot.command("start", start);
+privateBot.command("start", start);
 
 // Message handling
-bot.on("message:text", text);
-bot.on("msg:photo", photo);
+privateBot.on("message:text", text);
+privateBot.on("msg:photo", photo);
 
 // Standard commands
-bot.command("entries", entries);
-bot.command("help", help);
-bot.command("rules", rules);
-bot.command("entry", entry);
-bot.command("removelatest", removeLatestCommand);
+privateBot.command("entries", entries);
+privateBot.command("help", help);
+privateBot.command("rules", rules);
+privateBot.command("entry", entry);
+privateBot.command("removelatest", removeLatestCommand);
 
 // Middleware to get stickerids
 // eslint-disable-next-line prefer-const
 // let fileIds: string[] = []
-// bot.use((ctx:any, next) => {
+// privateBot.use((ctx:any, next) => {
 //   if (!ctx?.message?.sticker) return next()
 //   const fileId = ctx?.message?.sticker?.file_id
 //   fileIds.push(fileId)
@@ -66,47 +67,47 @@ bot.command("removelatest", removeLatestCommand);
 // })
 
 // Admin commands
-bot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
-bot.command("csv", csv);
-bot.command("pistokoe", pistokoe);
-bot.command("numtovalidate", notValidated);
-bot.command("remove", remove);
-bot.command("allphotos", allPhotosFromUser);
-bot.command("resetvalidation", resetValidation);
-bot.command("updatedistance", setDistance);
-bot.command("validate", validate);
-bot.command("allentries", allEntriesFromUser);
+privateBot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
+privateBot.command("csv", csv);
+privateBot.command("pistokoe", pistokoe);
+privateBot.command("numtovalidate", notValidated);
+privateBot.command("remove", remove);
+privateBot.command("allphotos", allPhotosFromUser);
+privateBot.command("resetvalidation", resetValidation);
+privateBot.command("updatedistance", setDistance);
+privateBot.command("validate", validate);
+privateBot.command("allentries", allEntriesFromUser);
 
-bot.callbackQuery("invalid", invalid);
-bot.callbackQuery("valid1x", valid1x);
-bot.callbackQuery("valid2x", valid2x);
-bot.callbackQuery("stopvalidation", stopValidation);
+privateBot.callbackQuery("invalid", invalid);
+privateBot.callbackQuery("valid1x", valid1x);
+privateBot.callbackQuery("valid2x", valid2x);
+privateBot.callbackQuery("stopvalidation", stopValidation);
 
-bot.callbackQuery("remove", confirmedRemove);
-bot.callbackQuery("cancel", cancelRemove);
+privateBot.callbackQuery("remove", confirmedRemove);
+privateBot.callbackQuery("cancel", cancelRemove);
 
-bot.callbackQuery("login", confirmLogin);
-bot.callbackQuery("cancel_login", cancelLogin);
+privateBot.callbackQuery("login", confirmLogin);
+privateBot.callbackQuery("cancel_login", cancelLogin);
 
-bot.callbackQuery("entry", entry);
-bot.callbackQuery("entries", entries);
-bot.callbackQuery("removelatest", removeLatestCommand);
-bot.callbackQuery("help", help);
-bot.callbackQuery("rules", rules);
+privateBot.callbackQuery("entry", entry);
+privateBot.callbackQuery("entries", entries);
+privateBot.callbackQuery("removelatest", removeLatestCommand);
+privateBot.callbackQuery("help", help);
+privateBot.callbackQuery("rules", rules);
 
 // Inline keyboard handling
-bot.callbackQuery("accepted", onPrivacyAccepted);
+privateBot.callbackQuery("accepted", onPrivacyAccepted);
 
-bot.callbackQuery("rejected", onPrivacyRejected);
+privateBot.callbackQuery("rejected", onPrivacyRejected);
 
-bot.use(async (ctx) => {
+privateBot.use(async (ctx) => {
   try {
     await ctx.editMessageReplyMarkup(undefined);
     // deno-lint-ignore no-empty
   } catch {}
 });
 
-// Launch bot
+// Launch privateBot
 launchBotDependingOnNodeEnv(bot);
 
 // Enable graceful stop
