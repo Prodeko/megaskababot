@@ -23,34 +23,18 @@ export const PRIVACY_REJECTED_MESSAGE =
 export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString();
 export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString();
 
-export const GUILDS = [
-	"prodeko",
-	"athene",
-	"fyysikkokilta",
-	"rakennusinsinöörikilta",
-] as const;
+export const GUILDS = ["prodeko", "athene", "mysteeri", "vieras"] as const;
 export const YEARS = [
-	...Array.from(Array(54).keys()).map((k) => `${1970 + k}`),
+	...Array.from(Array(55).keys()).map((k) => `${1970 + k}`),
 ].reverse();
-export const SPORTS = [
-	"swim",
-	"run",
-	"walk",
-	"ski",
-	"rollerski",
-	"rollerblade",
-	"skateboard",
-	"cycle",
-] as const;
+export const SPORTS = ["swim", "run", "walk", "ski", "skate", "cycle"] as const;
 export const COEFFICIENTS: Record<Sport, number> = {
 	swim: 5,
-	run: 1,
-	walk: 1,
-	ski: 0.5,
-	rollerski: 0.5,
-	rollerblade: 0.5,
-	skateboard: 0.5,
-	cycle: 0.2,
+	run: 1.75,
+	walk: 1.75,
+	ski: 1,
+	skate: 0.5,
+	cycle: 0.5,
 };
 // The limit for the number of points that is needed to achieve the milestone
 export const MILESTONE_LIMIT = 400;
