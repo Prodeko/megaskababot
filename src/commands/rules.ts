@@ -3,11 +3,11 @@ import type { ActionContext, CommandContext } from "../common/types";
 import { commandsKeyboard } from "../keyboards";
 
 const rules = async (
-	ctx: CommandContext | ActionContext,
-	next: () => Promise<void>,
+  ctx: CommandContext | ActionContext,
+  next: () => Promise<void>,
 ) => {
-	await ctx.replyWithHTML(RULES_TEXT, commandsKeyboard);
-	return next();
+  await ctx.replyWithHTML(RULES_TEXT, commandsKeyboard);
+  return next();
 };
 
 export default rules;

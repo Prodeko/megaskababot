@@ -4,26 +4,26 @@ import { Telegraf } from "telegraf";
 import cancelLogin from "./commands/action/cancelLogin";
 import confirmLogin from "./commands/action/confirmLogin";
 import {
-	onPrivacyAccepted,
-	onPrivacyRejected,
+  onPrivacyAccepted,
+  onPrivacyRejected,
 } from "./commands/action/privacy";
 import {
-	adminLogin,
-	allEntriesFromUser,
-	allPhotosFromUser,
-	cancelRemove,
-	confirmedRemove,
-	csv,
-	invalid,
-	notValidated,
-	pistokoe,
-	remove,
-	resetValidation,
-	setDistance,
-	stopValidation,
-	valid1x,
-	valid2x,
-	validate,
+  adminLogin,
+  allEntriesFromUser,
+  allPhotosFromUser,
+  cancelRemove,
+  confirmedRemove,
+  csv,
+  invalid,
+  notValidated,
+  pistokoe,
+  remove,
+  resetValidation,
+  setDistance,
+  stopValidation,
+  valid1x,
+  valid2x,
+  validate,
 } from "./commands/admin";
 import entries from "./commands/entries";
 import entry from "./commands/entry";
@@ -34,11 +34,12 @@ import rules from "./commands/rules";
 import start from "./commands/start";
 import text from "./commands/text";
 import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv";
+import process from "node:process";
 
 dotenv.config();
 
 if (!process.env.BOT_TOKEN) {
-	throw new Error("Bot token not defined!");
+  throw new Error("Bot token not defined!");
 }
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -102,9 +103,9 @@ bot.action("accepted", onPrivacyAccepted);
 bot.action("rejected", onPrivacyRejected);
 
 bot.use(async (ctx) => {
-	try {
-		await ctx.editMessageReplyMarkup(undefined);
-	} catch {}
+  try {
+    await ctx.editMessageReplyMarkup(undefined);
+  } catch {}
 });
 
 // Launch bot
