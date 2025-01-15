@@ -67,6 +67,11 @@ privateBot.command("removelatest", removeLatestCommand);
 // })
 
 // Admin commands
+
+// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
+// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
+// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
+// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
 privateBot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
 privateBot.command("csv", csv);
 privateBot.command("pistokoe", pistokoe);
