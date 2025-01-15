@@ -1,12 +1,13 @@
-import type { TextCtxType } from "../../common/types.ts";
+import { Composer } from "grammy";
 import { conversationPhase } from "../../common/variables.ts";
 import distance from "./distance.ts";
 import guild from "./guild.ts";
 import sport from "./sport.ts";
 import year from "./year.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const text = async (ctx: TextCtxType, next: () => Promise<void>) => {
+const text = new Composer();
+
+text.on("message:text", async (ctx) => {
   const chatId = ctx.chat.id;
   const userId = ctx.update.message.from.id;
   const text = ctx.update.message.text;
@@ -27,8 +28,6 @@ const text = async (ctx: TextCtxType, next: () => Promise<void>) => {
       await distance(ctx, text, chatId, userId);
       break;
   }
-
-  return next();
-};
+});
 
 export default text;

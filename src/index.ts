@@ -27,11 +27,11 @@ import {
 import entries from "./commands/entries.ts";
 import entry from "./commands/entry.ts";
 import help from "./commands/help.ts";
-import photo from "./commands/photo.ts";
 import removeLatestCommand from "./commands/removeLatest.ts";
 import rules from "./commands/rules.ts";
 import start from "./commands/start.ts";
 import text from "./commands/text/index.ts";
+import photo from "./commands/photo.ts";
 import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
 
@@ -45,8 +45,8 @@ const privateBot = bot.chatType("private");
 privateBot.command("start", start);
 
 // Message handling
-privateBot.on("message:text", text);
-privateBot.on("msg:photo", photo);
+privateBot.use(text);
+privateBot.use(photo);
 
 // Standard commands
 privateBot.command("entries", entries);

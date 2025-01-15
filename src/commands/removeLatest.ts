@@ -1,18 +1,18 @@
-import type { ActionContext, CommandContext } from "../common/types.ts";
+import { CommandContext, Context } from "grammy";
 import { removeLatest } from "../entries.ts";
 import { commandsKeyboard } from "../keyboards.ts";
 
 const removeLatestCommand = async (
-  ctx: CommandContext | ActionContext,
-  next: () => Promise<void>,
+  ctx: CommandContext<Context>,
 ) => {
   const result = await removeLatest(ctx!.from!.id);
   if (result) {
-    await ctx.reply("Removed latest entry!", commandsKeyboard);
+    await ctx.reply("Removed latest entry!", {
+      reply_markup: commandsKeyboard,
+    });
   } else {
-    await ctx.reply("No entries to remove", commandsKeyboard);
+    await ctx.reply("No entries to remove", { reply_markup: commandsKeyboard });
   }
-  return next();
 };
 
 export default removeLatestCommand;
