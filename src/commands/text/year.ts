@@ -1,8 +1,8 @@
-import { YEARS } from "../../common/constants";
-import type { TextCtxType } from "../../common/types";
-import { conversationPhase } from "../../common/variables";
-import { guildKeyboard } from "../../keyboards";
-import { updateUsersStash } from "../../users";
+import { YEARS } from "../../common/constants.js.ts";
+import type { TextCtxType } from "../../common/types.js.ts";
+import { conversationPhase } from "../../common/variables.js.ts";
+import { guildKeyboard } from "../../keyboards.js.ts";
+import { updateUsersStash } from "../../users.js.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function year(

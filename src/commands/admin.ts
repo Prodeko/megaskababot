@@ -8,9 +8,9 @@ import type {
   CommandContext,
   Entry,
   EntryWithUser,
-} from "../common/types";
-import { formatEntry, formatEntryWithUser } from "../common/utils";
-import { isBigInteger, isEntry } from "../common/validators";
+} from "../common/types.js.ts";
+import { formatEntry, formatEntryWithUser } from "../common/utils.js.ts";
+import { isBigInteger, isEntry } from "../common/validators.js.ts";
 import {
   amountToValidate,
   fileIdsForUserId,
@@ -24,8 +24,8 @@ import {
   setEntryDoublePoints,
   setEntryValidation,
   updateEntry,
-} from "../entries";
-import { confirmationKeyboard, validationKeyboard } from "../keyboards";
+} from "../entries.js.ts";
+import { confirmationKeyboard, validationKeyboard } from "../keyboards.js.ts";
 
 const admins = new Set();
 const underValidation = new Map<number, number>();
@@ -125,14 +125,14 @@ export const valid1x = async (
   ctx: ActionContext,
   next: () => Promise<void>,
 ) => {
-  validx(false, ctx, next);
+  await validx(false, ctx, next);
 };
 
 export const valid2x = async (
   ctx: ActionContext,
   next: () => Promise<void>,
 ) => {
-  validx(true, ctx, next);
+  await validx(true, ctx, next);
 };
 
 export const adminLogin = async (
@@ -248,7 +248,7 @@ export const confirmedRemove = async (
   return next();
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// deno-lint-ignore no-explicit-any
 export const cancelRemove = async (ctx: any, next: () => Promise<void>) => {
   if (!admins.has(ctx.from.id)) return next();
   removeConsideration.delete(ctx.chat.id);
@@ -371,6 +371,6 @@ export const stopValidation = async (
   ctx: ActionContext,
   next: () => Promise<void>,
 ) => {
-  underValidation.delete(ctx!.chat!.id);
+  await underValidation.delete(ctx!.chat!.id);
   return next();
 };

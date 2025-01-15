@@ -1,6 +1,6 @@
 import express from "express";
-import { saveEntriesAsCSV } from "../entries";
-import analyticsRouter from "./analytics";
+import { saveEntriesAsCSV } from "../entries.js.ts";
+import analyticsRouter from "./analytics.js.ts";
 import process from "node:process";
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
@@ -30,7 +30,7 @@ app.get("/entries", async (req, res) => {
 
 app.use("/analytics", analyticsRouter);
 
-export const launchServer = async () => {
+export const launchServer = () => {
   app.listen(port, () => console.log("Running on port ", port));
 };
 

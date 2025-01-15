@@ -1,7 +1,7 @@
 import _ from "lodash";
 
-import { INVALID_INPUT_STICKERS } from "./constants";
-import type { Entry, User } from "./types";
+import { INVALID_INPUT_STICKERS } from "./constants.js.ts";
+import type { Entry, User } from "./types.js.ts";
 
 export const arrayToCSV = <T extends Record<string, unknown>>(
   headers: (keyof T)[],

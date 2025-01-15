@@ -2,12 +2,12 @@
 import {
   PRIVACY_REJECTED_MESSAGE,
   START_REGISTRATION_MESSAGE,
-} from "../../common/constants";
-import type { ActionContext } from "../../common/types";
-import { isBigInteger } from "../../common/validators";
-import { conversationPhase } from "../../common/variables";
-import { yearKeyboard } from "../../keyboards";
-import { updateUsersStash } from "../../users";
+} from "../../common/constants.js.ts";
+import type { ActionContext } from "../../common/types.js.ts";
+import { isBigInteger } from "../../common/validators.js.ts";
+import { conversationPhase } from "../../common/variables.js.ts";
+import { yearKeyboard } from "../../keyboards.js.ts";
+import { updateUsersStash } from "../../users.js.ts";
 
 export async function onPrivacyAccepted(
   ctx: ActionContext,

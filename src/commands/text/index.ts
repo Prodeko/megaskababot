@@ -1,9 +1,9 @@
-import type { TextCtxType } from "../../common/types";
-import { conversationPhase } from "../../common/variables";
-import distance from "./distance";
-import guild from "./guild";
-import sport from "./sport";
-import year from "./year";
+import type { TextCtxType } from "../../common/types.js.ts";
+import { conversationPhase } from "../../common/variables.js.ts";
+import distance from "./distance.js.ts";
+import guild from "./guild.js.ts";
+import sport from "./sport.js.ts";
+import year from "./year.js.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const text = async (ctx: TextCtxType, next: () => Promise<void>) => {

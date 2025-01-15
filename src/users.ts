@@ -1,6 +1,6 @@
-import { prisma } from "../config";
-import type { User } from "./common/types";
-import { isCompleteUser } from "./common/validators";
+import { prisma } from "../config.js.ts";
+import type { User } from "./common/types.js.ts";
+import { isCompleteUser } from "./common/validators.js.ts";
 
 const users = new Map<number, Partial<User>>();
 

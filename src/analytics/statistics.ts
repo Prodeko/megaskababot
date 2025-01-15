@@ -1,6 +1,6 @@
-import { prisma } from "../../config";
-import { MILESTONE_LIMIT } from "../common/constants";
-import type { Guild, Statistics, TeamStatistics } from "../common/types";
+import { prisma } from "../../config.js.ts";
+import { MILESTONE_LIMIT } from "../common/constants.js.ts";
+import type { Guild, Statistics, TeamStatistics } from "../common/types.js.ts";
 
 interface PeriodStats {
 	guild: Guild;

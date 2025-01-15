@@ -2,16 +2,16 @@ import {
   INTRODUCTORY_MESSAGE,
   PRIVACY_POLICY,
   START_REGISTRATION_MESSAGE,
-} from "../common/constants";
-import type { CommandContext } from "../common/types";
-import { isBigInteger } from "../common/validators";
-import { conversationPhase } from "../common/variables";
+} from "../common/constants.js.ts";
+import type { CommandContext } from "../common/types.js.ts";
+import { isBigInteger } from "../common/validators.js.ts";
+import { conversationPhase } from "../common/variables.js.ts";
 import {
   commandsKeyboard,
   inlinePrivacyKeyboard,
   yearKeyboard,
-} from "../keyboards";
-import { isUser, updateUsersStash } from "../users";
+} from "../keyboards.js.ts";
+import { isUser, updateUsersStash } from "../users.js.ts";
 
 const start = async (ctx: CommandContext, next: () => Promise<void>) => {
   const userId = ctx.message.from.id;

@@ -1,4 +1,4 @@
-import { GUILDS, SPORTS } from "./constants";
+import { GUILDS, SPORTS } from "./constants.js.ts";
 import type {
   Entry,
   EntryWithoutId,
@@ -6,7 +6,7 @@ import type {
   Sport,
   User,
   UserWithoutTime,
-} from "./types";
+} from "./types.js.ts";
 
 const isSport = (sport: unknown): sport is Sport => {
   return typeof sport === "string" && SPORTS.some((t) => sport === t);
@@ -36,7 +36,7 @@ const isCompleteEntry = (entry: Partial<Entry>): entry is EntryWithoutId => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// deno-lint-ignore no-explicit-any
 const isEntry = (entry: any): entry is Entry => {
   return (
     typeof entry?.distance === "number" &&

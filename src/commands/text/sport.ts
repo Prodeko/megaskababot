@@ -1,9 +1,9 @@
 import _ from "lodash";
 
-import type { TextCtxType } from "../../common/types";
-import { isSport } from "../../common/validators";
-import { conversationPhase } from "../../common/variables";
-import { updateEntryStash } from "../../entries";
+import type { TextCtxType } from "../../common/types.js.ts";
+import { isSport } from "../../common/validators.js.ts";
+import { conversationPhase } from "../../common/variables.js.ts";
+import { updateEntryStash } from "../../entries.js.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function sport(

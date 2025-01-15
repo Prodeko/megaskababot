@@ -1,6 +1,6 @@
-import { HELP_TEXT } from "../common/constants";
-import type { ActionContext, CommandContext } from "../common/types";
-import { commandsKeyboard } from "../keyboards";
+import { HELP_TEXT } from "../common/constants.js.ts";
+import type { ActionContext, CommandContext } from "../common/types.js.ts";
+import { commandsKeyboard } from "../keyboards.js.ts";
 
 const help = async (
   ctx: CommandContext | ActionContext,
