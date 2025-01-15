@@ -98,7 +98,6 @@ export async function calculateGuildStatistics(
 
 	const statistics = new Map<Guild, TeamStatistics>();
 
-<<<<<<< HEAD
 	console.log("Milstone Achievers: ", milestoneAchieversByGuild);
 
 	for (const aggregate of aggregates) {
@@ -126,32 +125,5 @@ export async function calculateGuildStatistics(
 		});
 	}
 
-=======
-	for (const aggregate of aggregates) {
-		const periodStat = periodStats.find(
-			(stat) => stat.guild === aggregate.guild,
-		);
-		const milestoneAchievers = milestoneAchieversByGuild.find(
-			(stat) => stat.guild === aggregate.guild,
-		)?.milestoneAchievers;
-
-		statistics.set(aggregate.guild, {
-			totalPoints: aggregate.totalPoints,
-			totalKilometers: aggregate.totalKilometers,
-			totalEntries: Number(aggregate.totalEntries),
-			numberOfUniqueParticipants: Number(aggregate.uniqueParticipants),
-			proportionOfContinuingParticipants:
-				Number(periodStat?.continuingParticipants) /
-					Number(periodStat?.previousParticipants) || 0,
-			pointsGainedInPeriod: Number(periodStat?.pointsGainedInPeriod) || 0,
-			proportionOfMilestoneAchievers: Number(
-				milestoneAchievers
-					? Number(milestoneAchievers) / Number(aggregate.uniqueParticipants)
-					: 0,
-			),
-		});
-	}
-
->>>>>>> 3d394e8 (Fix silly deno issues)
 	return statistics;
 }

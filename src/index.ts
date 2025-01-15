@@ -41,7 +41,7 @@ if (!process.env.BOT_TOKEN) {
 
 const bot = new Bot(process.env.BOT_TOKEN);
 
-bot.command("start", start)
+bot.command("start", start);
 
 // Message handling
 bot.on("message:text", text);
