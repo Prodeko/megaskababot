@@ -24,8 +24,13 @@ export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString();
 export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString();
 
 export const GUILDS = ["prodeko", "athene", "mysteeri", "vieras"] as const;
+
+const firstFreshmanYear = 1970;
+const currentYear = new Date(Date.now()).getFullYear();
 export const YEARS = [
-	...Array.from(Array(55).keys()).map((k) => `${1970 + k}`),
+	...Array.from(Array(currentYear - firstFreshmanYear).keys()).map(
+		(k) => `${firstFreshmanYear + k}`,
+	),
 ].reverse();
 export const SPORTS = ["swim", "run", "walk", "ski", "skate", "cycle"] as const;
 export const COEFFICIENTS: Record<Sport, number> = {
