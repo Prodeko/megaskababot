@@ -166,8 +166,7 @@ const saveEntriesAsCSV = async () => {
     "guild",
   ];
 
-  // deno-lint-ignore no-explicit-any
-  const flattenedEntries = entries.map<any>((e) => ({
+  const flattenedEntries = entries.map<Record<string, unknown>>((e) => ({
     ...e,
     ...e.user,
     createdAt: e.createdAt,

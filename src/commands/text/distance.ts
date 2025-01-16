@@ -1,11 +1,11 @@
-import type { TextCtxType } from "../../common/types.ts";
+import { ChatTypeContext } from "grammy";
 import { randomInvalidInputSticker } from "../../common/utils.ts";
 import { conversationPhase } from "../../common/variables.ts";
 import { updateEntryStash } from "../../entries.ts";
+import { MegaskabaContext } from "../../common/types.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function distance(
-  ctx: TextCtxType,
+  ctx: ChatTypeContext<MegaskabaContext, "private">,
   distStr: string,
   chatId: number,
   userId: number,

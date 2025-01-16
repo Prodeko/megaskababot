@@ -1,13 +1,13 @@
 import _ from "lodash";
 
-import type { TextCtxType } from "../../common/types.ts";
 import { isSport } from "../../common/validators.ts";
 import { conversationPhase } from "../../common/variables.ts";
 import { updateEntryStash } from "../../entries.ts";
+import { ChatTypeContext } from "grammy";
+import { MegaskabaContext } from "../../common/types.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function sport(
-  ctx: TextCtxType,
+  ctx: ChatTypeContext<MegaskabaContext, "private">,
   sportStr: string,
   chatId: number,
 ) {

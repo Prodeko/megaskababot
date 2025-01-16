@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   PRIVACY_REJECTED_MESSAGE,
   START_REGISTRATION_MESSAGE,

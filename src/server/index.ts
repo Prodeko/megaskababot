@@ -3,7 +3,6 @@ import { saveEntriesAsCSV } from "../entries.ts";
 import analyticsRouter from "./analytics.ts";
 import process from "node:process";
 
-// biome-ignore lint/style/noNonNullAssertion: <explanation>
 const port = Number.parseInt(process.env.PORT!);
 
 const app = express();

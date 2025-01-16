@@ -1,4 +1,3 @@
-import { CommandContext, Context } from "grammy";
 import { conversationPhase } from "../common/variables.ts";
 import { sportKeyboard } from "../keyboards.ts";
 import { isUser } from "../users.ts";
