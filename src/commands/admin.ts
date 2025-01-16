@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as fs from "node:fs";
 import _ from "lodash";
-import type { MediaGroup } from "telegraf/typings/telegram-types";
 
 import type {
-  ActionContext,
-  CommandContext,
   Entry,
   EntryWithUser,
+  MegaskabaContext,
 } from "../common/types.ts";
 import { formatEntry, formatEntryWithUser } from "../common/utils.ts";
 import { isBigInteger, isEntry } from "../common/validators.ts";
@@ -26,13 +24,25 @@ import {
   updateEntry,
 } from "../entries.ts";
 import { confirmationKeyboard, validationKeyboard } from "../keyboards.ts";
+import {
+  CallbackQueryContext,
+  ChatTypeContext,
+  CommandContext,
+  Context,
+  InputMediaBuilder,
+} from "grammy";
+import { InputFile, InputMediaPhoto } from "grammy/types";
 
 const admins = new Set();
 const underValidation = new Map<number, number>();
 const removeConsideration = new Map<number, number>();
 
+type PrivateCommandMegaskabaContext = ChatTypeContext<
+  CommandContext<MegaskabaContext>,
+  "private"
+>;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const performPistokoe = async (ctx: ActionContext | CommandContext) => {
+const performPistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
   const entry = await getRandomNotValidEntry();
   const chatId = ctx!.chat!.id;
 
@@ -43,13 +53,16 @@ const performPistokoe = async (ctx: ActionContext | CommandContext) => {
   underValidation.set(chatId, entry.id);
 
   await notValidated(ctx);
-  await ctx.replyWithHTML(
+  await ctx.reply(
     formatEntryWithUser(entry as unknown as EntryWithUser),
+    { parse_mode: "HTML" },
   );
-  await ctx.replyWithPhoto(entry?.fileId, validationKeyboard);
+  await ctx.replyWithPhoto(entry?.fileId, { reply_markup: validationKeyboard });
 };
 
-export const validate = async (ctx: CommandContext) => {
+export const validate = async (
+  ctx: PrivateCommandMegaskabaContext,
+) => {
   if (!admins.has(ctx.from.id)) return;
 
   const args = ctx.message.text.split(" ");
@@ -68,25 +81,33 @@ export const validate = async (ctx: CommandContext) => {
   if (!entry) return ctx.reply("No such entry");
 
   underValidation.set(ctx.chat.id, entry.id);
-  await ctx.replyWithHTML(
+  await ctx.reply(
     formatEntryWithUser(entry as unknown as EntryWithUser),
+    { parse_mode: "HTML" },
   );
-  await ctx.replyWithPhoto(entry.fileId, validationKeyboard);
+  await ctx.replyWithPhoto(entry.fileId, { reply_markup: validationKeyboard });
 };
 
-export const notValidated = async (ctx: ActionContext | CommandContext) => {
+export const notValidated = async (
+  ctx: PrivateCommandMegaskabaContext,
+) => {
   const notValidated = await amountToValidate();
   await ctx.reply(`Number of entries not validated: ${notValidated}`);
 };
 
-export const pistokoe = async (ctx: CommandContext) => {
+export const pistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
   if (!admins.has(ctx.from.id)) return;
   console.log("pistokoe");
   await performPistokoe(ctx);
 };
 
+type PrivateCallbackMegaskabaContext = ChatTypeContext<
+  CallbackQueryContext<MegaskabaContext>,
+  "private"
+>;
+
 export const invalid = async (
-  ctx: ActionContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx!.from!.id)) return;
@@ -103,7 +124,7 @@ export const invalid = async (
 
 export const validx = async (
   doublePoints: boolean,
-  ctx: ActionContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx!.from!.id)) return;
@@ -120,24 +141,24 @@ export const validx = async (
 };
 
 export const valid1x = async (
-  ctx: ActionContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   await validx(false, ctx, next);
 };
 
 export const valid2x = async (
-  ctx: ActionContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   await validx(true, ctx, next);
 };
 
 export const adminLogin = async (
-  ctx: CommandContext,
+  ctx: ChatTypeContext<MegaskabaContext, "private">,
   next: () => Promise<void>,
 ) => {
-  const userId = ctx.message.from.id;
+  const userId = ctx.chatId;
   admins.add(userId);
   await ctx.reply(
     `You are now an admin! Possible commands:
@@ -155,8 +176,7 @@ export const adminLogin = async (
 };
 
 export const allPhotosFromUser = async (
-  ctx: CommandContext,
-  next: () => Promise<void>,
+  ctx: PrivateCommandMegaskabaContext,
 ) => {
   if (!admins.has(ctx!.from!.id)) return;
   const args = ctx.message.text.split(" ");
@@ -179,9 +199,9 @@ export const allPhotosFromUser = async (
   if (!fileIds) return await ctx.reply("No such user 👀");
 
   const chunks = _.chunk(
-    fileIds.map((f) => ({ media: f.fileId, type: "photo" })),
+    fileIds.map((f) => InputMediaBuilder.photo(f)),
     10,
-  ) as MediaGroup[];
+  );
 
   chunks.forEach(async (chunk) => {
     try {
@@ -191,11 +211,10 @@ export const allPhotosFromUser = async (
       await ctx.reply("Possibily invalid fileId");
     }
   });
-  return next();
 };
 
 export const allEntriesFromUser = async (
-  ctx: CommandContext,
+  ctx: PrivateCommandMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx!.from!.id)) return;
@@ -232,7 +251,7 @@ export const allEntriesFromUser = async (
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const confirmedRemove = async (
-  ctx: CommandContext,
+  ctx: PrivateCommandMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx.from.id)) return;
@@ -255,13 +274,12 @@ export const cancelRemove = async (ctx: any, next: () => Promise<void>) => {
 };
 
 export const remove = async (
-  ctx: CommandContext,
-  next: () => Promise<void>,
+  ctx: PrivateCommandMegaskabaContext,
 ) => {
   if (!admins.has(ctx.from.id)) return;
 
-  const args = ctx.message.text.split(" ");
-  if (args.length <= 1) {
+  const args = ctx?.message?.text?.split(" ");
+  if (!args || args.length <= 1) {
     return await ctx.reply(
       "Please give the id to remove as an argument (eg. /remove 10)",
     );
@@ -273,33 +291,34 @@ export const remove = async (
 
   try {
     const entry = await getEntry(idToRemove);
-    removeConsideration.set(ctx.chat.id, entry.id);
-    await ctx.replyWithPhoto(entry.fileId);
-    await ctx.replyWithHTML(
+    removeConsideration.set(ctx.chat.id, entry!.id);
+    await ctx.replyWithPhoto(entry!.fileId);
+    await ctx.reply(
       formatEntryWithUser(entry as unknown as EntryWithUser),
+      { parse_mode: "HTML" },
     );
-    await ctx.reply("Do you want to remove this entry?", confirmationKeyboard);
+    await ctx.reply("Do you want to remove this entry?", {
+      reply_markup: confirmationKeyboard,
+    });
   } catch (e) {
     console.error(e);
     await ctx.reply("No such entry");
   }
-  return next();
 };
 
-export const csv = async (ctx: CommandContext, next: () => Promise<void>) => {
+export const csv = async (
+  ctx: PrivateCommandMegaskabaContext,
+) => {
   if (!admins.has(ctx.from.id)) return;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await saveEntriesAsCSV();
-  ctx.telegram.sendDocument(ctx.from.id, {
-    source: fs.readFileSync("entries.csv"),
-    filename: "entries.csv",
-  });
-  return next();
+  const document = new InputFile("entries.csv");
+  ctx.replyWithDocument(document);
 };
 
 export const resetValidation = async (
-  ctx: CommandContext,
+  ctx: PrivateCommandMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx.from.id)) return;
@@ -331,7 +350,7 @@ export const resetValidation = async (
 };
 
 export const setDistance = async (
-  ctx: CommandContext,
+  ctx: PrivateCommandMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx.from.id)) return;
@@ -366,7 +385,7 @@ export const setDistance = async (
 };
 
 export const stopValidation = async (
-  ctx: ActionContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   await underValidation.delete(ctx!.chat!.id);

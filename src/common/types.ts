@@ -1,3 +1,4 @@
+import { Context } from "grammy";
 import type { GUILDS, SPORTS } from "./constants.ts";
 
 export type Phase = "year" | "guild" | "dist" | "proof" | "sport";
