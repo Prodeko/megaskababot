@@ -13,8 +13,11 @@ import {
 } from "../keyboards.ts";
 import { isUser, updateUsersStash } from "../users.ts";
 
-const start = async (ctx: CommandContext<ChatTypeContext<Context, "private">>, next: () => Promise<void>) => {
-  const userId = ctx.chatId
+const start = async (
+  ctx: CommandContext<ChatTypeContext<Context, "private">>,
+  next: () => Promise<void>,
+) => {
+  const userId = ctx.chatId;
 
   // Assuming that all users that have their data in the database have accepted the privacy policy.
   const userExistsInDatabase = await isUser(userId);
@@ -23,7 +26,7 @@ const start = async (ctx: CommandContext<ChatTypeContext<Context, "private">>, n
 
   if (isNewChat) {
     await ctx.reply(INTRODUCTORY_MESSAGE);
-    await ctx.reply(PRIVACY_POLICY, {reply_markup: inlinePrivacyKeyboard});
+    await ctx.reply(PRIVACY_POLICY, { reply_markup: inlinePrivacyKeyboard });
     return;
   }
 
@@ -40,11 +43,13 @@ const start = async (ctx: CommandContext<ChatTypeContext<Context, "private">>, n
       telegramUserId: userId,
     });
     await ctx.reply(`Welcome to GIGASKABA! ${START_REGISTRATION_MESSAGE}`);
-    await ctx.reply("What is your freshman year?", {reply_markup: yearKeyboard});
+    await ctx.reply("What is your freshman year?", {
+      reply_markup: yearKeyboard,
+    });
   } else {
     await ctx.reply(
       "Welcome back to GIGASKABA! What would you like to do?",
-      {reply_markup: commandsKeyboard},
+      { reply_markup: commandsKeyboard },
     );
   }
   return next();

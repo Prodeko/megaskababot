@@ -3,14 +3,14 @@ import {
   PRIVACY_REJECTED_MESSAGE,
   START_REGISTRATION_MESSAGE,
 } from "../../common/constants.ts";
-import type { ActionContext } from "../../common/types.ts";
+import { PrivateCallbackMegaskabaContext } from "../../common/types.ts";
 import { isBigInteger } from "../../common/validators.ts";
 import { conversationPhase } from "../../common/variables.ts";
 import { yearKeyboard } from "../../keyboards.ts";
 import { updateUsersStash } from "../../users.ts";
 
 export async function onPrivacyAccepted(
-  ctx: ActionContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) {
   conversationPhase.set(ctx.chat!.id, "year");
@@ -28,12 +28,14 @@ export async function onPrivacyAccepted(
     telegramUserId,
   });
   await ctx.reply(START_REGISTRATION_MESSAGE);
-  await ctx.reply("What is your freshman year?", yearKeyboard);
+  await ctx.reply("What is your freshman year?", {
+    reply_markup: yearKeyboard,
+  });
   return next();
 }
 
 export async function onPrivacyRejected(
-  ctx: ActionContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) {
   await ctx.reply(PRIVACY_REJECTED_MESSAGE);

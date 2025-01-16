@@ -3,10 +3,13 @@ import _ from "lodash";
 import { formatEntry } from "../common/utils.ts";
 import { getEntriesByUserId } from "../entries.ts";
 import { commandsKeyboard } from "../keyboards.ts";
-import { CommandContext, Context } from "grammy";
+import {
+  PrivateCallbackMegaskabaContext,
+  PrivateCommandMegaskabaContext,
+} from "../common/types.ts";
 
 const entries = async (
-  ctx: CommandContext<Context>,
+  ctx: PrivateCommandMegaskabaContext | PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   const entries = await getEntriesByUserId(ctx!.from!.id);
