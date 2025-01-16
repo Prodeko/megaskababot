@@ -1,12 +1,12 @@
+import { ChatTypeContext } from "grammy";
 import { YEARS } from "../../common/constants.ts";
-import type { TextCtxType } from "../../common/types.ts";
 import { conversationPhase } from "../../common/variables.ts";
 import { guildKeyboard } from "../../keyboards.ts";
 import { updateUsersStash } from "../../users.ts";
+import { MegaskabaContext } from "../../common/types.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function year(
-  ctx: TextCtxType,
+  ctx: ChatTypeContext<MegaskabaContext, "private">,
   yearStr: string,
   userId: number,
   chatId: number,
@@ -17,6 +17,6 @@ export default async function year(
   }
 
   updateUsersStash(userId, { freshmanYear: asNum });
-  await ctx.reply("From which guild are you?", guildKeyboard);
+  await ctx.reply("From which guild are you?", { reply_markup: guildKeyboard });
   conversationPhase.set(chatId, "guild");
 }

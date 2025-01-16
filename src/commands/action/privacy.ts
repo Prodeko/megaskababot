@@ -11,7 +11,6 @@ import { updateUsersStash } from "../../users.ts";
 
 export async function onPrivacyAccepted(
   ctx: PrivateCallbackMegaskabaContext,
-  next: () => Promise<void>,
 ) {
   conversationPhase.set(ctx.chat!.id, "year");
 
@@ -31,13 +30,10 @@ export async function onPrivacyAccepted(
   await ctx.reply("What is your freshman year?", {
     reply_markup: yearKeyboard,
   });
-  return next();
 }
 
 export async function onPrivacyRejected(
   ctx: PrivateCallbackMegaskabaContext,
-  next: () => Promise<void>,
 ) {
   await ctx.reply(PRIVACY_REJECTED_MESSAGE);
-  return next();
 }
