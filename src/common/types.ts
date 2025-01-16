@@ -1,4 +1,9 @@
-import { Context } from "grammy";
+import {
+  CallbackQueryContext,
+  ChatTypeContext,
+  CommandContext,
+  Context,
+} from "grammy";
 import type { GUILDS, SPORTS } from "./constants.ts";
 
 export type Phase = "year" | "guild" | "dist" | "proof" | "sport";
@@ -95,3 +100,13 @@ export type Statistics = Map<Guild, TeamStatistics>;
 export type pointsPerGuild = Map<Guild, number>;
 
 export type PrivacyState = "accepted" | "rejected";
+
+export type PrivateCommandMegaskabaContext = ChatTypeContext<
+  CommandContext<MegaskabaContext>,
+  "private"
+>;
+
+export type PrivateCallbackMegaskabaContext = ChatTypeContext<
+  CallbackQueryContext<MegaskabaContext>,
+  "private"
+>;

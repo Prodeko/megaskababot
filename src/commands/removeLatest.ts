@@ -1,9 +1,12 @@
-import { CommandContext, Context } from "grammy";
 import { removeLatest } from "../entries.ts";
 import { commandsKeyboard } from "../keyboards.ts";
+import {
+  PrivateCallbackMegaskabaContext,
+  PrivateCommandMegaskabaContext,
+} from "../common/types.ts";
 
 const removeLatestCommand = async (
-  ctx: CommandContext<Context>,
+  ctx: PrivateCallbackMegaskabaContext | PrivateCommandMegaskabaContext,
 ) => {
   const result = await removeLatest(ctx!.from!.id);
   if (result) {

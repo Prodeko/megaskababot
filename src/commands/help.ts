@@ -1,9 +1,12 @@
-import { CommandContext, Context } from "grammy";
 import { HELP_TEXT } from "../common/constants.ts";
 import { commandsKeyboard } from "../keyboards.ts";
+import {
+  PrivateCallbackMegaskabaContext,
+  PrivateCommandMegaskabaContext,
+} from "../common/types.ts";
 
 const help = async (
-  ctx: CommandContext<Context>,
+  ctx: PrivateCallbackMegaskabaContext | PrivateCommandMegaskabaContext,
 ) => {
   await ctx.reply(HELP_TEXT, {
     parse_mode: "HTML",

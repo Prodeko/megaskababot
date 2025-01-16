@@ -6,6 +6,8 @@ import type {
   Entry,
   EntryWithUser,
   MegaskabaContext,
+  PrivateCallbackMegaskabaContext,
+  PrivateCommandMegaskabaContext,
 } from "../common/types.ts";
 import { formatEntry, formatEntryWithUser } from "../common/utils.ts";
 import { isBigInteger, isEntry } from "../common/validators.ts";
@@ -37,10 +39,6 @@ const admins = new Set();
 const underValidation = new Map<number, number>();
 const removeConsideration = new Map<number, number>();
 
-type PrivateCommandMegaskabaContext = ChatTypeContext<
-  CommandContext<MegaskabaContext>,
-  "private"
->;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const performPistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
   const entry = await getRandomNotValidEntry();
@@ -100,11 +98,6 @@ export const pistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
   console.log("pistokoe");
   await performPistokoe(ctx);
 };
-
-type PrivateCallbackMegaskabaContext = ChatTypeContext<
-  CallbackQueryContext<MegaskabaContext>,
-  "private"
->;
 
 export const invalid = async (
   ctx: PrivateCallbackMegaskabaContext,
@@ -249,9 +242,8 @@ export const allEntriesFromUser = async (
   return next();
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const confirmedRemove = async (
-  ctx: PrivateCommandMegaskabaContext,
+  ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx.from.id)) return;
@@ -265,8 +257,10 @@ export const confirmedRemove = async (
   return next();
 };
 
-// deno-lint-ignore no-explicit-any
-export const cancelRemove = async (ctx: any, next: () => Promise<void>) => {
+export const cancelRemove = async (
+  ctx: PrivateCallbackMegaskabaContext,
+  next: () => Promise<void>,
+) => {
   if (!admins.has(ctx.from.id)) return next();
   removeConsideration.delete(ctx.chat.id);
   await ctx.reply("Canceled");
@@ -311,7 +305,6 @@ export const csv = async (
 ) => {
   if (!admins.has(ctx.from.id)) return;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await saveEntriesAsCSV();
   const document = new InputFile("entries.csv");
   ctx.replyWithDocument(document);
