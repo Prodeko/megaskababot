@@ -3,6 +3,7 @@ import {
   ChatTypeContext,
   CommandContext,
   Context,
+  SessionFlavor,
 } from "grammy";
 import type { GUILDS, SPORTS } from "./constants.ts";
 
@@ -49,10 +50,6 @@ export type State =
   | SportPhase
   | DistPhase
   | ProofPhase;
-
-export interface MegaskabaContext extends Context {
-  session?: State;
-}
 
 export type UserWithoutTime = {
   telegramUserId: bigint;
@@ -108,6 +105,11 @@ export type TimeSeriesData = [
     totalPoints: number;
   },
 ];
+export interface SessionData {
+  state?: State;
+}
+
+export type MegaskabaContext = Context & SessionFlavor<SessionData>;
 
 export type PrivateCommandMegaskabaContext = ChatTypeContext<
   CommandContext<MegaskabaContext>,
