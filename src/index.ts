@@ -1,4 +1,4 @@
-import { Bot } from "grammy";
+import { Bot, session } from "grammy";
 
 import cancelLogin from "./commands/action/cancelLogin.ts";
 import confirmLogin from "./commands/action/confirmLogin.ts";
@@ -34,12 +34,19 @@ import text from "./commands/text/index.ts";
 import photo from "./commands/photo.ts";
 import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
+import { MegaskabaContext } from "./common/types.ts";
 
 if (!process.env.BOT_TOKEN) {
   throw new Error("privateBot token not defined!");
 }
 
-const bot = new Bot(process.env.BOT_TOKEN);
+const bot = new Bot<MegaskabaContext>(process.env.BOT_TOKEN);
+bot.use(session({
+  initial: () => {
+    return {};
+  },
+}));
+
 const privateBot = bot.chatType("private");
 
 privateBot.command("start", start);
