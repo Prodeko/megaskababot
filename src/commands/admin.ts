@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import * as fs from "node:fs";
 import _ from "lodash";
 
 import type {
@@ -26,20 +24,13 @@ import {
 	updateEntry,
 } from "../entries.ts";
 import { confirmationKeyboard, validationKeyboard } from "../keyboards.ts";
-import {
-  CallbackQueryContext,
-  ChatTypeContext,
-  CommandContext,
-  Context,
-  InputMediaBuilder,
-} from "grammy";
-import { InputFile, InputMediaPhoto } from "grammy/types";
+import { ChatTypeContext, InputMediaBuilder } from "grammy";
+import { InputFile } from "grammy/types";
 
 const admins = new Set();
 const underValidation = new Map<number, number>();
 const removeConsideration = new Map<number, number>();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const performPistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
   const entry = await getRandomNotValidEntry();
   const chatId = ctx!.chat!.id;

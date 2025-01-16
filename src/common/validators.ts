@@ -39,11 +39,11 @@ const isCompleteEntry = (entry: Partial<Entry>): entry is EntryWithoutId => {
 // deno-lint-ignore no-explicit-any
 const isEntry = (entry: any): entry is Entry => {
   return (
-    typeof entry?.distance === "number" &&
-    typeof entry?.fileId === "string" &&
-    typeof entry?.userId === "bigint" &&
-    typeof entry?.id === "number" &&
-    typeof entry?.createdAt === "object" &&
+    typeof entry.distance === "number" &&
+    typeof entry.fileId === "string" &&
+    typeof entry.userId === "bigint" &&
+    typeof entry.id === "number" &&
+    typeof entry.createdAt === "object" &&
     isSport(entry?.sport)
   );
 };

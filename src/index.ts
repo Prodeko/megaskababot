@@ -55,23 +55,7 @@ privateBot.command("rules", rules);
 privateBot.command("entry", entry);
 privateBot.command("removelatest", removeLatestCommand);
 
-// Middleware to get stickerids
-// eslint-disable-next-line prefer-const
-// let fileIds: string[] = []
-// privateBot.use((ctx:any, next) => {
-//   if (!ctx?.message?.sticker) return next()
-//   const fileId = ctx?.message?.sticker?.file_id
-//   fileIds.push(fileId)
-//   console.log(fileIds)
-//   return next()
-// })
-
 // Admin commands
-
-// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
-// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
-// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
-// MIGRATE BELOW COMMANDS TO GRAMMY!!!!!!!!!!!!!!!!!
 privateBot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
 privateBot.command("csv", csv);
 privateBot.command("pistokoe", pistokoe);
@@ -108,8 +92,9 @@ privateBot.callbackQuery("rejected", onPrivacyRejected);
 privateBot.use(async (ctx) => {
   try {
     await ctx.editMessageReplyMarkup(undefined);
-    // deno-lint-ignore no-empty
-  } catch {}
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 // Launch privateBot
