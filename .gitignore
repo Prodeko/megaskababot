@@ -4,3 +4,4 @@ photos
 entries_db.json
 users_db.json
 entries.csv
+prisma/generated/

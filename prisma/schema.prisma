@@ -4,6 +4,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"]
+  output        = "./generated/client"
 }
 
 datasource db {
@@ -34,4 +35,12 @@ model Entry {
   valid           Boolean?
   sportMultiplier Float
   earnedPoints    Float
+}
+
+// For persistent storage of Grammy sessions. 
+// See https://github.com/grammyjs/storages/tree/main/packages/prisma
+model GrammySession {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String
 }
