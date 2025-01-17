@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "deno run --allow-all --watch ./src/index.ts",
-    "migrate": "deno run --allow-all npm:prisma migrate dev",
-    "generate": "deno run --allow-all npm:prisma generate",
+    "migrate": "deno run --allow-scripts --allow-all npm:prisma migrate dev",
+    "generate": "deno run --allow-scripts --allow-all npm:prisma generate",
     "sync-prisma": "deno task migrate && deno task generate",
     "start": "deno run --allow-all ./src/index.ts"
   },
@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/Prodeko/megaskababot#readme",
   "dependencies": {
-    "@prisma/client": "^4.9.0",
+    "@grammyjs/storage-prisma": "^2.4.2",
+    "@prisma/client": "^6.2.1",
     "@types/express": "^4.17.16",
     "@types/uuid": "^9.0.0",
     "axios": "^1.2.4",

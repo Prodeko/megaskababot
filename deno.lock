@@ -1,7 +1,8 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:@prisma/client@^4.9.0": "4.16.2",
+    "npm:@grammyjs/storage-prisma@^2.4.2": "2.4.2",
+    "npm:@prisma/client@^6.2.1": "6.2.1",
     "npm:@trivago/prettier-plugin-sort-imports@4": "4.3.0_prettier@3.4.2",
     "npm:@types/express@^4.17.16": "4.17.21",
     "npm:@types/lodash@^4.14.191": "4.17.14",
@@ -10,6 +11,7 @@
     "npm:express@^4.18.2": "4.21.2",
     "npm:grammy@^1.34.0": "1.34.0",
     "npm:lodash@^4.17.21": "4.17.21",
+    "npm:prisma@*": "6.2.1",
     "npm:uuid@9": "9.0.1"
   },
   "npm": {
@@ -113,6 +115,9 @@
         "@babel/helper-validator-identifier"
       ]
     },
+    "@grammyjs/storage-prisma@2.4.2": {
+      "integrity": "sha512-//NiwgiKiBHkz5+nBMBFarCpqWXaXmuCGqHYsnCXAjGecVB81Nb43NgA2CKSUaWn4hrLBnnLMaitwDci6EZc3g=="
+    },
     "@grammyjs/types@3.18.0": {
       "integrity": "sha512-/VpQcT6Z0+Lw6H6jv2JvnDmqB1/9rjbFdDBlPBPUW3kQ1bWfjzfaiVk2+J2eiid3o3sLaPp3ZK0XjEI1gWNc3g=="
     },
@@ -140,14 +145,37 @@
         "@jridgewell/sourcemap-codec"
       ]
     },
-    "@prisma/client@4.16.2": {
-      "integrity": "sha512-qCoEyxv1ZrQ4bKy39GnylE8Zq31IRmm8bNhNbZx7bF2cU5aiCCnSa93J2imF88MBjn7J9eUQneNxUQVJdl/rPQ==",
+    "@prisma/client@6.2.1": {
+      "integrity": "sha512-msKY2iRLISN8t5X0Tj7hU0UWet1u0KuxSPHWuf3IRkB4J95mCvGpyQBfQ6ufcmvKNOMQSq90O2iUmJEN2e5fiA=="
+    },
+    "@prisma/debug@6.2.1": {
+      "integrity": "sha512-0KItvt39CmQxWkEw6oW+RQMD6RZ43SJWgEUnzxN8VC9ixMysa7MzZCZf22LCK5DSooiLNf8vM3LHZm/I/Ni7bQ=="
+    },
+    "@prisma/engines-version@6.2.0-14.4123509d24aa4dede1e864b46351bf2790323b69": {
+      "integrity": "sha512-7tw1qs/9GWSX6qbZs4He09TOTg1ff3gYsB3ubaVNN0Pp1zLm9NC5C5MZShtkz7TyQjx7blhpknB7HwEhlG+PrQ=="
+    },
+    "@prisma/engines@6.2.1": {
+      "integrity": "sha512-lTBNLJBCxVT9iP5I7Mn6GlwqAxTpS5qMERrhebkUhtXpGVkBNd/jHnNJBZQW4kGDCKaQg/r2vlJYkzOHnAb7ZQ==",
       "dependencies": [
-        "@prisma/engines-version"
+        "@prisma/debug",
+        "@prisma/engines-version",
+        "@prisma/fetch-engine",
+        "@prisma/get-platform"
       ]
     },
-    "@prisma/engines-version@4.16.1-1.4bc8b6e1b66cb932731fb1bdbbc550d1e010de81": {
-      "integrity": "sha512-q617EUWfRIDTriWADZ4YiWRZXCa/WuhNgLTVd+HqWLffjMSPzyM5uOWoauX91wvQClSKZU4pzI4JJLQ9Kl62Qg=="
+    "@prisma/fetch-engine@6.2.1": {
+      "integrity": "sha512-OO7O9d6Mrx2F9i+Gu1LW+DGXXyUFkP7OE5aj9iBfA/2jjDXEJjqa9X0ZmM9NZNo8Uo7ql6zKm6yjDcbAcRrw1A==",
+      "dependencies": [
+        "@prisma/debug",
+        "@prisma/engines-version",
+        "@prisma/get-platform"
+      ]
+    },
+    "@prisma/get-platform@6.2.1": {
+      "integrity": "sha512-zp53yvroPl5m5/gXYLz7tGCNG33bhG+JYCm74ohxOq1pPnrL47VQYFfF3RbTZ7TzGWCrR3EtoiYMywUBw7UK6Q==",
+      "dependencies": [
+        "@prisma/debug"
+      ]
     },
     "@trivago/prettier-plugin-sort-imports@4.3.0_prettier@3.4.2": {
       "integrity": "sha512-r3n0onD3BTOVUNPhR4lhVK4/pABGpbA7bW3eumZnYdKaHkf1qEC+Mag6DPbGNuuh0eG8AaYj+YqmVHSiGslaTQ==",
@@ -437,6 +465,9 @@
     "fresh@0.5.2": {
       "integrity": "sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q=="
     },
+    "fsevents@2.3.3": {
+      "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="
+    },
     "function-bind@1.1.2": {
       "integrity": "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="
     },
@@ -582,6 +613,13 @@
     },
     "prettier@3.4.2": {
       "integrity": "sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ=="
+    },
+    "prisma@6.2.1": {
+      "integrity": "sha512-hhyM0H13pQleQ+br4CkzGizS5I0oInoeTw3JfLw1BRZduBSQxPILlJLwi+46wZzj9Je7ndyQEMGw/n5cN2fknA==",
+      "dependencies": [
+        "@prisma/engines",
+        "fsevents"
+      ]
     },
     "proxy-addr@2.0.7": {
       "integrity": "sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==",
@@ -734,7 +772,8 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
-        "npm:@prisma/client@^4.9.0",
+        "npm:@grammyjs/storage-prisma@^2.4.2",
+        "npm:@prisma/client@^6.2.1",
         "npm:@trivago/prettier-plugin-sort-imports@4",
         "npm:@types/express@^4.17.16",
         "npm:@types/lodash@^4.14.191",
