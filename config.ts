@@ -1,5 +1,4 @@
-import { PrismaClient } from "./prisma/generated/client/index.js";
-import type { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "./prisma/generated/client/deno/edge.ts";
 
 const prisma = new PrismaClient();
 
