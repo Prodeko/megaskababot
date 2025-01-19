@@ -2,9 +2,11 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl"]
-  output        = "./generated/client"
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl"]
+  output          = "./generated/client"
+  previewFeatures = ["deno"]
+  engineType      = "library"
 }
 
 datasource db {

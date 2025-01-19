@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "deno run --allow-all --watch ./src/index.ts",
     "migrate": "deno run --allow-scripts --allow-all npm:prisma migrate dev",
-    "generate": "deno run --allow-scripts --allow-all npm:prisma generate",
+    "generate": "deno run --allow-scripts --allow-all npm:prisma generate --accelerate",
     "sync-prisma": "deno task migrate && deno task generate",
     "start": "deno run --allow-all ./src/index.ts"
   },
