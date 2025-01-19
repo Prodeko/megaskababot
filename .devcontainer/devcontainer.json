@@ -5,14 +5,13 @@
   "workspaceFolder": "/megaskababot",
   "customizations": {
     "vscode": {
-      "extensions": [
+      "extensions": [,
         "Prisma.prisma",
-        "biomejs.biome",
         "bradlc.vscode-tailwindcss",
-        "Prisma.prisma"
+        "denoland.vscode-deno"
       ],
       "settings": {
-        "editor.defaultFormatter": "biomejs.biome"
+        "editor.defaultFormatter": "denoland.vscode-deno"
       }
     }
   },
