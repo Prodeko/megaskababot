@@ -1,6 +1,7 @@
 {
   "version": "4",
   "specifiers": {
+    "npm:@grammyjs/conversations@^1.2.0": "1.2.0_grammy@1.34.0",
     "npm:@grammyjs/storage-prisma@^2.4.2": "2.4.2",
     "npm:@prisma/client@^6.2.1": "6.2.1",
     "npm:@trivago/prettier-plugin-sort-imports@4": "4.3.0_prettier@3.4.2",
@@ -113,6 +114,24 @@
       "dependencies": [
         "@babel/helper-string-parser",
         "@babel/helper-validator-identifier"
+      ]
+    },
+    "@deno/shim-deno-test@0.4.0": {
+      "integrity": "sha512-oYWcD7CpERZy/TXMTM9Tgh1HD/POHlbY9WpzmAk+5H8DohcxG415Qws8yLGlim3EaKBT2v3lJv01x4G0BosnaQ=="
+    },
+    "@deno/shim-deno@0.16.1": {
+      "integrity": "sha512-s9v0kzF5bm/o9TgdwvsraHx6QNllYrXXmKzgOG2lh4LFXnVMr2gpjK/c/ve6EflQn1MqImcWmVD8HAv5ahuuZQ==",
+      "dependencies": [
+        "@deno/shim-deno-test",
+        "which"
+      ]
+    },
+    "@grammyjs/conversations@1.2.0_grammy@1.34.0": {
+      "integrity": "sha512-d06nGFPlcea4UqjOcxCm5rwiV74bZQVUWQl3YVQp5TwC0oCHNK+PXgqaKkVgkfcYSMyx3dADRBuBkcGt+yiyDA==",
+      "dependencies": [
+        "debug@4.4.0",
+        "grammy",
+        "o-son"
       ]
     },
     "@grammyjs/storage-prisma@2.4.2": {
@@ -539,6 +558,9 @@
     "ipaddr.js@1.9.1": {
       "integrity": "sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g=="
     },
+    "isexe@2.0.0": {
+      "integrity": "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw=="
+    },
     "javascript-natural-sort@0.7.1": {
       "integrity": "sha512-nO6jcEfZWQXDhOiBtG2KvKyEptz7RVbpGP4vTD2hLBdmNQSsCiicO2Ioinv6UI4y9ukqnBpy+XZ9H6uLNgJTlw=="
     },
@@ -591,6 +613,12 @@
       "integrity": "sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==",
       "dependencies": [
         "whatwg-url"
+      ]
+    },
+    "o-son@1.0.4": {
+      "integrity": "sha512-tdGKxZgiTexSv97/igC2m8Y6FljgwvwHW/Zy3ql3Jx6MPKrPKaBDLhV7rz8uuLjcDPw6Pxa2PVsnWwen59MmnQ==",
+      "dependencies": [
+        "@deno/shim-deno"
       ]
     },
     "object-inspect@1.13.3": {
@@ -767,11 +795,18 @@
         "tr46",
         "webidl-conversions"
       ]
+    },
+    "which@2.0.2": {
+      "integrity": "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==",
+      "dependencies": [
+        "isexe"
+      ]
     }
   },
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@grammyjs/conversations@^1.2.0",
         "npm:@grammyjs/storage-prisma@^2.4.2",
         "npm:@prisma/client@^6.2.1",
         "npm:@trivago/prettier-plugin-sort-imports@4",
