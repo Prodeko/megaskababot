@@ -21,8 +21,8 @@ export const confirmationKeyboard = new InlineKeyboard()
   .text("Cancel 🚫", "cancel");
 
 export const loginConfiramtionKeyboard = new InlineKeyboard()
-  .text("Yes, that's correct ✅", "login")
-  .text("No, try again 🚫", "cancel_login");
+  .text("Yes, that's correct ✅", "register")
+  .text("No, try again 🚫", "cancel_register");
 
 export const validationKeyboard = new InlineKeyboard()
   .text("1️⃣x ✅", "valid1x")

@@ -1,57 +1,40 @@
-import { ChatTypeContext, CommandContext, Context } from "grammy";
-import {
-  INTRODUCTORY_MESSAGE,
-  PRIVACY_POLICY,
-  START_REGISTRATION_MESSAGE,
-} from "../common/constants.ts";
+import { ChatTypeContext, CommandContext } from "grammy";
 import { isBigInteger } from "../common/validators.ts";
-import { conversationPhase } from "../common/variables.ts";
-import {
-  commandsKeyboard,
-  inlinePrivacyKeyboard,
-  yearKeyboard,
-} from "../keyboards.ts";
-import { isUser, updateUsersStash } from "../users.ts";
+import { commandsKeyboard } from "../keyboards.ts";
+import { MegaskabaContext } from "../common/types.ts";
+import { prisma } from "../../prisma/client.ts";
 
 const start = async (
-  ctx: CommandContext<ChatTypeContext<Context, "private">>,
+  ctx: CommandContext<ChatTypeContext<MegaskabaContext, "private">>,
   next: () => Promise<void>,
 ) => {
   const userId = ctx.chatId;
-
-  // Assuming that all users that have their data in the database have accepted the privacy policy.
-  const userExistsInDatabase = await isUser(userId);
-  const isNewChat = !conversationPhase.has(ctx.chat.id) &&
-    !userExistsInDatabase;
-
-  if (isNewChat) {
-    await ctx.reply(INTRODUCTORY_MESSAGE);
-    await ctx.reply(PRIVACY_POLICY, { reply_markup: inlinePrivacyKeyboard });
-    return;
-  }
 
   if (!isBigInteger(userId)) {
     throw TypeError("Invalid user ID received from ctx");
   }
 
-  if (!userExistsInDatabase) {
-    conversationPhase.set(ctx.chat.id, "year");
-    updateUsersStash(userId, {
-      firstName: ctx.message.from.first_name,
-      lastName: ctx.message.from.last_name,
-      telegramUsername: ctx.message.from.username,
-      telegramUserId: userId,
-    });
-    await ctx.reply(`Welcome to GIGASKABA! ${START_REGISTRATION_MESSAGE}`);
-    await ctx.reply("What is your freshman year?", {
-      reply_markup: yearKeyboard,
-    });
+  const privacyState = await prisma.privacyAccepted.findUnique({
+    where: { telegramUserId: userId },
+    select: { accepted: true, telegramUserId: true, user: true },
+  });
+
+  if (!privacyState?.accepted) {
+    await ctx.conversation.reenter("privacy");
+    return;
+  }
+
+  if (privacyState.user == null) {
+    // No user found but privacy policy is accepted
+    await ctx.conversation.reenter("register");
   } else {
+    // Privacy policy accepted and user is already registered.
     await ctx.reply(
       "Welcome back to GIGASKABA! What would you like to do?",
       { reply_markup: commandsKeyboard },
     );
   }
+
   return next();
 };
 

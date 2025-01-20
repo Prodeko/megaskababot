@@ -17,6 +17,9 @@ and will perform spot checks to verify the integrity of the competition.";
 export const START_REGISTRATION_MESSAGE =
   "You have not registered previously, so I'll ask you a few questions first.";
 
+export const PRIVACY_RETRY_MESSAGE =
+  "Sorry, you need to accept the privacy policy to continue.";
+
 export const PRIVACY_REJECTED_MESSAGE =
   "Sorry, you need to accept the privacy policy to continue. Restart the chat with /start.";
 
@@ -24,6 +27,17 @@ export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString();
 export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString();
 
 export const GUILDS = ["prodeko", "athene", "mysteeri", "vieras"] as const;
+
+export const UNEXPECTED_GUILD_MESSAGE = "Please enter a valid guild.";
+
+export const CONFIRM_REGISTERATION_MESSAGE = "Is this information correct?";
+export const ENTER_GUILD_MESSAGE = "Which guild do you represent?";
+export const GUILD_MESSAGE = "Guild";
+export const ENTER_FRESHMAN_YEAR_MESSAGE = "What is your freshman year?";
+export const FRESHMAN_YEAR_MESSAGE = "Freshman year";
+export const USE_BUTTONS_MESSAGE = "Please use the buttons above!";
+export const LETS_TRY_AGAIN_MESSAGE = "Lets try again";
+export const REGISTRATION_SUCCESSFUL_MESSAGE = "Welcome to GIGASKABA";
 
 const firstFreshmanYear = 1970;
 const currentYear = new Date(Date.now()).getFullYear();

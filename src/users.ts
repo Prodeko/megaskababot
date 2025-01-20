@@ -4,6 +4,13 @@ import { isCompleteUser } from "./common/validators.ts";
 
 const users = new Map<number, Partial<User>>();
 
+export async function privacyAccepted(userId: number): Promise<boolean> {
+  return (await prisma.privacyAccepted.findFirst({
+    where: { telegramUserId: userId },
+    select: { accepted: true },
+  }))?.accepted ?? false;
+}
+
 // TODO rename this
 const isUser = async (userId: number) => {
   const user = await prisma.user.findUnique({

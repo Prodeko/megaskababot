@@ -13,14 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model PrivacyAccepted {
+  telegramUserId BigInt  @id
+  accepted       Boolean
+  user           User?
+}
+
 model User {
-  telegramUserId   BigInt   @id
+  privacyAccepted  PrivacyAccepted @relation(fields: [telegramUserId], references: [telegramUserId])
+  telegramUserId   BigInt          @id
   telegramUsername String
   firstName        String
   lastName         String?
   freshmanYear     Int
   guild            String
-  createdAt        DateTime @default(now())
+  createdAt        DateTime        @default(now())
   entries          Entry[]
 }
 
