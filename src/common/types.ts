@@ -6,6 +6,7 @@ import {
   SessionFlavor,
 } from "grammy";
 import type { GUILDS, SPORTS } from "./constants.ts";
+import { Conversation, ConversationFlavor } from "@grammyjs/conversations";
 
 export type Phase = "year" | "guild" | "dist" | "proof" | "sport";
 type GuildTuple = typeof GUILDS;
@@ -102,7 +103,8 @@ export interface SessionData {
   state?: State;
 }
 
-export type MegaskabaContext = Context & SessionFlavor<SessionData>;
+export type MegaskabaContext = Context & SessionFlavor<SessionData> & ConversationFlavor;
+export type MegaskabaConversation = Conversation<MegaskabaContext>
 
 export type PrivateCommandMegaskabaContext = ChatTypeContext<
   CommandContext<MegaskabaContext>,

@@ -37,6 +37,7 @@ import process from "node:process";
 import { MegaskabaContext } from "./common/types.ts";
 import { PrismaAdapter } from "@grammyjs/storage-prisma";
 import { prisma } from "../prisma/client.ts";
+import { conversations } from "@grammyjs/conversations";
 
 if (!process.env.BOT_TOKEN) {
   throw new Error("privateBot token not defined!");
@@ -50,6 +51,7 @@ bot.use(session({
   storage: new PrismaAdapter(prisma.grammySession),
 }));
 
+bot.use(conversations())
 const privateBot = bot.chatType("private");
 
 privateBot.command("start", start);
