@@ -1,4 +1,4 @@
-import { prisma } from "../../config.ts";
+import { prisma } from "../../prisma/client.ts";
 import { MILESTONE_LIMIT } from "../common/constants.ts";
 import type { Guild, Statistics, TeamStatistics } from "../common/types.ts";
 

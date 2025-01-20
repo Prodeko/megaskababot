@@ -1,4 +1,4 @@
-import { prisma } from "../config.ts";
+import { prisma } from "../prisma/client.ts";
 import type { User } from "./common/types.ts";
 import { isCompleteUser } from "./common/validators.ts";
 

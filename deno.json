@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "generated/": "./node_modules/generated/"
+  }
+}

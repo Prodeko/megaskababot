@@ -36,7 +36,7 @@ import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
 import { MegaskabaContext } from "./common/types.ts";
 import { PrismaAdapter } from "@grammyjs/storage-prisma";
-import { prisma } from "../config.ts";
+import { prisma } from "../prisma/client.ts";
 
 if (!process.env.BOT_TOKEN) {
   throw new Error("privateBot token not defined!");

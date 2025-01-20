@@ -4,9 +4,8 @@
 generator client {
   provider        = "prisma-client-js"
   binaryTargets   = ["native", "linux-musl"]
-  output          = "./generated/client"
   previewFeatures = ["deno"]
-  engineType      = "library"
+  output          = "../node_modules/generated"
 }
 
 datasource db {
