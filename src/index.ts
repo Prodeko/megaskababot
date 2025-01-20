@@ -37,7 +37,10 @@ import process from "node:process";
 import { MegaskabaContext } from "./common/types.ts";
 import { PrismaAdapter } from "@grammyjs/storage-prisma";
 import { prisma } from "../prisma/client.ts";
-import { conversations } from "@grammyjs/conversations";
+import { conversations, createConversation } from "@grammyjs/conversations";
+import { privacy } from "./conversations/privacy.ts";
+import { create } from "node:domain";
+import { register } from "./conversations/register.ts";
 
 if (!process.env.BOT_TOKEN) {
   throw new Error("privateBot token not defined!");
@@ -51,13 +54,17 @@ bot.use(session({
   storage: new PrismaAdapter(prisma.grammySession),
 }));
 
-bot.use(conversations())
+bot.use(conversations());
 const privateBot = bot.chatType("private");
+
+// conversations
+privateBot.use(createConversation(privacy));
+privateBot.use(createConversation(register));
 
 privateBot.command("start", start);
 
 // Message handling
-privateBot.use(text);
+//privateBot.use(text);
 privateBot.use(photo);
 
 // Standard commands
@@ -87,9 +94,6 @@ privateBot.callbackQuery("stopvalidation", stopValidation);
 privateBot.callbackQuery("remove", confirmedRemove);
 privateBot.callbackQuery("cancel", cancelRemove);
 
-privateBot.callbackQuery("login", confirmLogin);
-privateBot.callbackQuery("cancel_login", cancelLogin);
-
 privateBot.callbackQuery("entry", entry);
 privateBot.callbackQuery("entries", entries);
 privateBot.callbackQuery("removelatest", removeLatestCommand);
@@ -97,18 +101,9 @@ privateBot.callbackQuery("help", help);
 privateBot.callbackQuery("rules", rules);
 
 // Inline keyboard handling
-privateBot.callbackQuery("accepted", onPrivacyAccepted);
+// privateBot.callbackQuery("accepted", onPrivacyAccepted);
 
-privateBot.callbackQuery("rejected", onPrivacyRejected);
-
-privateBot.use(async (ctx) => {
-  try {
-    await ctx.editMessageReplyMarkup(undefined);
-  } catch (e) {
-    console.log(e);
-  }
-});
-
+// privateBot.callbackQuery("rejected", onPrivacyRejected);
 // Launch privateBot
 launchBotDependingOnNodeEnv(bot);
 

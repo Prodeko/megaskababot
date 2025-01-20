@@ -41,5 +41,12 @@ Entry #${e.id}
 ${formatEntry(e)}`;
 };
 
+export function capitalizeFirstLetter(
+  str: string,
+  locale = navigator.language,
+) {
+  return str.replace(/^\p{CWU}/u, (char) => char.toLocaleUpperCase(locale));
+}
+
 export const randomInvalidInputSticker = () =>
   _.shuffle(INVALID_INPUT_STICKERS)[0];

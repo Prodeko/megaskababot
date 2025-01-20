@@ -34,5 +34,4 @@ export async function onPrivacyAccepted(
 export async function onPrivacyRejected(
   ctx: PrivateCallbackMegaskabaContext,
 ) {
-  await ctx.reply(PRIVACY_REJECTED_MESSAGE);
 }

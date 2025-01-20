@@ -17,6 +17,5 @@ export default async function year(
   }
 
   updateUsersStash(userId, { freshmanYear: asNum });
-  await ctx.reply("From which guild are you?", { reply_markup: guildKeyboard });
   conversationPhase.set(chatId, "guild");
 }
