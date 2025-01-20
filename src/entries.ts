@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 
-import { prisma } from "../config.ts";
+import { prisma } from "../prisma/client.ts";
 import type { Entry, EntryWithUser } from "./common/types.ts";
 import { arrayToCSV } from "./common/utils.ts";
 import { isBigInteger, isCompleteEntry } from "./common/validators.ts";

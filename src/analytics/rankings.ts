@@ -1,4 +1,4 @@
-import { prisma } from "../../config.ts";
+import { prisma } from "../../prisma/client.ts";
 
 const topUsersByGuild = async (guild: string, limit: number) => {
   const topUsers = await prisma.$queryRaw`
