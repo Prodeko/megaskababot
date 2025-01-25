@@ -7,8 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "deno run --env-file --allow-all --watch ./src/index.ts",
     "migrate": "deno run --env-file --allow-scripts --allow-all npm:prisma migrate dev",
+    "migrate-revert": "deno run --env-file --allow-scripts --allow-all npm:prisma migrate reset -f",
     "generate": "deno run --env-file --allow-scripts --allow-all npm:prisma generate",
     "sync-prisma": "deno task migrate && deno task generate",
+    "reset-db": "deno task migrate-revert && deno task migrate",
     "start": "deno run --env-file --allow-all ./src/index.ts"
   },
   "repository": {
