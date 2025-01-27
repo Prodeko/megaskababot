@@ -2,7 +2,7 @@ import { Composer } from "grammy";
 import { conversationPhase } from "../../common/variables.ts";
 import distance from "./distance.ts";
 import guild from "./guild.ts";
-import sport from "./sport.ts";
+import sport from "../../conversations/sport.ts";
 import year from "./year.ts";
 
 const text = new Composer();

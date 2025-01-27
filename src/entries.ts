@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 
 import { prisma } from "../prisma/client.ts";
-import type { Entry, EntryWithUser } from "./common/types.ts";
+import type { CreateEntry, Entry, EntryWithUser } from "./common/types.ts";
 import { arrayToCSV } from "./common/utils.ts";
 import { isBigInteger, isCompleteEntry } from "./common/validators.ts";
 import { COEFFICIENTS } from "./common/constants.ts";
@@ -110,9 +110,20 @@ const entryToDb = async (chatId: number) => {
     throw new Error("Entry is not complete!");
   }
 
+  await saveEntry(entry);
+
+  entries.delete(chatId);
+};
+
+/**
+ * Creates a new entry in the DB
+ * @param entry An new Entry to be created in the DB
+ * @returns Created Entry
+ */
+export async function saveEntry(entry: CreateEntry): Promise<Entry> {
   const sportMultiplier = COEFFICIENTS[entry.sport];
 
-  await prisma.entry.create({
+  return await prisma.entry.create({
     data: {
       ...entry,
       sportMultiplier,
@@ -120,9 +131,9 @@ const entryToDb = async (chatId: number) => {
         sportMultiplier *
         (entry.doublePoints ?? false ? 2 : 1),
     },
-  });
-  entries.delete(chatId);
-};
+    // TODO: Save sports as enum in Prisma schema to avoid this horrible type cast
+  }) as unknown as Entry;
+}
 
 const fileIdsForUserId = (userId: bigint) =>
   prisma.entry.findMany({ select: { fileId: true }, where: { userId } });

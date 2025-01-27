@@ -65,14 +65,20 @@ export type User = UserWithoutTime & {
   createdAt: Date;
 };
 
-export type EntryWithoutId = {
+export type CreateEntry = {
   distance: number;
   fileId: string;
   sport: Sport;
   userId: number;
   doublePoints: boolean;
-  earnedPoints: number;
+};
+
+export type EntryWithoutPoints = CreateEntry & {
   sportMultiplier: number;
+};
+
+export type EntryWithoutId = EntryWithoutPoints & {
+  earnedPoints: number;
 };
 
 export type Entry = EntryWithoutId & {
@@ -103,8 +109,11 @@ export interface SessionData {
   state?: State;
 }
 
-export type MegaskabaContext = Context & SessionFlavor<SessionData> & ConversationFlavor;
-export type MegaskabaConversation = Conversation<MegaskabaContext>
+export type MegaskabaContext =
+  & Context
+  & SessionFlavor<SessionData>
+  & ConversationFlavor;
+export type MegaskabaConversation = Conversation<MegaskabaContext>;
 
 export type PrivateCommandMegaskabaContext = ChatTypeContext<
   CommandContext<MegaskabaContext>,
