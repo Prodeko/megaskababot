@@ -1,34 +1,60 @@
-import { ChatTypeContext } from "grammy";
 import { randomInvalidInputSticker } from "../../common/utils.ts";
-import { conversationPhase } from "../../common/variables.ts";
-import { updateEntryStash } from "../../entries.ts";
-import { MegaskabaContext } from "../../common/types.ts";
+import {
+  MegaskabaContext,
+  MegaskabaConversation,
+  Sport,
+} from "../../common/types.ts";
+import {
+  DISTANCE_MESSAGE,
+  MAX_ENTRY_DISTANCE_KM,
+  NOT_A_NUMBER_MESSAGE,
+  POSITIVE_NUMBER_MESSAGE,
+  SUSPICIOUS_DISTANCE_MESSAGE,
+} from "../../common/constants.ts";
 
-export default async function distance(
-  ctx: ChatTypeContext<MegaskabaContext, "private">,
-  distStr: string,
-  chatId: number,
-  userId: number,
+export async function distance(
+  conversation: MegaskabaConversation,
+  ctx: MegaskabaContext,
+  sport: Sport,
 ) {
-  if (!distStr) return await ctx.reply("Please input text 👀");
+  await ctx.reply(`${DISTANCE_MESSAGE} ${sport}?`);
 
-  const distance = Number.parseFloat(distStr.replace(",", "."));
-  if (!isNaN(distance) && distance > 0 && distance < 300) {
-    updateEntryStash(chatId, {
-      userId,
-      distance,
-    });
-    await ctx.reply(
-      "Please give proof as an image 📷. The distance travelled and time taken should be visible.",
-    );
-    conversationPhase.set(chatId, "proof");
-  } else if (distance >= 1000) {
-    await ctx.replyWithSticker(randomInvalidInputSticker());
-    await ctx.reply(
-      "Please give the distance in kilometers 👀. If you really did over 300km in one go, contact the admins",
-    );
-  } else {
-    await ctx.replyWithSticker(randomInvalidInputSticker());
-    await ctx.reply("Please give a positive number 👀");
+  let validDistance: number | null = null;
+
+  // Loop for getting validated distance
+  while (validDistance === null) {
+    let number: number | null = null;
+
+    // Loop for getting a parseable
+    while (number === null) {
+      const potentialNumberResponse =
+        (await conversation.waitFor("msg:text")).msg.text;
+
+      const parsedNumber = Number.parseFloat(
+        potentialNumberResponse.replace(",", "."),
+      );
+
+      if (!isNaN(parsedNumber)) {
+        number = parsedNumber;
+      } else {
+        await ctx.reply(NOT_A_NUMBER_MESSAGE);
+      }
+    }
+
+    // Validate parsed number as a sensible distance
+    if (number <= 0) {
+      await ctx.replyWithSticker(randomInvalidInputSticker());
+      await ctx.reply(POSITIVE_NUMBER_MESSAGE);
+    } else if (number <= MAX_ENTRY_DISTANCE_KM) {
+      validDistance = number;
+    } else {
+      await ctx.replyWithSticker(randomInvalidInputSticker());
+      await ctx.reply(SUSPICIOUS_DISTANCE_MESSAGE);
+      //await ctx.reply(
+      //  "Please give proof as an image 📷. The distance travelled and time taken should be visible.",
+      //);
+    }
   }
+
+  return validDistance;
 }

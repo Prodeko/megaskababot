@@ -30,6 +30,10 @@ export const GUILDS = ["prodeko", "athene", "mysteeri", "vieras"] as const;
 
 export const UNEXPECTED_GUILD_MESSAGE = "Please enter a valid guild.";
 
+export const NOT_REGISTERED_MESSAGE =
+  "Not a user yet! Use /start to make an user";
+
+// Registration
 export const CONFIRM_REGISTERATION_MESSAGE = "Is this information correct?";
 export const ENTER_GUILD_MESSAGE = "Which guild do you represent?";
 export const GUILD_MESSAGE = "Guild";
@@ -38,6 +42,21 @@ export const FRESHMAN_YEAR_MESSAGE = "Freshman year";
 export const USE_BUTTONS_MESSAGE = "Please use the buttons above!";
 export const LETS_TRY_AGAIN_MESSAGE = "Lets try again";
 export const REGISTRATION_SUCCESSFUL_MESSAGE = "Welcome to GIGASKABA";
+
+// Entry
+export const SPORT_TYPE_MESSAGE =
+  "Welcome back! How did you cover ground today?";
+export const INVALID_SPORT_MESSAGE = "Please enter a valid sport.";
+export const DISTANCE_MESSAGE = "What distance (km) did you";
+export const NOT_A_NUMBER_MESSAGE = "Please enter a number in kilometers.";
+export const POSITIVE_NUMBER_MESSAGE = "Please give a positive number 👀";
+export const MAX_ENTRY_DISTANCE_KM = 300;
+export const SUSPICIOUS_DISTANCE_MESSAGE =
+  `Please give the distance in kilometers 👀. If you really did over ${MAX_ENTRY_DISTANCE_KM}km in one go, contact the admins`;
+export const IMAGE_PROOF_MESSAGE = "Please send proof as an image.";
+export const EXPECTED_IMAGE_MESSAGE =
+  "Oops! I expected to receive a single image.";
+export const ENTRY_ADDED_MESSAGE = "Entry added!";
 
 const firstFreshmanYear = 1970;
 const currentYear = new Date(Date.now()).getFullYear();

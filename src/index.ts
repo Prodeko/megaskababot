@@ -1,11 +1,5 @@
 import { Bot, session } from "grammy";
 
-import cancelLogin from "./commands/action/cancelLogin.ts";
-import confirmLogin from "./commands/action/confirmLogin.ts";
-import {
-  onPrivacyAccepted,
-  onPrivacyRejected,
-} from "./commands/action/privacy.ts";
 import {
   adminLogin,
   allEntriesFromUser,
@@ -25,12 +19,10 @@ import {
   validate,
 } from "./commands/admin.ts";
 import entries from "./commands/entries.ts";
-import entry from "./commands/entry.ts";
 import help from "./commands/help.ts";
 import removeLatestCommand from "./commands/removeLatest.ts";
 import rules from "./commands/rules.ts";
 import start from "./commands/start.ts";
-import text from "./commands/text/index.ts";
 import photo from "./commands/photo.ts";
 import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
@@ -39,8 +31,8 @@ import { PrismaAdapter } from "@grammyjs/storage-prisma";
 import { prisma } from "../prisma/client.ts";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import { privacy } from "./conversations/privacy.ts";
-import { create } from "node:domain";
 import { register } from "./conversations/register.ts";
+import { entry } from "./conversations/entry.ts";
 
 if (!process.env.BOT_TOKEN) {
   throw new Error("privateBot token not defined!");
@@ -60,6 +52,7 @@ const privateBot = bot.chatType("private");
 // conversations
 privateBot.use(createConversation(privacy));
 privateBot.use(createConversation(register));
+privateBot.use(createConversation(entry));
 
 privateBot.command("start", start);
 
@@ -68,10 +61,10 @@ privateBot.command("start", start);
 privateBot.use(photo);
 
 // Standard commands
+privateBot.command("entry", (ctx) => ctx.conversation.reenter("entry"));
 privateBot.command("entries", entries);
 privateBot.command("help", help);
 privateBot.command("rules", rules);
-privateBot.command("entry", entry);
 privateBot.command("removelatest", removeLatestCommand);
 
 // Admin commands
@@ -94,7 +87,7 @@ privateBot.callbackQuery("stopvalidation", stopValidation);
 privateBot.callbackQuery("remove", confirmedRemove);
 privateBot.callbackQuery("cancel", cancelRemove);
 
-privateBot.callbackQuery("entry", entry);
+privateBot.callbackQuery("entry", (ctx) => ctx.conversation.reenter("entry"));
 privateBot.callbackQuery("entries", entries);
 privateBot.callbackQuery("removelatest", removeLatestCommand);
 privateBot.callbackQuery("help", help);
