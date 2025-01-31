@@ -14,7 +14,6 @@ async function launchLongPollBot<T extends Context>(bot: Bot<T, Api<RawApi>>) {
  * Launch bot in webhook (production) mode
  */
 function launchWebhookBot<T extends Context>(bot: Bot<T, Api<RawApi>>) {
-  // Workaround to avoid issue with TSconfig
   app.use(webhookCallback(bot, "express"));
   launchServer();
 }
