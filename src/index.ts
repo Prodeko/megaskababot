@@ -34,7 +34,7 @@ import { register } from "./conversations/register.ts";
 import { entry } from "./conversations/entry.ts";
 
 if (!process.env.BOT_TOKEN) {
-  throw new Error("privateBot token not defined!");
+  throw new Error("Bot token not defined!");
 }
 
 const bot = new Bot<MegaskabaContext>(process.env.BOT_TOKEN);
@@ -46,6 +46,16 @@ bot.use(session({
 }));
 
 bot.use(conversations());
+
+await bot.api.setMyCommands([
+  { command: "start", description: "Start the bot" },
+  { command: "help", description: "Show the help message" },
+  { command: "rules", description: "Show the rules of the competition" },
+  { command: "entry", description: "Add a new entry" },
+  { command: "entries", description: "Show your previous entries" },
+  { command: "removelatest", description: "Remove your latest entry" },
+]);
+
 const privateBot = bot.chatType("private");
 
 // conversations
