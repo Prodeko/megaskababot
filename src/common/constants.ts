@@ -2,16 +2,18 @@ import * as fs from "node:fs";
 import type { Sport } from "./types.ts";
 
 export const INTRODUCTORY_MESSAGE =
-  "Welcome to GIGASKIBA! I help you record entries from your sports tracker app to the competition. \
+  "Welcome to Megaskaba! I help you record entries from your sports tracker app to the competition. \
 Firstly, you need to accept this privacy policy to continue.";
 
 export const PRIVACY_POLICY =
-  "GIGASKIBA stores your name, Telegram user ID and username, \
+  "Megaskababot stores your name, Telegram user ID and username, \
 guild and the year you started your studies in, in a database that is maintained by Prodeko. \
 Additionally, for every entry that you make, its timestamp, the distance travelled, and the sport are saved to the same database. \
-Images that you send are handled by Telegram. \
+Images that you send are handled by Telegram, but they can be accessed by Megaskaba administrators. \
 \
-The developers of GIGASKABA and the competition's administrators have access to all the data that you have sent, \
+The names and scores of top performers will be published weekly in a public leaderboard. \
+\
+The developers of Megaskaba and the competition's administrators have access to all the data that you have sent, \
 and will perform spot checks to verify the integrity of the competition.";
 
 export const START_REGISTRATION_MESSAGE =
@@ -53,7 +55,7 @@ export const PLEASE_ENTER_YEAR_MESSAGE = `Please enter a year between ${
 export const FRESHMAN_YEAR_MESSAGE = "Freshman year";
 export const USE_BUTTONS_MESSAGE = "Please use the buttons above!";
 export const LETS_TRY_AGAIN_MESSAGE = "Lets try again";
-export const REGISTRATION_SUCCESSFUL_MESSAGE = "Welcome to GIGASKABA";
+export const REGISTRATION_SUCCESSFUL_MESSAGE = "Welcome to Megaskaba";
 
 // Entry
 export const SPORT_TYPE_MESSAGE =

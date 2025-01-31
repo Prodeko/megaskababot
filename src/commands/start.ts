@@ -30,7 +30,7 @@ const start = async (
   } else {
     // Privacy policy accepted and user is already registered.
     await ctx.reply(
-      "Welcome back to GIGASKABA! What would you like to do?",
+      "Welcome back to Megaskaba! What would you like to do?",
       { reply_markup: commandsKeyboard },
     );
   }
