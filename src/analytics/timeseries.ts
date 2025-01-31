@@ -1,11 +1,11 @@
 import _ from "lodash";
-import { prisma } from "../../config";
-import { GUILDS } from "../common/constants";
-import type { Guild, TimeSeriesData } from "../common/types";
+import { GUILDS } from "../common/constants.ts";
+import type { Guild, TimeSeriesData } from "../common/types.ts";
+import { prisma } from "../../prisma/client.ts";
 
 export const getTimeSeriesData = async (): Promise<TimeSeriesData> => {
-    console.log("Getting time series data");
-    const data = await prisma.$queryRaw`
+  console.log("Getting time series data");
+  const data = await prisma.$queryRaw`
         WITH "PointsByDate" AS (
             SELECT
                 DATE_TRUNC('day', "Entry"."createdAt" AT TIME ZONE 'EEST' ) as "date",
@@ -30,7 +30,7 @@ export const getTimeSeriesData = async (): Promise<TimeSeriesData> => {
             "date" ASC;
     ` as TimeSeriesData;
 
-    console.log(data);
+  console.log(data);
 
-    return data;
-}
+  return data;
+};

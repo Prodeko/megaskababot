@@ -10,18 +10,18 @@ import type {
 import { formatEntry, formatEntryWithUser } from "../common/utils.ts";
 import { isBigInteger, isEntry } from "../common/validators.ts";
 import {
-	amountToValidate,
-	fileIdsForUserId,
-	fileIdsForUsername,
-	getEntriesByUserId,
-	getEntriesByUsername,
-	getEntry,
-	getRandomNotValidEntry,
-	removeEntry,
-	saveEntriesAsCSV,
-	setEntryDoublePoints,
-	setEntryValidation,
-	updateEntry,
+  amountToValidate,
+  fileIdsForUserId,
+  fileIdsForUsername,
+  getEntriesByUserId,
+  getEntriesByUsername,
+  getEntry,
+  getRandomNotValidEntry,
+  removeEntry,
+  saveEntriesAsCSV,
+  setEntryDoublePoints,
+  setEntryValidation,
+  updateEntry,
 } from "../entries.ts";
 import { confirmationKeyboard, validationKeyboard } from "../keyboards.ts";
 import { ChatTypeContext, InputMediaBuilder } from "grammy";
@@ -35,11 +35,11 @@ const performPistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
   const entry = await getRandomNotValidEntry();
   const chatId = ctx!.chat!.id;
 
-	if (!chatId) throw new Error("No chat id found");
-	if (!entry) return await ctx.reply("No entries found");
-	if (!isEntry(entry)) return await ctx.reply("Found entry is not an entry?");
+  if (!chatId) throw new Error("No chat id found");
+  if (!entry) return await ctx.reply("No entries found");
+  if (!isEntry(entry)) return await ctx.reply("Found entry is not an entry?");
 
-	underValidation.set(chatId, entry.id);
+  underValidation.set(chatId, entry.id);
 
   await notValidated(ctx);
 
@@ -57,20 +57,20 @@ export const validate = async (
 ) => {
   if (!admins.has(ctx.from.id)) return;
 
-	const args = ctx.message.text.split(" ");
+  const args = ctx.message.text.split(" ");
 
-	if (args.length <= 1) {
-		return ctx.reply(
-			"Please give the id of entry to validate as an argument (eg. /validate 10)",
-		);
-	}
+  if (args.length <= 1) {
+    return ctx.reply(
+      "Please give the id of entry to validate as an argument (eg. /validate 10)",
+    );
+  }
 
-	const possibleNum = Number.parseInt(args[1]);
+  const possibleNum = Number.parseInt(args[1]);
 
-	if (Number.isNaN(possibleNum)) return ctx.reply("Given id is not a number!");
+  if (Number.isNaN(possibleNum)) return ctx.reply("Given id is not a number!");
 
-	const entry = await getEntry(possibleNum);
-	if (!entry) return ctx.reply("No such entry");
+  const entry = await getEntry(possibleNum);
+  if (!entry) return ctx.reply("No such entry");
 
   underValidation.set(ctx.chat.id, entry.id);
 
@@ -100,16 +100,16 @@ export const invalid = async (
   ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	if (!admins.has(ctx!.from!.id)) return;
+  if (!admins.has(ctx!.from!.id)) return;
 
-	const entryId = underValidation.get(ctx!.chat!.id);
-	if (!entryId) return;
+  const entryId = underValidation.get(ctx!.chat!.id);
+  if (!entryId) return;
 
-	await setEntryValidation(entryId, false);
+  await setEntryValidation(entryId, false);
 
-	await ctx.reply("Marked invalid");
-	await performPistokoe(ctx);
-	return next();
+  await ctx.reply("Marked invalid");
+  await performPistokoe(ctx);
+  return next();
 };
 
 export const validx = async (
@@ -117,31 +117,31 @@ export const validx = async (
   ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	if (!admins.has(ctx!.from!.id)) return;
+  if (!admins.has(ctx!.from!.id)) return;
 
-	const entryId = underValidation.get(ctx!.chat!.id);
-	if (!entryId) return;
+  const entryId = underValidation.get(ctx!.chat!.id);
+  if (!entryId) return;
 
-	await setEntryValidation(entryId, true);
-	await setEntryDoublePoints(entryId, doublePoints);
+  await setEntryValidation(entryId, true);
+  await setEntryDoublePoints(entryId, doublePoints);
 
-	await ctx.reply(`Marked valid${doublePoints ? " (2️⃣x)" : ""}`);
-	await performPistokoe(ctx);
-	return next();
+  await ctx.reply(`Marked valid${doublePoints ? " (2️⃣x)" : ""}`);
+  await performPistokoe(ctx);
+  return next();
 };
 
 export const valid1x = async (
   ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	await validx(false, ctx, next);
+  await validx(false, ctx, next);
 };
 
 export const valid2x = async (
   ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	await validx(true, ctx, next);
+  await validx(true, ctx, next);
 };
 
 export const adminLogin = async (
@@ -161,23 +161,23 @@ export const adminLogin = async (
 			/updatedistance [entry id] [distance] - sets a new distance on an entry 
 			/resetvalidation [entry id] - resets the validation of entry 
 			/validate [entry id] - starts validation from specific entry`,
-	);
-	return next();
+  );
+  return next();
 };
 
 export const allPhotosFromUser = async (
   ctx: PrivateCommandMegaskabaContext,
 ) => {
-	if (!admins.has(ctx!.from!.id)) return;
-	const args = ctx.message.text.split(" ");
+  if (!admins.has(ctx!.from!.id)) return;
+  const args = ctx.message.text.split(" ");
 
-	if (args.length <= 1) {
-		return ctx.reply(
-			"Please give the id or username to get all photos from as an argument (eg. /allphotos mediakeisari)",
-		);
-	}
+  if (args.length <= 1) {
+    return ctx.reply(
+      "Please give the id or username to get all photos from as an argument (eg. /allphotos mediakeisari)",
+    );
+  }
 
-	const possibleNum = Number.parseInt(args[1]);
+  const possibleNum = Number.parseInt(args[1]);
 
   let allFileIds: string[] | null;
   if (isBigInteger(possibleNum)) {
@@ -211,51 +211,51 @@ export const allEntriesFromUser = async (
   ctx: PrivateCommandMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	if (!admins.has(ctx!.from!.id)) return;
+  if (!admins.has(ctx!.from!.id)) return;
 
-	const args = ctx.message.text.split(" ");
+  const args = ctx.message.text.split(" ");
 
-	if (args.length <= 1) {
-		return ctx.reply(
-			"Please give the id or username to get all entries from as an argument (eg. /allentries mediakeisari)",
-		);
-	}
+  if (args.length <= 1) {
+    return ctx.reply(
+      "Please give the id or username to get all entries from as an argument (eg. /allentries mediakeisari)",
+    );
+  }
 
-	const possibleNum = Number.parseInt(args[1]);
+  const possibleNum = Number.parseInt(args[1]);
 
-	let entries: Entry[];
-	if (!Number.isNaN(possibleNum) && isBigInteger(possibleNum)) {
-		entries = await getEntriesByUserId(possibleNum);
-	} else {
-		entries = await getEntriesByUsername(args[1]);
-	}
+  let entries: Entry[];
+  if (!Number.isNaN(possibleNum) && isBigInteger(possibleNum)) {
+    entries = await getEntriesByUserId(possibleNum);
+  } else {
+    entries = await getEntriesByUsername(args[1]);
+  }
 
-	if (!entries) return await ctx.reply("No such user 👀");
+  if (!entries) return await ctx.reply("No such user 👀");
 
-	const chunks = _.chunk(
-		entries.map((e) => formatEntry(e, true)),
-		10,
-	);
+  const chunks = _.chunk(
+    entries.map((e) => formatEntry(e, true)),
+    10,
+  );
 
-	for (const chunk of chunks) {
-		await ctx.reply(chunk.join("\n\n"));
-	}
-	return next();
+  for (const chunk of chunks) {
+    await ctx.reply(chunk.join("\n\n"));
+  }
+  return next();
 };
 
 export const confirmedRemove = async (
   ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	if (!admins.has(ctx.from.id)) return;
+  if (!admins.has(ctx.from.id)) return;
 
-	const entryId = removeConsideration.get(ctx.chat.id);
-	if (!entryId) return;
-	await removeEntry(entryId);
-	removeConsideration.delete(ctx.chat.id);
+  const entryId = removeConsideration.get(ctx.chat.id);
+  if (!entryId) return;
+  await removeEntry(entryId);
+  removeConsideration.delete(ctx.chat.id);
 
-	await ctx.reply("Removed entry!");
-	return next();
+  await ctx.reply("Removed entry!");
+  return next();
 };
 
 export const cancelRemove = async (
@@ -271,18 +271,18 @@ export const cancelRemove = async (
 export const remove = async (
   ctx: PrivateCommandMegaskabaContext,
 ) => {
-	if (!admins.has(ctx.from.id)) return;
+  if (!admins.has(ctx.from.id)) return;
 
-	const args = ctx.message.text.split(" ");
-	if (args.length <= 1) {
-		return await ctx.reply(
-			"Please give the id to remove as an argument (eg. /remove 10)",
-		);
-	}
+  const args = ctx.message.text.split(" ");
+  if (args.length <= 1) {
+    return await ctx.reply(
+      "Please give the id to remove as an argument (eg. /remove 10)",
+    );
+  }
 
-	const idToRemove = Number.parseInt(args[1]);
+  const idToRemove = Number.parseInt(args[1]);
 
-	if (isNaN(idToRemove)) return await ctx.reply("Given id is not a number!");
+  if (isNaN(idToRemove)) return await ctx.reply("Given id is not a number!");
 
   const entry = await getEntry(idToRemove);
   if (entry != null) {
@@ -306,8 +306,11 @@ export const remove = async (
   }
 };
 
-export const csv = async (ctx: PrivateCommandMegaskabaContext, next: () => Promise<void>) => {
-	if (!admins.has(ctx.from.id)) return;
+export const csv = async (
+  ctx: PrivateCommandMegaskabaContext,
+  next: () => Promise<void>,
+) => {
+  if (!admins.has(ctx.from.id)) return;
 
   await saveEntriesAsCSV();
   const document = new InputFile("entries.csv");
@@ -315,76 +318,76 @@ export const csv = async (ctx: PrivateCommandMegaskabaContext, next: () => Promi
 };
 
 export const resetValidation = async (
-	ctx: PrivateCommandMegaskabaContext,,
-	next: () => Promise<void>,
+  ctx: PrivateCommandMegaskabaContext,
+  next: () => Promise<void>,
 ) => {
-	if (!admins.has(ctx.from.id)) return;
+  if (!admins.has(ctx.from.id)) return;
 
-	const args = ctx.message.text.split(" ");
-	if (args.length <= 1) {
-		return await ctx.reply(
-			"Please give the id to update as an argument (eg. /resetvalidation 10)",
-		);
-	}
+  const args = ctx.message.text.split(" ");
+  if (args.length <= 1) {
+    return await ctx.reply(
+      "Please give the id to update as an argument (eg. /resetvalidation 10)",
+    );
+  }
 
-	const idToReset = Number.parseInt(args[1]);
+  const idToReset = Number.parseInt(args[1]);
 
-	if (isNaN(idToReset)) return await ctx.reply("Given id is not a number!");
+  if (isNaN(idToReset)) return await ctx.reply("Given id is not a number!");
 
-	try {
-		const entry = await updateEntry(idToReset, {
-			valid: null,
-		});
-		await ctx.reply(
-			`Resetted valdation for entry ${entry.id}: 
+  try {
+    const entry = await updateEntry(idToReset, {
+      valid: null,
+    });
+    await ctx.reply(
+      `Resetted valdation for entry ${entry.id}: 
 				${formatEntry(entry as unknown as Entry)}`,
-		);
-	} catch (e) {
-		console.log(e);
-		await ctx.reply("That did not work! (Most likely there is no such entry)");
-	}
-	return next();
+    );
+  } catch (e) {
+    console.log(e);
+    await ctx.reply("That did not work! (Most likely there is no such entry)");
+  }
+  return next();
 };
 
 export const setDistance = async (
   ctx: PrivateCommandMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	if (!admins.has(ctx.from.id)) return;
+  if (!admins.has(ctx.from.id)) return;
 
-	const args = ctx.message.text.split(" ");
-	if (args.length <= 2) {
-		return await ctx.reply(
-			"Please give the id to update and new distance as an argument (eg. /setdistance 10 10.4)",
-		);
-	}
+  const args = ctx.message.text.split(" ");
+  if (args.length <= 2) {
+    return await ctx.reply(
+      "Please give the id to update and new distance as an argument (eg. /setdistance 10 10.4)",
+    );
+  }
 
-	const idToUpdate = Number.parseInt(args[1]);
-	const distance = Number.parseFloat(args[2].replace(",", "."));
+  const idToUpdate = Number.parseInt(args[1]);
+  const distance = Number.parseFloat(args[2].replace(",", "."));
 
-	if (isNaN(idToUpdate) || isNaN(distance) || !(idToUpdate && distance)) {
-		return await ctx.reply("Either of the given arguments is not a number!");
-	}
+  if (isNaN(idToUpdate) || isNaN(distance) || !(idToUpdate && distance)) {
+    return await ctx.reply("Either of the given arguments is not a number!");
+  }
 
-	try {
-		const entry = await updateEntry(idToUpdate, {
-			distance,
-		});
-		await ctx.reply(
-			`Updated distance for entry ${entry.id}: 
+  try {
+    const entry = await updateEntry(idToUpdate, {
+      distance,
+    });
+    await ctx.reply(
+      `Updated distance for entry ${entry.id}: 
 				${formatEntry(entry as unknown as Entry)}`,
-		);
-	} catch (e) {
-		console.log(e);
-		await ctx.reply("That did not work! (Most likely there is no such entry)");
-	}
-	return next();
+    );
+  } catch (e) {
+    console.log(e);
+    await ctx.reply("That did not work! (Most likely there is no such entry)");
+  }
+  return next();
 };
 
 export const stopValidation = async (
   ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-	await underValidation.delete(ctx!.chat!.id);
-	return next();
+  await underValidation.delete(ctx!.chat!.id);
+  return next();
 };
