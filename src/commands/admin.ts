@@ -273,8 +273,8 @@ export const remove = async (
 ) => {
   if (!admins.has(ctx.from.id)) return;
 
-  const args = ctx?.message?.text?.split(" ");
-  if (!args || args.length <= 1) {
+  const args = ctx.message.text.split(" ");
+  if (args.length <= 1) {
     return await ctx.reply(
       "Please give the id to remove as an argument (eg. /remove 10)",
     );
@@ -308,6 +308,7 @@ export const remove = async (
 
 export const csv = async (
   ctx: PrivateCommandMegaskabaContext,
+  next: () => Promise<void>,
 ) => {
   if (!admins.has(ctx.from.id)) return;
 

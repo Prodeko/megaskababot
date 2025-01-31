@@ -1,18 +1,21 @@
 import express from "express";
-import { validatePeriod } from "./middleware.ts";
+import { validatePeriod } from "./validators.ts";
 import { calculateGuildStatistics } from "../analytics/statistics.ts";
 import topUsersByGuild from "../analytics/rankings.ts";
 import { arrayToCSV } from "../common/utils.ts";
-import process from "node:process";
+import { getTimeSeriesData } from "../analytics/timeseries.ts";
+import { GUILDS } from "../common/constants.ts";
+import _ from "lodash";
+import { Guild } from "../common/types.ts";
 
 const router = express.Router({ mergeParams: true });
 
 export interface StatisticsResponse extends express.Response {
-  locals: {
-    guild: string;
-    periodStart: Date;
-    periodEnd: Date;
-  };
+	locals: {
+		guild: string;
+		periodStart: Date;
+		periodEnd: Date;
+	};
 }
 
 router.get("/ranking/:guild", async (req, res: StatisticsResponse) => {
@@ -52,8 +55,29 @@ router.get("/ranking/:guild", async (req, res: StatisticsResponse) => {
   }
 });
 
-// Middleware to validate the period start and end query parameters
-router.use(validatePeriod);
+router.get("/time-series", async (req, res) => {
+  if (req.query.pass !== process.env.ADMIN_PASSWORD) {
+    console.log("Wrong password");
+    return res.status(401).send("Wrong password!");
+  }
+
+  const timeSeries = await getTimeSeriesData();
+
+  const groupedSeries = _.groupBy(timeSeries, (e) => e.date);
+  const guildsAsColumns = _.map(groupedSeries, (entries, date) => {
+    return {
+      date: entries[0].date.toLocaleDateString("fi-FI"),
+      ...(Object.fromEntries(
+        entries.map((e) => [e.guild, e.totalPoints]),
+      ) as Record<Guild, number>),
+    };
+  });
+
+  const csv = arrayToCSV(["date", ...GUILDS], guildsAsColumns);
+
+  res.header("Content-Type", "text/csv");
+  res.status(200).send(csv);
+});
 
 router.get("/statistics", async (req, res: StatisticsResponse) => {
   if (req.query.pass !== process.env.ADMIN_PASSWORD) {
@@ -61,13 +85,17 @@ router.get("/statistics", async (req, res: StatisticsResponse) => {
     return res.status(401).send("Wrong password!");
   }
 
-  const { periodStart, periodEnd } = res.locals;
+  const validatedRes = validatePeriod(req, res);
+
+  const { periodStart, periodEnd } = validatedRes.locals;
   try {
     const statistics = await calculateGuildStatistics(periodStart, periodEnd);
-    res.json(Object.fromEntries(statistics));
+    validatedRes.json(Object.fromEntries(statistics));
   } catch (error) {
     console.error(error);
-    res.status(500).send("An error occurred while calculating statistics");
+    validatedRes.status(500).send(
+      "An error occurred while calculating statistics",
+    );
   }
 });
 

@@ -105,6 +105,13 @@ export type pointsPerGuild = Map<Guild, number>;
 
 export type PrivacyState = "accepted" | "rejected";
 
+export type TimeSeriesData = [
+  {
+    date: Date;
+    guild: Guild;
+    totalPoints: number;
+  },
+];
 export interface SessionData {
   state?: State;
 }

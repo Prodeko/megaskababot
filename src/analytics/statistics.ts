@@ -31,6 +31,8 @@ export async function calculateGuildStatistics(
 			COUNT(DISTINCT "userId") as "uniqueParticipants"
 		FROM
 			"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
+		WHERE
+			"Entry"."valid" IS NOT FALSE
 		GROUP BY
 			guild
 	`) as Aggregate[];
@@ -41,6 +43,8 @@ export async function calculateGuildStatistics(
 				"userId"
 			FROM
 				"Entry"
+			WHERE
+				"Entry"."valid" IS NOT FALSE	
 			GROUP BY
 				"userId"
 			HAVING
@@ -65,7 +69,8 @@ export async function calculateGuildStatistics(
 			FROM
 				"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
 			WHERE
-				"Entry"."createdAt" BETWEEN ${periodStart} AND ${periodEnd}
+				("Entry"."createdAt" BETWEEN ${periodStart} AND ${periodEnd}) AND
+				"Entry"."valid" IS NOT FALSE
 			GROUP BY
 				guild
 		),
@@ -76,7 +81,8 @@ export async function calculateGuildStatistics(
 			FROM
 				"Entry" JOIN "User" ON "Entry"."userId" = "User"."telegramUserId"
 			WHERE
-				"Entry"."createdAt" < ${periodStart}
+				"Entry"."createdAt" < ${periodStart} AND
+				"Entry"."valid" IS NOT FALSE
 			GROUP BY
 				guild
 		)

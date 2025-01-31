@@ -1,10 +1,6 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response } from "express";
 
-export const validatePeriod = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const validatePeriod = (req: Request, res: Response) => {
   const start = req.query.start;
   const end = req.query.end;
 
@@ -36,5 +32,5 @@ export const validatePeriod = (
   res.locals.periodStart = startDate;
   res.locals.periodEnd = endDate;
 
-  next();
+  return res;
 };
