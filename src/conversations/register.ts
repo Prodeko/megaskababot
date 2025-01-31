@@ -6,9 +6,7 @@ import {
   GUILD_MESSAGE,
   LETS_TRY_AGAIN_MESSAGE,
   REGISTRATION_SUCCESSFUL_MESSAGE,
-  START_REGISTRATION_MESSAGE,
   UNEXPECTED_GUILD_MESSAGE,
-  USE_BUTTONS_MESSAGE,
 } from "../common/constants.ts";
 import {
   Guild,
@@ -26,27 +24,16 @@ import { prisma } from "../../prisma/client.ts";
 import { ChatTypeContext } from "grammy";
 import { UserWithoutTime } from "../common/types.ts";
 import { capitalizeFirstLetter } from "../common/utils.ts";
+import { year } from "./year.ts";
 
 export async function register(
   conversation: MegaskabaConversation,
   ctx: ChatTypeContext<MegaskabaContext, "private">,
 ) {
-  await ctx.reply(
-    `
-${START_REGISTRATION_MESSAGE}.
-    
-${ENTER_FRESHMAN_YEAR_MESSAGE}
-    `,
-    {
-      reply_markup: yearKeyboard,
-    },
-  );
-
   let user: UserWithoutTime | null = null;
 
   while (!user) {
-    // TODO: Figure out how to only accept sensible years if user types year manually
-    const freshmanYear = await conversation.form.int();
+    const freshmanYear = await year(conversation, ctx);
 
     await ctx.reply(ENTER_GUILD_MESSAGE, {
       reply_markup: guildKeyboard,

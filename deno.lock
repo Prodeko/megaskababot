@@ -10,7 +10,7 @@
     "npm:@types/uuid@9": "9.0.8",
     "npm:axios@^1.2.4": "1.7.9",
     "npm:express@^4.18.2": "4.21.2",
-    "npm:grammy@^1.34.0": "1.34.1",
+    "npm:grammy@^1.34.1": "1.34.1",
     "npm:lodash@^4.17.21": "4.17.21",
     "npm:prisma@*": "6.2.1",
     "npm:uuid@9": "9.0.1"
@@ -815,7 +815,7 @@
         "npm:@types/uuid@9",
         "npm:axios@^1.2.4",
         "npm:express@^4.18.2",
-        "npm:grammy@^1.34.0",
+        "npm:grammy@^1.34.1",
         "npm:lodash@^4.17.21",
         "npm:uuid@9"
       ]

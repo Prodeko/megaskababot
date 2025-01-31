@@ -1,5 +1,4 @@
 import { ChatTypeContext } from "grammy";
-import { distance } from "../commands/text/distance.ts";
 import {
   ENTRY_ADDED_MESSAGE,
   NOT_REGISTERED_MESSAGE,
@@ -11,6 +10,7 @@ import { isUser } from "../users.ts";
 import { image } from "./image.ts";
 import { sport } from "./sport.ts";
 import { commandsKeyboard } from "../keyboards.ts";
+import { distance } from "./distance.ts";
 
 export async function entry(
   conversation: MegaskabaConversation,
