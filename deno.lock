@@ -1,7 +1,7 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:@grammyjs/conversations@^1.2.0": "1.2.0_grammy@1.34.0",
+    "npm:@grammyjs/conversations@^1.2.0": "1.2.0_grammy@1.34.1",
     "npm:@grammyjs/storage-prisma@^2.4.2": "2.4.2",
     "npm:@prisma/client@^6.2.1": "6.2.1",
     "npm:@trivago/prettier-plugin-sort-imports@4": "4.3.0_prettier@3.4.2",
@@ -10,7 +10,7 @@
     "npm:@types/uuid@9": "9.0.8",
     "npm:axios@^1.2.4": "1.7.9",
     "npm:express@^4.18.2": "4.21.2",
-    "npm:grammy@^1.34.0": "1.34.0",
+    "npm:grammy@^1.34.0": "1.34.1",
     "npm:lodash@^4.17.21": "4.17.21",
     "npm:prisma@*": "6.2.1",
     "npm:uuid@9": "9.0.1"
@@ -126,7 +126,7 @@
         "which"
       ]
     },
-    "@grammyjs/conversations@1.2.0_grammy@1.34.0": {
+    "@grammyjs/conversations@1.2.0_grammy@1.34.1": {
       "integrity": "sha512-d06nGFPlcea4UqjOcxCm5rwiV74bZQVUWQl3YVQp5TwC0oCHNK+PXgqaKkVgkfcYSMyx3dADRBuBkcGt+yiyDA==",
       "dependencies": [
         "debug@4.4.0",
@@ -518,8 +518,8 @@
     "gopd@1.2.0": {
       "integrity": "sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg=="
     },
-    "grammy@1.34.0": {
-      "integrity": "sha512-YSLUSLdwycufB0Si9em+Ef3aXt7Vq0LYuGgwF4+ZskPb6+3RzrPdkh28qQNKhCeIXKodgMKQ5CxAHf/fLJZufg==",
+    "grammy@1.34.1": {
+      "integrity": "sha512-0ypt5d1bna8CqSANlDCg2ce1sx87oDm9gjyPRHWYpAgvjy3WYW9oEmMllAYCWCZ3vHDULW5x14jBMXai51ar0Q==",
       "dependencies": [
         "@grammyjs/types",
         "abort-controller",
