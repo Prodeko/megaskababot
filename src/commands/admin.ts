@@ -42,11 +42,14 @@ const performPistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
 	underValidation.set(chatId, entry.id);
 
   await notValidated(ctx);
+
+  const photos = entry.fileIds.map((id) => InputMediaBuilder.photo(id));
+  await ctx.replyWithMediaGroup(photos);
+
   await ctx.reply(
     formatEntryWithUser(entry as unknown as EntryWithUser),
-    { parse_mode: "HTML" },
+    { parse_mode: "HTML", reply_markup: validationKeyboard },
   );
-  await ctx.replyWithPhoto(entry?.fileId, { reply_markup: validationKeyboard });
 };
 
 export const validate = async (
@@ -70,11 +73,14 @@ export const validate = async (
 	if (!entry) return ctx.reply("No such entry");
 
   underValidation.set(ctx.chat.id, entry.id);
+
+  const photos = entry.fileIds.map((id) => InputMediaBuilder.photo(id));
+  await ctx.replyWithMediaGroup(photos);
+
   await ctx.reply(
     formatEntryWithUser(entry as unknown as EntryWithUser),
-    { parse_mode: "HTML" },
+    { parse_mode: "HTML", reply_markup: validationKeyboard },
   );
-  await ctx.replyWithPhoto(entry.fileId, { reply_markup: validationKeyboard });
 };
 
 export const notValidated = async (
@@ -173,17 +179,17 @@ export const allPhotosFromUser = async (
 
 	const possibleNum = Number.parseInt(args[1]);
 
-	let fileIds: { fileId: string }[] | null;
-	if (isBigInteger(possibleNum)) {
-		fileIds = await fileIdsForUserId(possibleNum);
-	} else {
-		fileIds = await fileIdsForUsername(args[1]);
-	}
+  let allFileIds: string[] | null;
+  if (isBigInteger(possibleNum)) {
+    allFileIds = await fileIdsForUserId(possibleNum);
+  } else {
+    allFileIds = await fileIdsForUsername(args[1]);
+  }
 
-	if (!fileIds) return await ctx.reply("No such user 👀");
+  if (!allFileIds) return await ctx.reply("No such user 👀");
 
   const chunks = _.chunk(
-    fileIds.map((f) => InputMediaBuilder.photo(f)),
+    allFileIds.map((f) => InputMediaBuilder.photo(f)),
     10,
   );
 
@@ -195,6 +201,10 @@ export const allPhotosFromUser = async (
       await ctx.reply("Possibily invalid fileId");
     }
   });
+
+  if (chunks.length === 0) {
+    await ctx.reply("No photos found");
+  }
 };
 
 export const allEntriesFromUser = async (
@@ -274,19 +284,26 @@ export const remove = async (
 
 	if (isNaN(idToRemove)) return await ctx.reply("Given id is not a number!");
 
-	try {
-		const entry = await getEntry(idToRemove);
-		removeConsideration.set(ctx.chat.id, entry.id);
-		await ctx.replyWithPhoto(entry.fileId);
-		await ctx.replyWithHTML(
-			formatEntryWithUser(entry as unknown as EntryWithUser),
-		);
-		await ctx.reply("Do you want to remove this entry?", confirmationKeyboard);
-	} catch (e) {
-		console.error(e);
-		await ctx.reply("No such entry");
-	}
-	return next();
+  const entry = await getEntry(idToRemove);
+  if (entry != null) {
+    removeConsideration.set(ctx.chat.id, entry!.id);
+    const photos = entry.fileIds.map((id) => InputMediaBuilder.photo(id));
+    await ctx.replyWithMediaGroup(photos);
+    //await ctx.replyWithPhoto(entry!.fileId);
+    await ctx.reply(
+      // TODO: Remove type cast
+      formatEntryWithUser(entry as unknown as EntryWithUser),
+      { parse_mode: "HTML" },
+    );
+    await ctx.reply("Do you want to remove this entry?", {
+      reply_markup: confirmationKeyboard,
+    });
+  } else {
+    console.log(
+      `Tried to find entry with id ${idToRemove} but did not find it.`,
+    );
+    await ctx.reply("No such entry");
+  }
 };
 
 export const csv = async (ctx: PrivateCommandMegaskabaContext, next: () => Promise<void>) => {

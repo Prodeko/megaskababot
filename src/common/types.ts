@@ -42,7 +42,7 @@ interface ProofPhase {
   phase: "proof";
   sport: Sport;
   distance: number;
-  fileId: string;
+  fileIds: string[];
 }
 
 export type State =
@@ -67,7 +67,7 @@ export type User = UserWithoutTime & {
 
 export type CreateEntry = {
   distance: number;
-  fileId: string;
+  fileIds: string[];
   sport: Sport;
   userId: number;
   doublePoints: boolean;
