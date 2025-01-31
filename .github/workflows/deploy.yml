@@ -35,14 +35,17 @@ jobs:
 
       - name: Build and push
         run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba:${{ secrets.SUBSCRIPTION }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba:${{ secrets.SUBSCRIPTION }}
 
       - name: Deploy from ACR
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: "megaskababot"
-          images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
+        run: |
+          az webapp config container set \
+            --container-image-name ${{ secrets.REGISTRY_NAME }}.azurecr.io/megaskababot/megaskababot:${{ github.sha }} \
+            --container-registry-url https://${{ secrets.REGISTRY_NAME }}.azurecr.io \
+            --subscription ${{ secrets.SUBSCRIPTION }} \
+            --resource-group prodeko-rg-new \
+            --name megaskababot
 
       - name: Azure logout
         run: |
