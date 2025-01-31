@@ -13,7 +13,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment:
-      name: "Production"
+      name: "production"
       url: "https://megaskababot.azurewebsites.net/"
 
     steps:
