@@ -34,7 +34,7 @@ model User {
 model Entry {
   id              Int      @id @default(autoincrement())
   distance        Float
-  fileId          String
+  fileIds         String[]
   sport           String
   user            User     @relation(fields: [userId], references: [telegramUserId])
   doublePoints    Boolean  @default(false)

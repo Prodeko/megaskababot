@@ -23,7 +23,6 @@ import help from "./commands/help.ts";
 import removeLatestCommand from "./commands/removeLatest.ts";
 import rules from "./commands/rules.ts";
 import start from "./commands/start.ts";
-import photo from "./commands/photo.ts";
 import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
 import process from "node:process";
 import { MegaskabaContext } from "./common/types.ts";
@@ -55,10 +54,6 @@ privateBot.use(createConversation(register));
 privateBot.use(createConversation(entry));
 
 privateBot.command("start", start);
-
-// Message handling
-//privateBot.use(text);
-privateBot.use(photo);
 
 // Standard commands
 privateBot.command("entry", (ctx) => ctx.conversation.reenter("entry"));

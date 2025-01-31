@@ -30,7 +30,8 @@ const isCompleteUser = (user: Partial<User>): user is UserWithoutTime => {
 const isCompleteEntry = (entry: Partial<Entry>): entry is EntryWithoutId => {
   return (
     typeof entry?.distance === "number" &&
-    typeof entry?.fileId === "string" &&
+    Array.isArray(entry?.fileIds) && 
+    entry.fileIds.every(id => typeof id === "string") && 
     typeof entry?.userId === "number" &&
     isSport(entry?.sport)
   );
@@ -40,7 +41,8 @@ const isCompleteEntry = (entry: Partial<Entry>): entry is EntryWithoutId => {
 const isEntry = (entry: any): entry is Entry => {
   return (
     typeof entry.distance === "number" &&
-    typeof entry.fileId === "string" &&
+    Array.isArray(entry?.fileIds) &&
+    entry.fileIds.every((id: unknown) => typeof id === "string") && 
     typeof entry.userId === "bigint" &&
     typeof entry.id === "number" &&
     typeof entry.createdAt === "object" &&

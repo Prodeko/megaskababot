@@ -30,7 +30,7 @@ export async function entry(
     distance: enteredDistance,
     sport: enteredSport,
     doublePoints: false,
-    fileId: enteredImage,
+    fileIds: enteredImage,
     userId: ctx.chatId,
   });
 

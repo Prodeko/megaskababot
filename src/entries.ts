@@ -50,6 +50,7 @@ const getRandomNotValidEntry = async () => {
   if (count === 0) return null;
   const random = Math.floor(Math.random() * count);
   console.log("Random", random);
+
   const entry = await prisma.entry.findFirst({
     where: {
       valid: null,
@@ -135,8 +136,14 @@ export async function saveEntry(entry: CreateEntry): Promise<Entry> {
   }) as unknown as Entry;
 }
 
-const fileIdsForUserId = (userId: bigint) =>
-  prisma.entry.findMany({ select: { fileId: true }, where: { userId } });
+const fileIdsForUserId = async (userId: bigint) => {
+  const foundEntries = await prisma.entry.findMany({
+    where: { userId },
+    select: { fileIds: true },
+  });
+
+  return foundEntries.flatMap(i => i.fileIds);
+}
 
 const fileIdsForUsername = async (username: string) => {
   const result = await prisma.user.findFirst({
@@ -146,8 +153,9 @@ const fileIdsForUsername = async (username: string) => {
 
   if (result) {
     return await fileIdsForUserId(result.telegramUserId as unknown as bigint);
+  } else {
+    return null
   }
-  return null;
 };
 
 const updateEntry = (id: number, data: Partial<Entry>) =>
@@ -162,7 +170,7 @@ const saveEntriesAsCSV = async () => {
   const headers = [
     "id",
     "distance",
-    "fileId",
+    "fileIds",
     "sport",
     "userId",
     "createdAt",

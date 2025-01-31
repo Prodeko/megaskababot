@@ -7,19 +7,21 @@ import {
 export async function image(
   conversation: MegaskabaConversation,
   ctx: MegaskabaContext,
-): Promise<string> {
+): Promise<string[]> {
   await ctx.reply(IMAGE_PROOF_MESSAGE);
 
-  let fileId: string | null = null;
+  let fileIds: string | null = null;
 
-  while (fileId === null) {
-    const response = await conversation.waitFor("message");
-    fileId = response.msg.photo?.[0]?.file_id ?? null;
+  while (fileIds === null) {
+    const response = await conversation.waitFor("msg");
+    // TODO: Figure out how to actually capture multiple files.
+    // Now we just grab the first size from some photo.
+    fileIds = response?.msg?.photo?.map((p) => p.file_id).find(Boolean) ?? null;
 
-    if (fileId === null) {
+    if (fileIds === null) {
       await ctx.reply(EXPECTED_IMAGE_MESSAGE);
     }
   }
 
-  return fileId;
+  return [fileIds];
 }
