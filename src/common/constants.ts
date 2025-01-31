@@ -33,11 +33,23 @@ export const UNEXPECTED_GUILD_MESSAGE = "Please enter a valid guild.";
 export const NOT_REGISTERED_MESSAGE =
   "Not a user yet! Use /start to make an user";
 
+export const FIRST_FRESHMAN_YEAR = 1970;
+export const CURRENT_YEAR = new Date(Date.now()).getFullYear();
+export const YEARS = [
+  ...Array.from(Array(CURRENT_YEAR - FIRST_FRESHMAN_YEAR + 1).keys()).map(
+    (k) => `${FIRST_FRESHMAN_YEAR + k}`,
+  ),
+].reverse();
+
 // Registration
 export const CONFIRM_REGISTERATION_MESSAGE = "Is this information correct?";
 export const ENTER_GUILD_MESSAGE = "Which guild do you represent?";
 export const GUILD_MESSAGE = "Guild";
 export const ENTER_FRESHMAN_YEAR_MESSAGE = "What is your freshman year?";
+// TODO: Find first and last year using Math.min and Math.max
+export const PLEASE_ENTER_YEAR_MESSAGE = `Please enter a year between ${
+  YEARS.at(-1)
+} and ${YEARS.at(0)}`;
 export const FRESHMAN_YEAR_MESSAGE = "Freshman year";
 export const USE_BUTTONS_MESSAGE = "Please use the buttons above!";
 export const LETS_TRY_AGAIN_MESSAGE = "Lets try again";
@@ -48,7 +60,8 @@ export const SPORT_TYPE_MESSAGE =
   "Welcome back! How did you cover ground today?";
 export const INVALID_SPORT_MESSAGE = "Please enter a valid sport.";
 export const DISTANCE_MESSAGE = "What distance (km) did you";
-export const NOT_A_NUMBER_MESSAGE = "Please enter a number in kilometers.";
+export const ENTER_NUMBER_IN_KILOMETERS_MESSAGE =
+  "Please enter a number in kilometers.";
 export const POSITIVE_NUMBER_MESSAGE = "Please give a positive number 👀";
 export const MAX_ENTRY_DISTANCE_KM = 300;
 export const SUSPICIOUS_DISTANCE_MESSAGE =
@@ -58,13 +71,6 @@ export const EXPECTED_IMAGE_MESSAGE =
   "Oops! I expected to receive a single image.";
 export const ENTRY_ADDED_MESSAGE = "Entry added!";
 
-const firstFreshmanYear = 1970;
-const currentYear = new Date(Date.now()).getFullYear();
-export const YEARS = [
-  ...Array.from(Array(currentYear - firstFreshmanYear).keys()).map(
-    (k) => `${firstFreshmanYear + k}`,
-  ),
-].reverse();
 export const SPORTS = ["swim", "run", "walk", "ski", "skate", "cycle"] as const;
 export const COEFFICIENTS: Record<Sport, number> = {
   swim: 5,

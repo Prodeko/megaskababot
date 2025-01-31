@@ -1,16 +1,16 @@
-import { randomInvalidInputSticker } from "../../common/utils.ts";
+import {
+  DISTANCE_MESSAGE,
+  ENTER_NUMBER_IN_KILOMETERS_MESSAGE,
+  MAX_ENTRY_DISTANCE_KM,
+  POSITIVE_NUMBER_MESSAGE,
+  SUSPICIOUS_DISTANCE_MESSAGE,
+} from "../common/constants.ts";
 import {
   MegaskabaContext,
   MegaskabaConversation,
   Sport,
-} from "../../common/types.ts";
-import {
-  DISTANCE_MESSAGE,
-  MAX_ENTRY_DISTANCE_KM,
-  NOT_A_NUMBER_MESSAGE,
-  POSITIVE_NUMBER_MESSAGE,
-  SUSPICIOUS_DISTANCE_MESSAGE,
-} from "../../common/constants.ts";
+} from "../common/types.ts";
+import { randomInvalidInputSticker } from "../common/utils.ts";
 
 export async function distance(
   conversation: MegaskabaConversation,
@@ -37,7 +37,7 @@ export async function distance(
       if (!isNaN(parsedNumber)) {
         number = parsedNumber;
       } else {
-        await ctx.reply(NOT_A_NUMBER_MESSAGE);
+        await ctx.reply(ENTER_NUMBER_IN_KILOMETERS_MESSAGE);
       }
     }
 
