@@ -28,7 +28,7 @@ export const PRIVACY_REJECTED_MESSAGE =
 export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString();
 export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString();
 
-export const GUILDS = ["prodeko", "athene", "mysteeri", "vieras"] as const;
+export const GUILDS = ["athene", "indecs", "man@ger", "prodeko"] as const;
 
 export const UNEXPECTED_GUILD_MESSAGE = "Please enter a valid guild.";
 
