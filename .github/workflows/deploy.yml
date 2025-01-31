@@ -13,8 +13,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment:
-      name: 'Production'
-      url: 'https://megaskababot.azurewebsites.net/'
+      name: "Production"
+      url: "https://megaskababot.azurewebsites.net/"
 
     steps:
       - uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
       - name: Deploy from ACR
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'megaskababot'
+          app-name: "megaskababot"
           images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba
 
       - name: Azure logout

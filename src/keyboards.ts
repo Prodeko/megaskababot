@@ -1,47 +1,41 @@
 import _ from "lodash";
-import { Markup } from "telegraf";
+import { InlineKeyboard, Keyboard } from "grammy";
 
-import { GUILDS, SPORTS, YEARS } from "./common/constants";
+import { GUILDS, SPORTS, YEARS } from "./common/constants.ts";
 
-export const inlinePrivacyKeyboard = Markup.inlineKeyboard([
-	[
-		{ text: "Accept ✅", callback_data: "accepted" },
-		{ text: "Reject ❌", callback_data: "rejected" },
-	],
-]);
+export const inlinePrivacyKeyboard = new InlineKeyboard()
+  .text("Accept ✅", "accepted").text("Reject ❌", "rejected");
 
-export const guildKeyboard = Markup.keyboard(GUILDS.map(_.capitalize)).oneTime(
-	true,
+export const guildKeyboard = Keyboard.from(
+  GUILDS.map(_.capitalize).map((g) => [Keyboard.text(g)]),
+).oneTime(
+  true,
 );
-export const yearKeyboard = Markup.keyboard(YEARS).oneTime(true);
-export const sportKeyboard = Markup.keyboard([...SPORTS]).oneTime(true);
-export const confirmationKeyboard = Markup.inlineKeyboard([
-	Markup.button.callback("Remove 🗑️", "remove"),
-	Markup.button.callback("Cancel 🚫", "cancel"),
-]);
+export const yearKeyboard = Keyboard.from(YEARS.map((y) => [Keyboard.text(y)]))
+  .oneTime(true);
+export const sportKeyboard = Keyboard.from(
+  [...SPORTS].map((s) => [Keyboard.text(s)]),
+).oneTime(true);
+export const confirmationKeyboard = new InlineKeyboard()
+  .text("Remove 🗑️", "remove")
+  .text("Cancel 🚫", "cancel");
 
-export const loginConfiramtionKeyboard = Markup.inlineKeyboard([
-	Markup.button.callback("Yes, that's correct ✅", "login"),
-	Markup.button.callback("No, try again 🚫", "cancel_login"),
-]);
+export const loginConfiramtionKeyboard = new InlineKeyboard()
+  .text("Yes, that's correct ✅", "register")
+  .text("No, try again 🚫", "cancel_register");
 
-export const validationKeyboard = Markup.inlineKeyboard([
-	[
-		Markup.button.callback("1️⃣x ✅", "valid1x"),
-		Markup.button.callback("2️⃣x ✅", "valid2x"),
-		Markup.button.callback("Invalid ❌", "invalid"),
-	],
-	[Markup.button.callback("Stop validation 🛑", "stopvalidation")],
-]);
+export const validationKeyboard = new InlineKeyboard()
+  .text("1️⃣x ✅", "valid1x")
+  .text("2️⃣x ✅", "valid2x")
+  .text("Invalid ❌", "invalid")
+  .row()
+  .text("Stop validation 🛑", "stopvalidation");
 
-export const commandsKeyboard = Markup.inlineKeyboard([
-	[
-		{ text: "New entry 🆕", callback_data: "entry" },
-		{ text: "Previous entries 📈", callback_data: "entries" },
-	],
-	[
-		{ text: "Remove latest 🗑️", callback_data: "removelatest" },
-		{ text: "Rules 📖", callback_data: "rules" },
-	],
-	[{ text: "Help 💡", callback_data: "help" }],
-]);
+export const commandsKeyboard = new InlineKeyboard()
+  .text("New entry 🆕", "entry")
+  .text("Previous entries 📈", "entries")
+  .row()
+  .text("Remove latest 🗑️", "removelatest")
+  .text("Rules 📖", "rules")
+  .row()
+  .text("Help 💡", "help");

@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "generated/": "./node_modules/generated/"
+  },
+  "nodeModulesDir": "auto"
+}

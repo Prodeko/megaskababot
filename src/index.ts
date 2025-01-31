@@ -1,115 +1,124 @@
-import * as dotenv from "dotenv";
-import { Telegraf } from "telegraf";
+import { Bot, session } from "grammy";
 
-import cancelLogin from "./commands/action/cancelLogin";
-import confirmLogin from "./commands/action/confirmLogin";
 import {
-	onPrivacyAccepted,
-	onPrivacyRejected,
-} from "./commands/action/privacy";
-import {
-	adminLogin,
-	allEntriesFromUser,
-	allPhotosFromUser,
-	cancelRemove,
-	confirmedRemove,
-	csv,
-	invalid,
-	notValidated,
-	pistokoe,
-	remove,
-	resetValidation,
-	setDistance,
-	stopValidation,
-	valid1x,
-	valid2x,
-	validate,
-} from "./commands/admin";
-import entries from "./commands/entries";
-import entry from "./commands/entry";
-import help from "./commands/help";
-import photo from "./commands/photo";
-import removeLatestCommand from "./commands/removeLatest";
-import rules from "./commands/rules";
-import start from "./commands/start";
-import text from "./commands/text";
-import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv";
-
-dotenv.config();
+  adminLogin,
+  allEntriesFromUser,
+  allPhotosFromUser,
+  cancelRemove,
+  confirmedRemove,
+  csv,
+  invalid,
+  notValidated,
+  pistokoe,
+  remove,
+  resetValidation,
+  setDistance,
+  stopValidation,
+  valid1x,
+  valid2x,
+  validate,
+} from "./commands/admin.ts";
+import entries from "./commands/entries.ts";
+import help from "./commands/help.ts";
+import removeLatestCommand from "./commands/removeLatest.ts";
+import rules from "./commands/rules.ts";
+import start from "./commands/start.ts";
+import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
+import process from "node:process";
+import { MegaskabaContext } from "./common/types.ts";
+import { PrismaAdapter } from "@grammyjs/storage-prisma";
+import { prisma } from "../prisma/client.ts";
+import { conversations, createConversation } from "@grammyjs/conversations";
+import { privacy } from "./conversations/privacy.ts";
+import { register } from "./conversations/register.ts";
+import { entry } from "./conversations/entry.ts";
 
 if (!process.env.BOT_TOKEN) {
-	throw new Error("Bot token not defined!");
+  throw new Error("Bot token not defined!");
 }
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const bot = new Bot<MegaskabaContext>(process.env.BOT_TOKEN);
+bot.use(session({
+  initial: () => {
+    return {};
+  },
+  storage: new PrismaAdapter(prisma.grammySession),
+}));
 
-bot.start(start);
+bot.use(conversations());
 
-// Message handling
-bot.on("text", text);
-bot.on("photo", photo);
+try {
+  await Promise.all([
+    bot.api.setMyCommands([
+      { command: "start", description: "Start the bot" },
+      { command: "help", description: "Show the help message" },
+      { command: "rules", description: "Show the rules of the competition" },
+      { command: "entry", description: "Add a new entry" },
+      { command: "entries", description: "Show your previous entries" },
+      { command: "removelatest", description: "Remove your latest entry" },
+    ]),
+    bot.api.setMyName("Megaskababot"),
+    bot.api.setMyDescription(
+      "Megaskababot allows you to keep track of your entries in Megaskaba.",
+    ),
+    bot.api.setMyShortDescription(
+      "Megaskababot allows you to keep track of your entries in Megaskaba.",
+    ),
+  ]);
+} catch (e) {
+  // Prevent crash due to ratelimit
+  console.error(e);
+}
+
+const privateBot = bot.chatType("private");
+
+// conversations
+privateBot.use(createConversation(privacy));
+privateBot.use(createConversation(register));
+privateBot.use(createConversation(entry));
+
+privateBot.command("start", start);
 
 // Standard commands
-bot.command("entries", entries);
-bot.command("help", help);
-bot.command("rules", rules);
-bot.command("entry", entry);
-bot.command("removelatest", removeLatestCommand);
-
-// Middleware to get stickerids
-// eslint-disable-next-line prefer-const
-// let fileIds: string[] = []
-// bot.use((ctx:any, next) => {
-//   if (!ctx?.message?.sticker) return next()
-//   const fileId = ctx?.message?.sticker?.file_id
-//   fileIds.push(fileId)
-//   console.log(fileIds)
-//   return next()
-// })
+privateBot.command("entry", (ctx) => ctx.conversation.reenter("entry"));
+privateBot.command("entries", entries);
+privateBot.command("help", help);
+privateBot.command("rules", rules);
+privateBot.command("removelatest", removeLatestCommand);
 
 // Admin commands
-bot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
-bot.command("csv", csv);
-bot.command("pistokoe", pistokoe);
-bot.command("numtovalidate", notValidated);
-bot.command("remove", remove);
-bot.command("allphotos", allPhotosFromUser);
-bot.command("resetvalidation", resetValidation);
-bot.command("updatedistance", setDistance);
-bot.command("validate", validate);
-bot.command("allentries", allEntriesFromUser);
+privateBot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
+privateBot.command("csv", csv);
+privateBot.command("pistokoe", pistokoe);
+privateBot.command("numtovalidate", notValidated);
+privateBot.command("remove", remove);
+privateBot.command("allphotos", allPhotosFromUser);
+privateBot.command("resetvalidation", resetValidation);
+privateBot.command("updatedistance", setDistance);
+privateBot.command("validate", validate);
+privateBot.command("allentries", allEntriesFromUser);
 
-bot.action("invalid", invalid);
-bot.action("valid1x", valid1x);
-bot.action("valid2x", valid2x);
-bot.action("stopvalidation", stopValidation);
+privateBot.callbackQuery("invalid", invalid);
+privateBot.callbackQuery("valid1x", valid1x);
+privateBot.callbackQuery("valid2x", valid2x);
+privateBot.callbackQuery("stopvalidation", stopValidation);
 
-bot.action("remove", confirmedRemove);
-bot.action("cancel", cancelRemove);
+privateBot.callbackQuery("remove", confirmedRemove);
+privateBot.callbackQuery("cancel", cancelRemove);
 
-bot.action("login", confirmLogin);
-bot.action("cancel_login", cancelLogin);
-
-bot.action("entry", entry);
-bot.action("entries", entries);
-bot.action("removelatest", removeLatestCommand);
-bot.action("help", help);
-bot.action("rules", rules);
+privateBot.callbackQuery("entry", (ctx) => ctx.conversation.reenter("entry"));
+privateBot.callbackQuery("entries", entries);
+privateBot.callbackQuery("removelatest", removeLatestCommand);
+privateBot.callbackQuery("help", help);
+privateBot.callbackQuery("rules", rules);
 
 // Inline keyboard handling
-bot.action("accepted", onPrivacyAccepted);
+// privateBot.callbackQuery("accepted", onPrivacyAccepted);
 
-bot.action("rejected", onPrivacyRejected);
-
-bot.use(async (ctx) => {
-	try {
-		await ctx.editMessageReplyMarkup(undefined);
-	} catch {}
-});
-
-// Launch bot
+// privateBot.callbackQuery("rejected", onPrivacyRejected);
+// Launch privateBot
 launchBotDependingOnNodeEnv(bot);
 
 // Enable graceful stop
-process.once("SIGINT", () => bot.stop("SIGINT"));
-process.once("SIGTERM", () => bot.stop("SIGTERM"));
+process.once("SIGINT", () => bot.stop());
+process.once("SIGTERM", () => bot.stop());

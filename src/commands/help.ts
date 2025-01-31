@@ -1,13 +1,17 @@
-import { HELP_TEXT } from "../common/constants";
-import type { ActionContext, CommandContext } from "../common/types";
-import { commandsKeyboard } from "../keyboards";
+import { HELP_TEXT } from "../common/constants.ts";
+import { commandsKeyboard } from "../keyboards.ts";
+import {
+  PrivateCallbackMegaskabaContext,
+  PrivateCommandMegaskabaContext,
+} from "../common/types.ts";
 
 const help = async (
-	ctx: CommandContext | ActionContext,
-	next: () => Promise<void>,
+  ctx: PrivateCallbackMegaskabaContext | PrivateCommandMegaskabaContext,
 ) => {
-	await ctx.replyWithHTML(HELP_TEXT, commandsKeyboard);
-	return next();
+  await ctx.reply(HELP_TEXT, {
+    parse_mode: "HTML",
+    reply_markup: commandsKeyboard,
+  });
 };
 
 export default help;

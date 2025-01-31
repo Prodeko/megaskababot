@@ -2,8 +2,10 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "linux-musl"]
+  previewFeatures = ["deno"]
+  output          = "../node_modules/generated"
 }
 
 datasource db {
@@ -11,21 +13,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model PrivacyAccepted {
+  telegramUserId BigInt  @id
+  accepted       Boolean
+  user           User?
+}
+
 model User {
-  telegramUserId   BigInt   @id
+  privacyAccepted  PrivacyAccepted @relation(fields: [telegramUserId], references: [telegramUserId])
+  telegramUserId   BigInt          @id
   telegramUsername String
   firstName        String
   lastName         String?
   freshmanYear     Int
   guild            String
-  createdAt        DateTime @default(now())
+  createdAt        DateTime        @default(now())
   entries          Entry[]
 }
 
 model Entry {
   id              Int      @id @default(autoincrement())
   distance        Float
-  fileId          String
+  fileIds         String[]
   sport           String
   user            User     @relation(fields: [userId], references: [telegramUserId])
   doublePoints    Boolean  @default(false)
@@ -34,4 +43,12 @@ model Entry {
   valid           Boolean?
   sportMultiplier Float
   earnedPoints    Float
+}
+
+// For persistent storage of Grammy sessions. 
+// See https://github.com/grammyjs/storages/tree/main/packages/prisma
+model GrammySession {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String
 }
