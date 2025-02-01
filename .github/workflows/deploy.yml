@@ -35,8 +35,8 @@ jobs:
 
       - name: Build and push
         run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba:${{ secrets.SUBSCRIPTION }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskaba/megaskaba:${{ secrets.SUBSCRIPTION }}
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskababot/megaskababot:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskababot/megaskababot:${{ github.sha }}
 
       - name: Deploy from ACR
         run: |
