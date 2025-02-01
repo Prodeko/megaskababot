@@ -9,6 +9,9 @@ on:
 permissions:
   id-token: write
 
+env:
+  AZURE_CORE_OUTPUT: none
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
