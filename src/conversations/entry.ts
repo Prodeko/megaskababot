@@ -26,13 +26,13 @@ export async function entry(
   const enteredDistance = await distance(conversation, ctx, enteredSport);
   const enteredImage = await image(conversation, ctx);
 
-  await saveEntry({
+  await conversation.external(() => saveEntry({
     distance: enteredDistance,
     sport: enteredSport,
     doublePoints: false,
     fileIds: enteredImage,
     userId: ctx.chatId,
-  });
+  }));
 
   await ctx.replyWithSticker(
     STICKERS[Math.floor(Math.random() * STICKERS.length)],

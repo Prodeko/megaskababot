@@ -94,9 +94,9 @@ export async function register(
     }
   }
 
-  await prisma.user.create({
+  await conversation.external(() => prisma.user.create({
     data: user,
-  });
+  }));
 
   await ctx.reply(
     `${REGISTRATION_SUCCESSFUL_MESSAGE}, ${
