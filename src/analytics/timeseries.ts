@@ -8,7 +8,7 @@ export const getTimeSeriesData = async (): Promise<TimeSeriesData> => {
   const data = await prisma.$queryRaw`
         WITH "PointsByDate" AS (
             SELECT
-                DATE_TRUNC('day', "Entry"."createdAt" AT TIME ZONE 'EEST' ) as "date",
+                DATE_TRUNC('day', "Entry"."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'EET' ) as "date",
                 "guild",
                 SUM("earnedPoints") as "totalPoints"
             FROM
