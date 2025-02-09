@@ -30,16 +30,13 @@ jobs:
           allow-no-subscriptions: true
 
       - name: Docker login to ACR
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          az acr login --name ${{ secrets.REGISTRY_NAME }}
 
       - name: Build and push
         run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskababot/megaskababot:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/megaskababot/megaskababot:${{ github.sha }}
+          docker build . -t ${{ secrets.REGISTRY_NAME }}.azurecr.io/megaskababot/megaskababot:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_NAME }}.azurecr.io/megaskababot/megaskababot:${{ github.sha }}
 
       - name: Deploy from ACR
         run: |
