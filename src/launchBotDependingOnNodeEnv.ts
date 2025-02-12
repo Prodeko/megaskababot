@@ -29,7 +29,7 @@ async function launchWebhookBot<T extends Context>(bot: Bot<T, Api<RawApi>>) {
  * Launches the bot in webhook mode if NODE_ENV is "production", or long polling (development) mode otherwise.
  * If webhook mode is used, the bot is also wrapped in a dummy Express API so it can be run in an Azure App Service.
  */
-export default function launchBotBasedOnNodeEnv<T extends Context>(
+export default async function launchBotBasedOnNodeEnv<T extends Context>(
   bot: Bot<T, Api<RawApi>>,
 ) {
   const useWebhook = process.env.NODE_ENV === "production";
@@ -37,7 +37,7 @@ export default function launchBotBasedOnNodeEnv<T extends Context>(
   if (useWebhook) {
     console.log("Launching bot in webhook mode");
     try {
-      launchWebhookBot(bot);
+      await launchWebhookBot(bot);
     } catch (e) {
       console.error(
         "Failed to launch webhook bot - falling back to long polling!",
