@@ -17,15 +17,21 @@ app.get("/health", (_req, res) => {
   res.status(200).send("OK");
 });
 
-app.get("/entries", async (req, res) => {
-  if (req.query.pass !== process.env.ADMIN_PASSWORD) {
-    console.log("Wrong password");
-    return res.status(401).send("Wrong password!");
+app.get("/entries", async (req, res, next) => {
+  try {
+    if (req.query.pass !== process.env.ADMIN_PASSWORD) {
+      console.log("Wrong password");
+      return res.status(401).send("Wrong password!");
+    }
+    await saveEntriesAsCSV();
+    res.attachment("./entries.csv");
+    res.header("Content-Type", "text/csv");
+    res.status(200).send(fs.readFileSync("./entries.csv"));
+  } catch (e) {
+    next(e);
+    return;
   }
-  await saveEntriesAsCSV();
-  res.attachment("./entries.csv");
-  res.header("Content-Type", "text/csv");
-  res.status(200).send(fs.readFileSync("./entries.csv"));
+  next();
 });
 
 app.use("/analytics", analyticsRouter);
