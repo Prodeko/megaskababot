@@ -25,7 +25,7 @@ async function launchWebhookBot<T extends Context>(bot: Bot<T, Api<RawApi>>) {
 
   app.post("/webhook", async (req, res, next) => {
     await webhookCallback(bot, "express", { secretToken: token })(req, res)
-      .then(next);
+      .catch(next);
   });
 
   launchServer();
