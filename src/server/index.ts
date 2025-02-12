@@ -8,6 +8,9 @@ const port = Number.parseInt(process.env.PORT!);
 
 const app = express();
 
+// Parse JSON body for webhook handler
+app.use(express.json());
+
 // Necessary because of Azure App Service health check on startup
 app.get("/", (_req, res) => {
   res.status(200).send("Kovaa tulee");
