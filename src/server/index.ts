@@ -1,3 +1,4 @@
+// @ts-types="npm:@types/express"
 import express from "express";
 import { saveEntriesAsCSV } from "../entries.ts";
 import analyticsRouter from "./analytics.ts";
