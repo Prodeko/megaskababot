@@ -2,6 +2,7 @@ import { Api, Bot, Context, RawApi, webhookCallback } from "grammy";
 import app, { launchServer } from "./server/index.ts";
 import process from "node:process";
 import path from "node:path";
+import { randomUUID } from "node:crypto";
 
 /**
  * Launch bot in long polling (development) mode
@@ -19,9 +20,14 @@ async function launchWebhookBot<T extends Context>(bot: Bot<T, Api<RawApi>>) {
   const webhookBaseUrl = process.env.WEBHOOK_URL!;
   const webhookUrl = path.join(webhookBaseUrl, webhookRoute);
 
-  // TODO: add secret token to this call
-  await bot.api.setWebhook(webhookUrl);
-  app.post("/webhook", webhookCallback(bot, "express"));
+  const token = randomUUID();
+  await bot.api.setWebhook(webhookUrl, { secret_token: token });
+
+  app.post("/webhook", async (req, res, next) => {
+    await webhookCallback(bot, "express", { secretToken: token })(req, res)
+      .then(next);
+  });
+
   launchServer();
 }
 
