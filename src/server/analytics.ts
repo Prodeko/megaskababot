@@ -66,7 +66,7 @@ router.get("/time-series", async (req, res, next: NextFunction) => {
     res.status(401).send("Wrong password!");
   }
 
-  const timeSeries = await getTimeSeriesData().then(next);
+  const timeSeries = await getTimeSeriesData().catch(next);
 
   const groupedSeries = _.groupBy(timeSeries, (e) => e.date);
   const guildsAsColumns = _.map(groupedSeries, (entries, date) => {
