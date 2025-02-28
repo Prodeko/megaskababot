@@ -45,6 +45,15 @@ model Entry {
   earnedPoints    Float
 }
 
+enum Setting {
+  ARCHIVE_MODE
+}
+
+model ApplicationSettings {
+  setting Setting @id
+  value   String?
+}
+
 // For persistent storage of Grammy sessions. 
 // See https://github.com/grammyjs/storages/tree/main/packages/prisma
 model GrammySession {

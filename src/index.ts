@@ -4,6 +4,7 @@ import {
   adminLogin,
   allEntriesFromUser,
   allPhotosFromUser,
+  archive,
   cancelRemove,
   confirmedRemove,
   csv,
@@ -88,6 +89,7 @@ privateBot.command("removelatest", removeLatestCommand);
 
 // Admin commands
 privateBot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
+privateBot.command("archive", archive);
 privateBot.command("csv", csv);
 privateBot.command("pistokoe", pistokoe);
 privateBot.command("numtovalidate", notValidated);
