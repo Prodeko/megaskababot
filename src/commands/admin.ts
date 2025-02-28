@@ -26,6 +26,9 @@ import {
 import { confirmationKeyboard, validationKeyboard } from "../keyboards.ts";
 import { ChatTypeContext, InputMediaBuilder } from "grammy";
 import { InputFile } from "grammy/types";
+import { prisma } from "../../prisma/client.ts";
+// @ts-types="generated/index.d.ts"
+import { Setting } from "generated/index.js";
 
 const admins = new Set();
 const underValidation = new Map<number, number>();
@@ -163,6 +166,55 @@ export const adminLogin = async (
 			/validate [entry id] - starts validation from specific entry`,
   );
   return next();
+};
+
+export const archive = async (
+  ctx: ChatTypeContext<MegaskabaContext, "private">,
+  next: () => Promise<void>,
+) => {
+  // TODO: refactor this horrible mess
+  if (!admins.has(ctx!.from!.id)) return;
+  const modeInput = ctx.match;
+  const parsedMode = typeof modeInput === "string"
+    ? modeInput.toLocaleLowerCase()
+    : null;
+
+  console.log("archive");
+  try {
+    if (parsedMode === "on") {
+      await prisma.applicationSettings.upsert({
+        where: { setting: Setting.ARCHIVE_MODE },
+        update: { value: "true" },
+        create: { setting: Setting.ARCHIVE_MODE, value: "false" },
+      });
+      await ctx.reply(`Archive: true`);
+    } else if (parsedMode === "off") {
+      await prisma.applicationSettings.upsert({
+        where: { setting: Setting.ARCHIVE_MODE },
+        update: { value: "false" },
+        create: { setting: Setting.ARCHIVE_MODE, value: "false" },
+      });
+      await ctx.reply(`Archive: false`);
+    } else if (parsedMode == null || parsedMode === "") {
+      const existingValue = (await prisma.applicationSettings.findUnique({
+        where: { setting: Setting.ARCHIVE_MODE },
+      }))?.value ?? "false";
+      const newValue = existingValue === "false" ? "true" : "false";
+      await prisma.applicationSettings.upsert({
+        where: { setting: Setting.ARCHIVE_MODE },
+        update: {
+          value: newValue,
+        },
+        create: { setting: Setting.ARCHIVE_MODE, value: "false" },
+      });
+      await ctx.reply(`Archive: ${newValue}`);
+    } else {
+      return await ctx.reply("Didn't understand, please try again.");
+    }
+  } catch (e) {
+    console.error(e);
+    next();
+  }
 };
 
 export const allPhotosFromUser = async (
