@@ -54,7 +54,7 @@ export type State =
 
 export type UserWithoutTime = {
   telegramUserId: bigint;
-  telegramUsername: string;
+  telegramUsername?: string;
   firstName: string;
   lastName?: string;
   freshmanYear: number;

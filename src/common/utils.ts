@@ -33,8 +33,9 @@ Sport: ${e.sport}` +
 };
 
 export const formatEntryWithUser = (e: Entry & { user: User }) => {
-  const usernameLink =
-    `<a href="tg://user?id=${e.userId}">@${e.user.telegramUsername}</a>`;
+  const usernameLink = `<a href="tg://user?id=${e.userId}">@${
+    e.user.telegramUsername ?? "<No username>"
+  }</a>`;
 
   return `Username: ${usernameLink}
 Entry #${e.id}

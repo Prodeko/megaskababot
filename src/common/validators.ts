@@ -19,7 +19,8 @@ const isGuild = (guild: unknown): guild is Guild => {
 const isCompleteUser = (user: Partial<User>): user is UserWithoutTime => {
   return (
     typeof user?.telegramUserId === "number" &&
-    typeof user?.telegramUsername === "string" &&
+    (user?.telegramUsername === undefined ||
+      typeof user?.telegramUsername === "string") &&
     typeof user?.firstName === "string" &&
     (user.lastName === undefined || typeof user?.lastName === "string") &&
     typeof user?.freshmanYear === "number" &&
@@ -30,8 +31,8 @@ const isCompleteUser = (user: Partial<User>): user is UserWithoutTime => {
 const isCompleteEntry = (entry: Partial<Entry>): entry is EntryWithoutId => {
   return (
     typeof entry?.distance === "number" &&
-    Array.isArray(entry?.fileIds) && 
-    entry.fileIds.every(id => typeof id === "string") && 
+    Array.isArray(entry?.fileIds) &&
+    entry.fileIds.every((id) => typeof id === "string") &&
     typeof entry?.userId === "number" &&
     isSport(entry?.sport)
   );
@@ -42,7 +43,7 @@ const isEntry = (entry: any): entry is Entry => {
   return (
     typeof entry.distance === "number" &&
     Array.isArray(entry?.fileIds) &&
-    entry.fileIds.every((id: unknown) => typeof id === "string") && 
+    entry.fileIds.every((id: unknown) => typeof id === "string") &&
     typeof entry.userId === "bigint" &&
     typeof entry.id === "number" &&
     typeof entry.createdAt === "object" &&
