@@ -1,6 +1,5 @@
 import _ from "lodash";
-import { GUILDS } from "../common/constants.ts";
-import type { Guild, TimeSeriesData } from "../common/types.ts";
+import type { TimeSeriesData } from "../common/types.ts";
 import { prisma } from "../../prisma/client.ts";
 
 export const getTimeSeriesData = async (): Promise<TimeSeriesData> => {

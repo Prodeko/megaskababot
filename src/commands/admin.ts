@@ -364,9 +364,14 @@ export const csv = async (
 ) => {
   if (!admins.has(ctx.from.id)) return;
 
-  await saveEntriesAsCSV();
-  const document = new InputFile("entries.csv");
-  ctx.replyWithDocument(document);
+  try {
+    await saveEntriesAsCSV();
+    const document = new InputFile("entries.csv");
+    ctx.replyWithDocument(document);
+  } catch (e) {
+    console.error(e);
+    next();
+  }
 };
 
 export const resetValidation = async (

@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import { prisma } from "../prisma/client.ts";
 import type { CreateEntry, Entry, EntryWithUser } from "./common/types.ts";
 import { arrayToCSV } from "./common/utils.ts";
-import { isBigInteger, isCompleteEntry } from "./common/validators.ts";
+import { isBigInteger } from "./common/validators.ts";
 import { COEFFICIENTS } from "./common/constants.ts";
 
 export const getEntriesByUserId = async (userId: unknown): Promise<Entry[]> => {

@@ -7,7 +7,7 @@ import { randomUUID } from "node:crypto";
 /**
  * Launch bot in long polling (development) mode
  */
-async function launchLongPollBot<T extends Context>(bot: Bot<T, Api<RawApi>>) {
+function launchLongPollBot<T extends Context>(bot: Bot<T, Api<RawApi>>) {
   launchServer();
   bot.start().catch((e) => console.error(e));
 }
