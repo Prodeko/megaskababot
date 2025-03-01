@@ -22,7 +22,7 @@ model PrivacyAccepted {
 model User {
   privacyAccepted  PrivacyAccepted @relation(fields: [telegramUserId], references: [telegramUserId])
   telegramUserId   BigInt          @id
-  telegramUsername String
+  telegramUsername String?
   firstName        String
   lastName         String?
   freshmanYear     Int
