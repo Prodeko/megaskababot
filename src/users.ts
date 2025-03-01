@@ -11,8 +11,7 @@ export async function privacyAccepted(userId: number): Promise<boolean> {
   }))?.accepted ?? false;
 }
 
-// TODO rename this
-const isUser = async (userId: number) => {
+const checkIfUserHasRegistered = async (userId: number): Promise<boolean> => {
   const user = await prisma.user.findUnique({
     where: { telegramUserId: userId },
   });
@@ -43,4 +42,4 @@ const userToDb = async (userId: number) => {
   users.delete(userId);
 };
 
-export { getUserStash, isUser, updateUsersStash, userToDb };
+export { checkIfUserHasRegistered, getUserStash, updateUsersStash, userToDb };
