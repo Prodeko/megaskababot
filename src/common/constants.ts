@@ -68,7 +68,8 @@ export const LETS_TRY_AGAIN_MESSAGE = "Lets try again";
 export const REGISTRATION_SUCCESSFUL_MESSAGE = "Welcome to Megaskaba";
 
 // Entry
-export const SORRY_ARCHIVE_ENABLED_MESSAGE = "Sorry, entry submission has closed."
+export const SORRY_ARCHIVE_ENABLED_MESSAGE =
+  "Sorry, entry submission has closed.";
 export const SPORT_TYPE_MESSAGE =
   "Welcome back! How did you cover ground today?";
 export const INVALID_SPORT_MESSAGE = "Please enter a valid sport.";

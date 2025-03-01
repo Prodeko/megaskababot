@@ -2,5 +2,10 @@
   "imports": {
     "generated/": "./node_modules/generated/"
   },
-  "nodeModulesDir": "auto"
+  "nodeModulesDir": "auto",
+  "fmt": {
+    "exclude": [
+      "**/*.html"
+    ]
+  }
 }
