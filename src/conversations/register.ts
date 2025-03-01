@@ -77,8 +77,7 @@ export async function register(
       user = {
         firstName: ctx.chat.first_name,
         lastName: ctx.chat.last_name,
-        // TODO: Make optional
-        telegramUsername: ctx.chat.username!,
+        telegramUsername: ctx.chat.username,
         telegramUserId: ctx.chatId as unknown as bigint,
         guild,
         freshmanYear,
@@ -94,9 +93,11 @@ export async function register(
     }
   }
 
-  await conversation.external(() => prisma.user.create({
-    data: user,
-  }));
+  await conversation.external(() =>
+    prisma.user.create({
+      data: user,
+    })
+  );
 
   await ctx.reply(
     `${REGISTRATION_SUCCESSFUL_MESSAGE}, ${
