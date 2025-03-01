@@ -5,7 +5,7 @@
   "workspaceFolder": "/megaskababot",
   "customizations": {
     "vscode": {
-      "extensions": [,
+      "extensions": [
         "Prisma.prisma",
         "bradlc.vscode-tailwindcss",
         "denoland.vscode-deno"
