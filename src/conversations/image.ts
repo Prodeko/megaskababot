@@ -4,24 +4,49 @@ import {
   IMAGE_PROOF_MESSAGE,
 } from "../common/constants.ts";
 
-export async function image(
+export async function images(
   conversation: MegaskabaConversation,
   ctx: MegaskabaContext,
-): Promise<string[]> {
+): Promise<{ fileIds: string[]; captions: string[] }> {
   await ctx.reply(IMAGE_PROOF_MESSAGE);
 
-  let fileIds: string | null = null;
+  let collectedFileIds: string[] = [];
+  let collectedCaptions: string[] = [];
 
-  while (fileIds === null) {
-    const response = await conversation.waitFor("msg");
-    // TODO: Figure out how to actually capture multiple files.
-    // Now we just grab the first size from some photo.
-    fileIds = response?.msg?.photo?.map((p) => p.file_id).find(Boolean) ?? null;
+  // Wait for at least one photo
+  let firstMessage = await conversation.waitFor("msg");
 
-    if (fileIds === null) {
-      await ctx.reply(EXPECTED_IMAGE_MESSAGE);
-    }
+  if (!firstMessage?.msg?.photo?.length) {
+    await ctx.reply(EXPECTED_IMAGE_MESSAGE);
+    return images(conversation, ctx); // Retry
   }
 
-  return [fileIds];
+  const mediaGroupId = firstMessage.msg.media_group_id;
+
+  if (mediaGroupId) {
+    // It's an album: collect all messages in this media group
+    collectedFileIds.push(
+      firstMessage.msg.photo.at(-1)!.file_id // highest resolution
+    );
+    collectedCaptions.push(firstMessage.msg.caption ?? "");
+
+    let collecting = true;
+    while (collecting) {
+      const msg = await conversation.waitFor("msg");
+      if (msg.msg.media_group_id === mediaGroupId) {
+        collectedFileIds.push(msg.msg.photo.at(-1)!.file_id);
+        collectedCaptions.push(msg.msg.caption ?? "");
+      } else {
+        // This message is from another group, stop collecting
+        await ctx.reply(EXPECTED_IMAGE_MESSAGE); 
+        collecting = false; 
+      }
+    }
+  } else {
+    // Single photo
+    collectedFileIds.push(firstMessage.msg.photo.at(-1)!.file_id);
+    collectedCaptions.push(firstMessage.msg.caption ?? "");
+  }
+
+  return { fileIds: collectedFileIds, captions: collectedCaptions };
 }

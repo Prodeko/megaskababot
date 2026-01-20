@@ -68,6 +68,7 @@ export type User = UserWithoutTime & {
 export type CreateEntry = {
   distance: number;
   fileIds: string[];
+  caption: string;
   sport: Sport;
   userId: number;
   doublePoints: boolean;

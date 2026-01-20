@@ -35,6 +35,7 @@ model Entry {
   id              Int      @id @default(autoincrement())
   distance        Float
   fileIds         String[]
+  caption         String?
   sport           String
   user            User     @relation(fields: [userId], references: [telegramUserId])
   doublePoints    Boolean  @default(false)

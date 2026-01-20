@@ -46,9 +46,16 @@ const performPistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
 
   await notValidated(ctx);
 
-  const photos = entry.fileIds.map((id) => InputMediaBuilder.photo(id));
+// Build media group, only first photo gets the entry caption
+  const photos = entry.fileIds.map((id, idx) =>
+    InputMediaBuilder.photo(id, {
+      caption: idx === 0 ? entry.caption : undefined,
+    })
+  );
+
   await ctx.replyWithMediaGroup(photos);
 
+  // Send the rest of the entry info (user, type, distance, etc.)
   await ctx.reply(
     formatEntryWithUser(entry as unknown as EntryWithUser),
     { parse_mode: "HTML", reply_markup: validationKeyboard },

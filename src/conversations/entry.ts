@@ -8,7 +8,7 @@ import {
 import { MegaskabaContext, MegaskabaConversation } from "../common/types.ts";
 import { saveEntry } from "../entries.ts";
 import { isUser } from "../users.ts";
-import { image } from "./image.ts";
+import { images } from "./image.ts";
 import { sport } from "./sport.ts";
 import { commandsKeyboard } from "../keyboards.ts";
 import { distance } from "./distance.ts";
@@ -39,14 +39,15 @@ export async function entry(
 
   const enteredSport = await sport(conversation, ctx);
   const enteredDistance = await distance(conversation, ctx, enteredSport);
-  const enteredImage = await image(conversation, ctx);
+  const enteredImages = await images(conversation, ctx);
 
   await conversation.external(() =>
     saveEntry({
       distance: enteredDistance,
       sport: enteredSport,
       doublePoints: false,
-      fileIds: enteredImage,
+      fileIds: enteredImages.fileIds,
+      caption: enteredImages.captions[0] || "",
       userId: ctx.chatId,
     })
   );
