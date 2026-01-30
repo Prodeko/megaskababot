@@ -28,7 +28,17 @@ export const PRIVACY_REJECTED_MESSAGE =
 export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString();
 export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString();
 
-export const GUILDS = ["athene", "indecs", "man@ger", "prodeko"] as const;
+export const GUILDS = ["athene", 
+  "rakennusinsinöörikilta",
+  "tietokilta", 
+  "maanmittarikilta",
+  "data guild",
+  "prosessiteekkarit",
+  "inkubio",
+  "fyysikkokilta",
+  "arkkitehtikilta",
+  "automaatio- ja systeemitekniikan kilta",
+  "prodeko",] as const;
 
 export const UNEXPECTED_GUILD_MESSAGE = "Please enter a valid guild.";
 
@@ -74,14 +84,15 @@ export const EXPECTED_IMAGE_MESSAGE =
   "Oops! I expected to receive a single image.";
 export const ENTRY_ADDED_MESSAGE = "Entry added!";
 
-export const SPORTS = ["swim", "run", "walk", "ski", "skate", "cycle"] as const;
+export const SPORTS = ["swim", "run", "walk", "ski", "skate", "cycle", "row"] as const;
 export const COEFFICIENTS: Record<Sport, number> = {
-  swim: 5,
-  run: 1.75,
-  walk: 1.75,
+  swim: 4,
+  run: 1.5,
+  walk: 1.5,
   ski: 1,
-  skate: 0.5,
-  cycle: 0.5,
+  skate: 1,
+  cycle: 0.75,
+  row: 1.0
 };
 // The limit for the number of points that is needed to achieve the milestone
 export const MILESTONE_LIMIT = 50;
