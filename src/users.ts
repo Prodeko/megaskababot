@@ -4,33 +4,16 @@ import { isCompleteUser } from "./common/validators.ts";
 
 const users = new Map<number, Partial<User>>();
 
-export async function privacyAccepted(userId: number): Promise<boolean> {
-  return (await prisma.privacyAccepted.findFirst({
-    where: { telegramUserId: userId },
-    select: { accepted: true },
-  }))?.accepted ?? false;
-}
-
-// TODO rename this
-const isUser = async (userId: number) => {
+export const checkIfUserHasRegistered = async (
+  userId: number,
+): Promise<boolean> => {
   const user = await prisma.user.findUnique({
     where: { telegramUserId: userId },
   });
   return !!user;
 };
 
-const updateUsersStash = (userId: number, update: Partial<User>) => {
-  users.set(userId, {
-    ...users.get(userId),
-    ...update,
-  });
-};
-
-const getUserStash = (userId: number) => {
-  return users.get(userId);
-};
-
-const userToDb = async (userId: number) => {
+export const userToDb = async (userId: number) => {
   const user = users.get(userId);
   if (!user || !isCompleteUser(user)) {
     console.log(user);
@@ -42,5 +25,3 @@ const userToDb = async (userId: number) => {
   });
   users.delete(userId);
 };
-
-export { getUserStash, isUser, updateUsersStash, userToDb };

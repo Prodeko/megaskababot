@@ -33,6 +33,7 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import { privacy } from "./conversations/privacy.ts";
 import { register } from "./conversations/register.ts";
 import { entry } from "./conversations/entry.ts";
+import { setBotMetadata } from "./server/setBotMetadata.ts";
 
 if (!process.env.BOT_TOKEN) {
   throw new Error("Bot token not defined!");
@@ -46,30 +47,9 @@ bot.use(session({
   storage: new PrismaAdapter(prisma.grammySession),
 }));
 
-bot.use(conversations());
+setBotMetadata(bot);
 
-try {
-  await Promise.all([
-    bot.api.setMyCommands([
-      { command: "start", description: "Start the bot" },
-      { command: "help", description: "Show the help message" },
-      { command: "rules", description: "Show the rules of the competition" },
-      { command: "entry", description: "Add a new entry" },
-      { command: "entries", description: "Show your previous entries" },
-      { command: "removelatest", description: "Remove your latest entry" },
-    ]),
-    bot.api.setMyName("Megaskababot"),
-    bot.api.setMyDescription(
-      "Megaskababot allows you to keep track of your entries in Megaskaba.",
-    ),
-    bot.api.setMyShortDescription(
-      "Megaskababot allows you to keep track of your entries in Megaskaba.",
-    ),
-  ]);
-} catch (e) {
-  // Prevent crash due to ratelimit
-  console.error(e);
-}
+bot.use(conversations());
 
 const privateBot = bot.chatType("private");
 
@@ -81,7 +61,7 @@ privateBot.use(createConversation(entry));
 privateBot.command("start", start);
 
 // Standard commands
-privateBot.command("entry", (ctx) => ctx.conversation.reenter("entry"));
+privateBot.command("entry", (ctx) => ctx.conversation.enter("entry"));
 privateBot.command("entries", entries);
 privateBot.command("help", help);
 privateBot.command("rules", rules);
@@ -108,7 +88,7 @@ privateBot.callbackQuery("stopvalidation", stopValidation);
 privateBot.callbackQuery("remove", confirmedRemove);
 privateBot.callbackQuery("cancel", cancelRemove);
 
-privateBot.callbackQuery("entry", (ctx) => ctx.conversation.reenter("entry"));
+privateBot.callbackQuery("entry", (ctx) => ctx.conversation.enter("entry"));
 privateBot.callbackQuery("entries", entries);
 privateBot.callbackQuery("removelatest", removeLatestCommand);
 privateBot.callbackQuery("help", help);

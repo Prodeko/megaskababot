@@ -7,7 +7,7 @@ import {
 } from "../common/constants.ts";
 import { MegaskabaContext, MegaskabaConversation } from "../common/types.ts";
 import { saveEntry } from "../entries.ts";
-import { isUser } from "../users.ts";
+import { checkIfUserHasRegistered } from "../users.ts";
 import { image } from "./image.ts";
 import { sport } from "./sport.ts";
 import { commandsKeyboard } from "../keyboards.ts";
@@ -22,7 +22,7 @@ export async function entry(
 ) {
   const userId = ctx.chatId;
 
-  if (!(await isUser(userId))) {
+  if (!(await checkIfUserHasRegistered(userId))) {
     return await ctx.reply(NOT_REGISTERED_MESSAGE);
   }
 

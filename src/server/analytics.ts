@@ -8,6 +8,7 @@ import { GUILDS } from "../common/constants.ts";
 import _ from "lodash";
 import { Guild } from "../common/types.ts";
 import { NextFunction } from "npm:@types/express@4.17.15";
+import process from "node:process";
 
 const router = express.Router({ mergeParams: true });
 
@@ -69,7 +70,7 @@ router.get("/time-series", async (req, res, next: NextFunction) => {
   const timeSeries = await getTimeSeriesData().catch(next);
 
   const groupedSeries = _.groupBy(timeSeries, (e) => e.date);
-  const guildsAsColumns = _.map(groupedSeries, (entries, date) => {
+  const guildsAsColumns = _.map(groupedSeries, (entries, _date) => {
     return {
       date: entries[0].date.toLocaleDateString("fi-FI"),
       ...(Object.fromEntries(

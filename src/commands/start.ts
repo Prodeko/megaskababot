@@ -20,13 +20,13 @@ const start = async (
   });
 
   if (!privacyState?.accepted) {
-    await ctx.conversation.reenter("privacy");
+    await ctx.conversation.enter("privacy");
     return;
   }
 
   if (privacyState.user == null) {
     // No user found but privacy policy is accepted
-    await ctx.conversation.reenter("register");
+    await ctx.conversation.enter("register");
   } else {
     // Privacy policy accepted and user is already registered.
     await ctx.reply(

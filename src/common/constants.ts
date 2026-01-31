@@ -28,9 +28,10 @@ export const PRIVACY_REJECTED_MESSAGE =
 export const HELP_TEXT = fs.readFileSync("./src/common/help.html").toString();
 export const RULES_TEXT = fs.readFileSync("./src/common/rules.html").toString();
 
-export const GUILDS = ["athene", 
+export const GUILDS = [
+  "athene",
   "rakennusinsinöörikilta",
-  "tietokilta", 
+  "tietokilta",
   "maanmittarikilta",
   "data guild",
   "prosessiteekkarit",
@@ -38,7 +39,8 @@ export const GUILDS = ["athene",
   "fyysikkokilta",
   "arkkitehtikilta",
   "automaatio- ja systeemitekniikan kilta",
-  "prodeko",] as const;
+  "prodeko",
+] as const;
 
 export const UNEXPECTED_GUILD_MESSAGE = "Please enter a valid guild.";
 
@@ -68,7 +70,8 @@ export const LETS_TRY_AGAIN_MESSAGE = "Lets try again";
 export const REGISTRATION_SUCCESSFUL_MESSAGE = "Welcome to Megaskaba";
 
 // Entry
-export const SORRY_ARCHIVE_ENABLED_MESSAGE = "Sorry, entry submission has closed."
+export const SORRY_ARCHIVE_ENABLED_MESSAGE =
+  "Sorry, entry submission has closed.";
 export const SPORT_TYPE_MESSAGE =
   "Welcome back! How did you cover ground today?";
 export const INVALID_SPORT_MESSAGE = "Please enter a valid sport.";
@@ -84,7 +87,15 @@ export const EXPECTED_IMAGE_MESSAGE =
   "Oops! I expected to receive a single image.";
 export const ENTRY_ADDED_MESSAGE = "Entry added!";
 
-export const SPORTS = ["swim", "run", "walk", "ski", "skate", "cycle", "row"] as const;
+export const SPORTS = [
+  "swim",
+  "run",
+  "walk",
+  "ski",
+  "skate",
+  "cycle",
+  "row",
+] as const;
 export const COEFFICIENTS: Record<Sport, number> = {
   swim: 4,
   run: 1.5,
@@ -92,7 +103,7 @@ export const COEFFICIENTS: Record<Sport, number> = {
   ski: 1,
   skate: 1,
   cycle: 0.75,
-  row: 1.0
+  row: 1.0,
 };
 // The limit for the number of points that is needed to achieve the milestone
 export const MILESTONE_LIMIT = 50;
