@@ -50,9 +50,6 @@ export async function distance(
     } else {
       await ctx.replyWithSticker(randomInvalidInputSticker());
       await ctx.reply(SUSPICIOUS_DISTANCE_MESSAGE);
-      //await ctx.reply(
-      //  "Please give proof as an image 📷. The distance travelled and time taken should be visible.",
-      //);
     }
   }
 
