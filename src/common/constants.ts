@@ -82,7 +82,7 @@ export const POSITIVE_NUMBER_MESSAGE = "Please give a positive number 👀";
 export const MAX_ENTRY_DISTANCE_KM = 300;
 export const SUSPICIOUS_DISTANCE_MESSAGE =
   `Please give the distance in kilometers 👀. If you really did over ${MAX_ENTRY_DISTANCE_KM}km in one go, contact the admins`;
-export const IMAGE_PROOF_MESSAGE = "Please send proof as an image.";
+export const IMAGE_PROOF_MESSAGE = "Please send proof as a single image.";
 export const EXPECTED_IMAGE_MESSAGE =
   "Oops! I expected to receive a single image.";
 export const ENTRY_ADDED_MESSAGE = "Entry added!";
