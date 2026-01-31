@@ -5,37 +5,37 @@ import { MegaskabaContext } from "../common/types.ts";
 import { prisma } from "../../prisma/client.ts";
 
 const start = async (
-	ctx: CommandContext<ChatTypeContext<MegaskabaContext, "private">>,
-	next: () => Promise<void>,
+  ctx: CommandContext<ChatTypeContext<MegaskabaContext, "private">>,
+  next: () => Promise<void>,
 ) => {
-	const userId = ctx.chatId;
+  const userId = ctx.chatId;
 
-	if (!isBigInteger(userId)) {
-		throw TypeError("Invalid user ID received from ctx");
-	}
+  if (!isBigInteger(userId)) {
+    throw TypeError("Invalid user ID received from ctx");
+  }
 
-	const privacyState = await prisma.privacyAccepted.findUnique({
-		where: { telegramUserId: userId },
-		select: { accepted: true, telegramUserId: true, user: true },
-	});
+  const privacyState = await prisma.privacyAccepted.findUnique({
+    where: { telegramUserId: userId },
+    select: { accepted: true, telegramUserId: true, user: true },
+  });
 
-	if (!privacyState?.accepted) {
-		await ctx.conversation.enter("privacy");
-		return;
-	}
+  if (!privacyState?.accepted) {
+    await ctx.conversation.enter("privacy");
+    return;
+  }
 
-	if (privacyState.user == null) {
-		// No user found but privacy policy is accepted
-		await ctx.conversation.enter("register");
-	} else {
-		// Privacy policy accepted and user is already registered.
-		await ctx.reply(
-			"Welcome back to Megaskaba! What would you like to do?",
-			{ reply_markup: commandsKeyboard },
-		);
-	}
+  if (privacyState.user == null) {
+    // No user found but privacy policy is accepted
+    await ctx.conversation.enter("register");
+  } else {
+    // Privacy policy accepted and user is already registered.
+    await ctx.reply(
+      "Welcome back to Megaskaba! What would you like to do?",
+      { reply_markup: commandsKeyboard },
+    );
+  }
 
-	return next();
+  return next();
 };
 
 export default start;
