@@ -1,106 +1,75 @@
-import { Bot, session } from "grammy";
-
-import {
-  adminLogin,
-  allEntriesFromUser,
-  allPhotosFromUser,
-  archive,
-  cancelRemove,
-  confirmedRemove,
-  csv,
-  invalid,
-  notValidated,
-  pistokoe,
-  remove,
-  resetValidation,
-  setDistance,
-  stopValidation,
-  valid1x,
-  valid2x,
-  validate,
-} from "./commands/admin.ts";
-import entries from "./commands/entries.ts";
-import help from "./commands/help.ts";
-import removeLatestCommand from "./commands/removeLatest.ts";
-import rules from "./commands/rules.ts";
-import start from "./commands/start.ts";
-import launchBotDependingOnNodeEnv from "./launchBotDependingOnNodeEnv.ts";
+// @ts-types="npm:@types/express"
+import express from "express";
+import { saveEntriesAsCSV } from "./entries.ts";
+import analyticsRouter from "./server/analytics.ts";
 import process from "node:process";
-import { MegaskabaContext } from "./common/types.ts";
-import { PrismaAdapter } from "@grammyjs/storage-prisma";
-import { prisma } from "../prisma/client.ts";
-import { conversations, createConversation } from "@grammyjs/conversations";
-import { privacy } from "./conversations/privacy.ts";
-import { register } from "./conversations/register.ts";
-import { entry } from "./conversations/entry.ts";
-import { setBotMetadata } from "./server/setBotMetadata.ts";
+import { bot } from "./bot.ts";
+import fs from "node:fs";
+import { attachWebhook } from "./server/attachWebhook.ts";
 
-if (!process.env.BOT_TOKEN) {
-  throw new Error("Bot token not defined!");
+const port = Number.parseInt(process.env.PORT!);
+
+const useWebhook = process.env.NODE_ENV === "production";
+let webhookSuccessfullyAttached = false;
+
+const app = express();
+
+// Parse JSON body for webhook handler
+app.use(express.json());
+
+// Necessary because of Azure App Service health check on startup
+app.get("/", (_req, res) => {
+  res.status(200).send("Kovaa tulee");
+});
+
+app.get("/health", (_req, res) => {
+  res.status(200).send("OK");
+});
+
+app.get("/entries", async (req, res, next) => {
+  try {
+    if (req.query.pass !== process.env.ADMIN_PASSWORD) {
+      console.log("Wrong password");
+      return res.status(401).send("Wrong password!");
+    }
+    await saveEntriesAsCSV();
+    res.attachment("./entries.csv");
+    res.header("Content-Type", "text/csv");
+    res.status(200).send(fs.readFileSync("./entries.csv"));
+  } catch (e) {
+    next(e);
+    return;
+  }
+  next();
+});
+
+app.use("/analytics", analyticsRouter);
+
+if (useWebhook) {
+  console.log("Launching bot in webhook mode");
+  try {
+    await attachWebhook(app);
+    webhookSuccessfullyAttached = true;
+  } catch (e) {
+    console.error(
+      "Failed to launch webhook bot - falling back to long polling!",
+      e,
+    );
+  }
 }
 
-const bot = new Bot<MegaskabaContext>(process.env.BOT_TOKEN);
-bot.use(session({
-  initial: () => {
-    return {};
-  },
-  storage: new PrismaAdapter(prisma.grammySession),
-}));
+app.use((err, req, res, _next) => {
+  console.log("request:", req);
+  console.error(err);
+  res.status(500).send("Internal server error");
+});
 
-setBotMetadata(bot);
+app.listen(port, () => console.log("Running on port ", port));
 
-bot.use(conversations());
+// We default to long polling in dev and fall back to long polling in prod in case attaching the webhook fails
+if (!webhookSuccessfullyAttached) {
+  console.log("Launching bot in long polling mode");
+  bot.start().catch((e) => console.error(e));
+}
 
-const privateBot = bot.chatType("private");
-
-// conversations
-privateBot.use(createConversation(privacy));
-privateBot.use(createConversation(register));
-privateBot.use(createConversation(entry));
-
-privateBot.command("start", start);
-
-// Standard commands
-privateBot.command("entry", (ctx) => ctx.conversation.enter("entry"));
-privateBot.command("entries", entries);
-privateBot.command("help", help);
-privateBot.command("rules", rules);
-privateBot.command("removelatest", removeLatestCommand);
-
-// Admin commands
-privateBot.hears(process.env.ADMIN_PASSWORD ?? "admin", adminLogin);
-privateBot.command("archive", archive);
-privateBot.command("csv", csv);
-privateBot.command("pistokoe", pistokoe);
-privateBot.command("numtovalidate", notValidated);
-privateBot.command("remove", remove);
-privateBot.command("allphotos", allPhotosFromUser);
-privateBot.command("resetvalidation", resetValidation);
-privateBot.command("updatedistance", setDistance);
-privateBot.command("validate", validate);
-privateBot.command("allentries", allEntriesFromUser);
-
-privateBot.callbackQuery("invalid", invalid);
-privateBot.callbackQuery("valid1x", valid1x);
-privateBot.callbackQuery("valid2x", valid2x);
-privateBot.callbackQuery("stopvalidation", stopValidation);
-
-privateBot.callbackQuery("remove", confirmedRemove);
-privateBot.callbackQuery("cancel", cancelRemove);
-
-privateBot.callbackQuery("entry", (ctx) => ctx.conversation.enter("entry"));
-privateBot.callbackQuery("entries", entries);
-privateBot.callbackQuery("removelatest", removeLatestCommand);
-privateBot.callbackQuery("help", help);
-privateBot.callbackQuery("rules", rules);
-
-// Inline keyboard handling
-// privateBot.callbackQuery("accepted", onPrivacyAccepted);
-
-// privateBot.callbackQuery("rejected", onPrivacyRejected);
-// Launch privateBot
-launchBotDependingOnNodeEnv(bot);
-
-// Enable graceful stop
-process.once("SIGINT", () => bot.stop());
-process.once("SIGTERM", () => bot.stop());
+export default app;
