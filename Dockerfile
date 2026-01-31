@@ -1,4 +1,4 @@
-FROM denoland/deno:2.1.5
+FROM denoland/deno:2.6.7
 WORKDIR /usr/src/app
 RUN apt-get update -y && apt-get install openssl -y
 COPY . .
