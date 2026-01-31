@@ -25,7 +25,7 @@ router.get(
   async (req, res: StatisticsResponse, next: NextFunction) => {
     if (req.query.pass !== process.env.ADMIN_PASSWORD) {
       console.log("Wrong password");
-      res.status(401).send("Wrong password!");
+      return res.status(401).send("Wrong password!");
     }
 
     const guild = req.params.guild;
@@ -52,7 +52,7 @@ router.get(
         topUsers,
       );
       res.header("Content-Type", "text/csv");
-      res.status(200).send(csv);
+      return res.status(200).send(csv);
     } catch (error) {
       console.error(error);
       res.status(500).send("An error occurred while calculating rankings");
@@ -64,7 +64,7 @@ router.get(
 router.get("/time-series", async (req, res, next: NextFunction) => {
   if (req.query.pass !== process.env.ADMIN_PASSWORD) {
     console.log("Wrong password");
-    res.status(401).send("Wrong password!");
+    return res.status(401).send("Wrong password!");
   }
 
   const timeSeries = await getTimeSeriesData().catch(next);
@@ -82,7 +82,7 @@ router.get("/time-series", async (req, res, next: NextFunction) => {
   const csv = arrayToCSV(["date", ...GUILDS], guildsAsColumns);
 
   res.header("Content-Type", "text/csv");
-  res.status(200).send(csv);
+  return res.status(200).send(csv);
 });
 
 router.get(
