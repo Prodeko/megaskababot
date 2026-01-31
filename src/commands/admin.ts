@@ -163,7 +163,8 @@ export const adminLogin = async (
 			/allentries [user id or username] - gets all entries by user
 			/updatedistance [entry id] [distance] - sets a new distance on an entry 
 			/resetvalidation [entry id] - resets the validation of entry 
-			/validate [entry id] - starts validation from specific entry`,
+			/validate [entry id] - starts validation from specific entry
+			/archive <on/off> - toggles archive mode (on = new entries disabled, off = new entries enabled)`,
   );
   return next();
 };
