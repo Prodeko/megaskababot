@@ -59,7 +59,7 @@ if (useWebhook) {
 }
 
 app.use((err, req, res, _next) => {
-  console.log("request:", req);
+  console.log(`Error in request: ${req.body}`);
   console.error(err);
   res.status(500).send("Internal server error");
 });
