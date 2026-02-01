@@ -29,7 +29,7 @@
     "@prisma/client": "^6.19.2",
     "@types/uuid": "^9.0.8",
     "axios": "^1.13.4",
-    "express": "^4.22.1",
+    "express": "^5.2.1",
     "grammy": "^1.39.3",
     "lodash": "^4.17.23",
     "uuid": "^9.0.1"
