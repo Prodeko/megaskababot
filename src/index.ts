@@ -25,9 +25,14 @@ app.get("/", (_req, res) => {
 
 app.get("/health", async (_req, res) => {
   try {
+    const start = Date.now();
     // Hit database in healthcheck to keep connection alive
     await prisma.$executeRaw`SELECT 1`;
-    console.log("Health check OK");
+    const end = Date.now();
+
+    const duration = end - start;
+
+    console.log(`Health check OK in ${duration}ms`);
     res.status(200).send("OK");
   } catch (e) {
     console.error("Health check FAIL: ", e);
