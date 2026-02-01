@@ -44,8 +44,8 @@ jobs:
             --container-image-name ${{ secrets.REGISTRY_NAME }}.azurecr.io/megaskababot/megaskababot:${{ github.sha }} \
             --container-registry-url https://${{ secrets.REGISTRY_NAME }}.azurecr.io \
             --subscription ${{ secrets.SUBSCRIPTION }} \
-            --resource-group prodeko-rg-new \
-            --name megaskababot
+            --resource-group ${{ secrets.RESOURCE_GROUP }} \
+            --name ${{ secrets.APP_SERVICE_NAME }}
 
       - name: Azure logout
         run: |
