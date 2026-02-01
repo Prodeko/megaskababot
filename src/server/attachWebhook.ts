@@ -13,8 +13,5 @@ export async function attachWebhook(app: Express) {
   const token = randomUUID();
   await bot.api.setWebhook(webhookUrl, { secret_token: token });
 
-  app.post("/webhook", async (req, res, next) => {
-    await webhookCallback(bot, "express", { secretToken: token })(req, res)
-      .catch(next);
-  });
+  app.post("/webhook", webhookCallback(bot, "express", { secretToken: token }));
 }
