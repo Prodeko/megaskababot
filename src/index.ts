@@ -6,6 +6,7 @@ import process from "node:process";
 import { bot } from "./bot.ts";
 import fs from "node:fs";
 import { attachWebhook } from "./server/attachWebhook.ts";
+import { prisma } from "../prisma/client.ts";
 
 const port = Number.parseInt(process.env.PORT!);
 
@@ -22,8 +23,16 @@ app.get("/", (_req, res) => {
   res.status(200).send("Kovaa tulee");
 });
 
-app.get("/health", (_req, res) => {
-  res.status(200).send("OK");
+app.get("/health", async (_req, res) => {
+  try {
+    // Hit database in healthcheck to keep connection alive
+    await prisma.$executeRaw`SELECT 1`;
+    console.log("Health check OK");
+    res.status(200).send("OK");
+  } catch (e) {
+    console.error("Health check FAIL: ", e);
+    res.status(500).send();
+  }
 });
 
 app.get("/entries", async (req, res, next) => {
