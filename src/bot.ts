@@ -1,4 +1,4 @@
-import { Bot, session } from "grammy";
+import { Bot, NextFunction, session } from "grammy";
 
 import {
   adminLogin,
@@ -52,6 +52,11 @@ setBotMetadata(bot);
 bot.use(conversations());
 
 const privateBot = bot.chatType("private");
+
+privateBot.use(async (ctx: MegaskabaContext, next: NextFunction) => {
+  console.log("UPDATE: ", ctx?.update);
+  await next();
+});
 
 // conversations
 privateBot.use(createConversation(privacy));
