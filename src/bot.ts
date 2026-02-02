@@ -71,7 +71,10 @@ privateBot.use(createConversation(entry));
 privateBot.command("start", start);
 
 // Standard commands
-privateBot.command("entry", (ctx) => ctx.conversation.enter("entry"));
+privateBot.command(
+  "entry",
+  async (ctx) => await ctx.conversation.enter("entry"),
+);
 privateBot.command("entries", entries);
 privateBot.command("help", help);
 privateBot.command("rules", rules);
@@ -98,7 +101,10 @@ privateBot.callbackQuery("stopvalidation", stopValidation);
 privateBot.callbackQuery("remove", confirmedRemove);
 privateBot.callbackQuery("cancel", cancelRemove);
 
-privateBot.callbackQuery("entry", (ctx) => ctx.conversation.enter("entry"));
+privateBot.callbackQuery(
+  "entry",
+  async (ctx) => await ctx.conversation.enter("entry"),
+);
 privateBot.callbackQuery("entries", entries);
 privateBot.callbackQuery("removelatest", removeLatestCommand);
 privateBot.callbackQuery("help", help);

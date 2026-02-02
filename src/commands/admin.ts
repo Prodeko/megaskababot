@@ -65,17 +65,19 @@ export const validate = async (
   const args = ctx.message.text.split(" ");
 
   if (args.length <= 1) {
-    return ctx.reply(
+    return await ctx.reply(
       "Please give the id of entry to validate as an argument (eg. /validate 10)",
     );
   }
 
   const possibleNum = Number.parseInt(args[1]);
 
-  if (Number.isNaN(possibleNum)) return ctx.reply("Given id is not a number!");
+  if (Number.isNaN(possibleNum)) {
+    return await ctx.reply("Given id is not a number!");
+  }
 
   const entry = await getEntry(possibleNum);
-  if (!entry) return ctx.reply("No such entry");
+  if (!entry) return await ctx.reply("No such entry");
 
   underValidation.set(ctx.chat.id, entry.id);
 
@@ -227,7 +229,7 @@ export const allPhotosFromUser = async (
   const args = ctx.message.text.split(" ");
 
   if (args.length <= 1) {
-    return ctx.reply(
+    return await ctx.reply(
       "Please give the id or username to get all photos from as an argument (eg. /allphotos mediakeisari)",
     );
   }
@@ -271,7 +273,7 @@ export const allEntriesFromUser = async (
   const args = ctx.message.text.split(" ");
 
   if (args.length <= 1) {
-    return ctx.reply(
+    return await ctx.reply(
       "Please give the id or username to get all entries from as an argument (eg. /allentries mediakeisari)",
     );
   }
@@ -370,7 +372,7 @@ export const csv = async (
   try {
     await saveEntriesAsCSV();
     const document = new InputFile("entries.csv");
-    ctx.replyWithDocument(document);
+    await ctx.replyWithDocument(document);
   } catch (e) {
     console.error(e);
     await next();
