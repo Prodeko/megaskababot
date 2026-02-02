@@ -39,7 +39,7 @@ if (!process.env.BOT_TOKEN) {
 }
 
 export const bot = new Bot<MegaskabaContext>(process.env.BOT_TOKEN, {
-  client: { sensitiveLogs: true },
+  client: { sensitiveLogs: false },
 });
 
 bot.use(async (ctx: MegaskabaContext, next: NextFunction) => {
