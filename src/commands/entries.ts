@@ -56,7 +56,7 @@ const entries = async (
   } else {
     await ctx.reply("No entries yet!", { reply_markup: commandsKeyboard });
   }
-  return next();
+  await next();
 };
 
 export default entries;

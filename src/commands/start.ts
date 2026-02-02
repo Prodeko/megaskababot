@@ -35,7 +35,7 @@ const start = async (
     );
   }
 
-  return next();
+  await next();
 };
 
 export default start;

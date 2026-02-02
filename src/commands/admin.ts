@@ -112,7 +112,7 @@ export const invalid = async (
 
   await ctx.reply("Marked invalid");
   await performPistokoe(ctx);
-  return next();
+  await next();
 };
 
 export const validx = async (
@@ -130,7 +130,7 @@ export const validx = async (
 
   await ctx.reply(`Marked valid${doublePoints ? " (2️⃣x)" : ""}`);
   await performPistokoe(ctx);
-  return next();
+  await next();
 };
 
 export const valid1x = async (
@@ -166,7 +166,7 @@ export const adminLogin = async (
 			/validate [entry id] - starts validation from specific entry
 			/archive <on/off> - toggles archive mode (on = new entries disabled, off = new entries enabled)`,
   );
-  return next();
+  await next();
 };
 
 export const archive = async (
@@ -214,7 +214,7 @@ export const archive = async (
     }
   } catch (e) {
     console.error(e);
-    next();
+    await next();
   }
 };
 
@@ -293,7 +293,7 @@ export const allEntriesFromUser = async (
   for (const chunk of chunks) {
     await ctx.reply(chunk.join("\n\n"));
   }
-  return next();
+  await next();
 };
 
 export const confirmedRemove = async (
@@ -308,17 +308,17 @@ export const confirmedRemove = async (
   removeConsideration.delete(ctx.chat.id);
 
   await ctx.reply("Removed entry!");
-  return next();
+  await next();
 };
 
 export const cancelRemove = async (
   ctx: PrivateCallbackMegaskabaContext,
   next: () => Promise<void>,
 ) => {
-  if (!admins.has(ctx.from.id)) return next();
+  if (!admins.has(ctx.from.id)) return await next();
   removeConsideration.delete(ctx.chat.id);
   await ctx.reply("Canceled");
-  return next();
+  await next();
 };
 
 export const remove = async (
@@ -371,7 +371,7 @@ export const csv = async (
     ctx.replyWithDocument(document);
   } catch (e) {
     console.error(e);
-    next();
+    await next();
   }
 };
 
@@ -404,7 +404,7 @@ export const resetValidation = async (
     console.log(e);
     await ctx.reply("That did not work! (Most likely there is no such entry)");
   }
-  return next();
+  await next();
 };
 
 export const setDistance = async (
@@ -439,7 +439,7 @@ export const setDistance = async (
     console.log(e);
     await ctx.reply("That did not work! (Most likely there is no such entry)");
   }
-  return next();
+  await next();
 };
 
 export const stopValidation = async (
@@ -447,5 +447,5 @@ export const stopValidation = async (
   next: () => Promise<void>,
 ) => {
   await underValidation.delete(ctx!.chat!.id);
-  return next();
+  await next();
 };
