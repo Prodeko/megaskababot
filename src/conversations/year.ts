@@ -5,13 +5,13 @@ import {
   PLEASE_ENTER_YEAR_MESSAGE,
   START_REGISTRATION_MESSAGE,
 } from "../common/constants.ts";
-import { MegaskabaContext, MegaskabaConversation } from "../common/types.ts";
+import { ConversationContext, MegaskabaConversation } from "../common/types.ts";
 import { randomInvalidInputSticker } from "../common/utils.ts";
 import { yearKeyboard } from "../keyboards.ts";
 
 export async function year(
   conversation: MegaskabaConversation,
-  ctx: MegaskabaContext,
+  ctx: ConversationContext,
 ) {
   await ctx.reply(
     `

@@ -9,8 +9,8 @@ import {
   UNEXPECTED_GUILD_MESSAGE,
 } from "../common/constants.ts";
 import {
+  ConversationContext,
   Guild,
-  MegaskabaContext,
   MegaskabaConversation,
 } from "../common/types.ts";
 import {
@@ -21,14 +21,13 @@ import {
 } from "../keyboards.ts";
 import { isGuild } from "../common/validators.ts";
 import { prisma } from "../../prisma/client.ts";
-import { ChatTypeContext } from "grammy";
 import { UserWithoutTime } from "../common/types.ts";
 import { capitalizeFirstLetter } from "../common/utils.ts";
 import { year } from "./year.ts";
 
 export async function register(
   conversation: MegaskabaConversation,
-  ctx: ChatTypeContext<MegaskabaContext, "private">,
+  ctx: ConversationContext,
 ) {
   let user: UserWithoutTime | null = null;
 

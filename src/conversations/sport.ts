@@ -1,6 +1,6 @@
 import { isSport } from "../common/validators.ts";
 import {
-  MegaskabaContext,
+  ConversationContext,
   MegaskabaConversation,
   Sport,
 } from "../common/types.ts";
@@ -12,7 +12,7 @@ import { sportKeyboard } from "../keyboards.ts";
 
 export async function sport(
   conversation: MegaskabaConversation,
-  ctx: MegaskabaContext,
+  ctx: ConversationContext,
 ): Promise<Sport> {
   await ctx.reply(
     SPORT_TYPE_MESSAGE,

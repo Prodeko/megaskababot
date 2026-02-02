@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import { validatePeriod } from "./validators.ts";
 import { calculateGuildStatistics } from "../analytics/statistics.ts";
 import topUsersByGuild from "../analytics/rankings.ts";
@@ -7,7 +7,6 @@ import { getTimeSeriesData } from "../analytics/timeseries.ts";
 import { GUILDS } from "../common/constants.ts";
 import _ from "lodash";
 import { Guild } from "../common/types.ts";
-import { NextFunction } from "npm:@types/express@4.17.15";
 import process from "node:process";
 
 const router = express.Router({ mergeParams: true });

@@ -34,7 +34,9 @@ const admins = new Set();
 const underValidation = new Map<number, number>();
 const removeConsideration = new Map<number, number>();
 
-const performPistokoe = async (ctx: PrivateCommandMegaskabaContext) => {
+const performPistokoe = async (
+  ctx: ChatTypeContext<MegaskabaContext, "private">,
+) => {
   const entry = await getRandomNotValidEntry();
   const chatId = ctx!.chat!.id;
 
@@ -87,7 +89,7 @@ export const validate = async (
 };
 
 export const notValidated = async (
-  ctx: PrivateCommandMegaskabaContext,
+  ctx: ChatTypeContext<MegaskabaContext, "private">,
 ) => {
   const notValidated = await amountToValidate();
   await ctx.reply(`Number of entries not validated: ${notValidated}`);

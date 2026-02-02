@@ -27,6 +27,7 @@
     "@grammyjs/conversations": "^2.1.1",
     "@grammyjs/storage-prisma": "^2.5.1",
     "@prisma/client": "^6.19.2",
+    "@types/express": "^4.17.25",
     "@types/uuid": "^9.0.8",
     "axios": "^1.13.4",
     "express": "^5.2.1",

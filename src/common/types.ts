@@ -117,10 +117,17 @@ export interface SessionData {
 }
 
 export type MegaskabaContext =
-  & Context
   & SessionFlavor<SessionData>
-  & ConversationFlavor;
-export type MegaskabaConversation = Conversation<MegaskabaContext>;
+  & ConversationFlavor<ChatTypeContext<Context, "private">>;
+
+export type ConversationContext =
+  & ChatTypeContext<Context, "private">
+  & SessionFlavor<SessionData>;
+
+export type MegaskabaConversation = Conversation<
+  MegaskabaContext,
+  ConversationContext
+>;
 
 export type PrivateCommandMegaskabaContext = ChatTypeContext<
   CommandContext<MegaskabaContext>,

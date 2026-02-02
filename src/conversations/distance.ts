@@ -6,7 +6,7 @@ import {
   SUSPICIOUS_DISTANCE_MESSAGE,
 } from "../common/constants.ts";
 import {
-  MegaskabaContext,
+  ConversationContext,
   MegaskabaConversation,
   Sport,
 } from "../common/types.ts";
@@ -14,7 +14,7 @@ import { randomInvalidInputSticker } from "../common/utils.ts";
 
 export async function distance(
   conversation: MegaskabaConversation,
-  ctx: MegaskabaContext,
+  ctx: ConversationContext,
   sport: Sport,
 ) {
   await ctx.reply(`${DISTANCE_MESSAGE} ${sport}?`);

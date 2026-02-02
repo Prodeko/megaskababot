@@ -1,4 +1,3 @@
-import { ChatTypeContext } from "grammy";
 import { prisma } from "../../prisma/client.ts";
 import {
   INTRODUCTORY_MESSAGE,
@@ -6,13 +5,13 @@ import {
   PRIVACY_REJECTED_MESSAGE,
   PRIVACY_RETRY_MESSAGE,
 } from "../common/constants.ts";
-import { MegaskabaContext, MegaskabaConversation } from "../common/types.ts";
+import { ConversationContext, MegaskabaConversation } from "../common/types.ts";
 import { inlinePrivacyKeyboard } from "../keyboards.ts";
 import { register } from "./register.ts";
 
 async function respondToPrivacyInlineButtonPress(
   conversation: MegaskabaConversation,
-  ctx: ChatTypeContext<MegaskabaContext, "private">,
+  ctx: ConversationContext,
 ): Promise<boolean> {
   const response = await conversation.waitForCallbackQuery([
     "accepted",
@@ -43,7 +42,7 @@ async function respondToPrivacyInlineButtonPress(
 
 export async function privacy(
   conversation: MegaskabaConversation,
-  ctx: ChatTypeContext<MegaskabaContext, "private">,
+  ctx: ConversationContext,
 ) {
   await ctx.reply(INTRODUCTORY_MESSAGE);
   await ctx.reply(PRIVACY_POLICY, {

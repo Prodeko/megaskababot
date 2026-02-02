@@ -1,11 +1,10 @@
-import { ChatTypeContext } from "grammy";
 import {
   ENTRY_ADDED_MESSAGE,
   NOT_REGISTERED_MESSAGE,
   SORRY_ARCHIVE_ENABLED_MESSAGE,
   STICKERS,
 } from "../common/constants.ts";
-import { MegaskabaContext, MegaskabaConversation } from "../common/types.ts";
+import { ConversationContext, MegaskabaConversation } from "../common/types.ts";
 import { saveEntry } from "../entries.ts";
 import { checkIfUserHasRegistered } from "../users.ts";
 import { image } from "./image.ts";
@@ -18,7 +17,7 @@ import { Setting } from "generated/index.js";
 
 export async function entry(
   conversation: MegaskabaConversation,
-  ctx: ChatTypeContext<MegaskabaContext, "private">,
+  ctx: ConversationContext,
 ) {
   const userId = ctx.chatId;
 

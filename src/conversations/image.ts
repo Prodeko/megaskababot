@@ -1,4 +1,4 @@
-import { MegaskabaContext, MegaskabaConversation } from "../common/types.ts";
+import { ConversationContext, MegaskabaConversation } from "../common/types.ts";
 import {
   EXPECTED_IMAGE_MESSAGE,
   IMAGE_PROOF_MESSAGE,
@@ -6,7 +6,7 @@ import {
 
 export async function image(
   conversation: MegaskabaConversation,
-  ctx: MegaskabaContext,
+  ctx: ConversationContext,
 ): Promise<string[]> {
   await ctx.reply(IMAGE_PROOF_MESSAGE);
 
