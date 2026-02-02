@@ -40,6 +40,11 @@ if (!process.env.BOT_TOKEN) {
 
 export const bot = new Bot<MegaskabaContext>(process.env.BOT_TOKEN);
 
+bot.use(async (ctx: MegaskabaContext, next: NextFunction) => {
+  console.log("UPDATE PRE SESSION: ", ctx?.update);
+  await next();
+});
+
 bot.use(session({
   initial: () => {
     return {};
@@ -54,7 +59,7 @@ bot.use(conversations());
 const privateBot = bot.chatType("private");
 
 privateBot.use(async (ctx: MegaskabaContext, next: NextFunction) => {
-  console.log("UPDATE: ", ctx?.update);
+  console.log("UPDATE POST SESSION: ", ctx?.update);
   await next();
 });
 
