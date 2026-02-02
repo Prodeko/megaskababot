@@ -25,6 +25,7 @@
   "homepage": "https://github.com/Prodeko/megaskababot#readme",
   "dependencies": {
     "@grammyjs/conversations": "^2.1.1",
+    "@grammyjs/storage-file": "^2.5.1",
     "@grammyjs/storage-prisma": "^2.5.1",
     "@prisma/client": "^6.19.2",
     "@types/uuid": "^9.0.8",

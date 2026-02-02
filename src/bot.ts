@@ -27,6 +27,7 @@ import start from "./commands/start.ts";
 import process from "node:process";
 import { MegaskabaContext } from "./common/types.ts";
 import { PrismaAdapter } from "@grammyjs/storage-prisma";
+import { FileAdapter } from "@grammyjs/storage-file";
 import { prisma } from "../prisma/client.ts";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import { privacy } from "./conversations/privacy.ts";
@@ -49,7 +50,9 @@ bot.use(session({
 
 setBotMetadata(bot);
 
-bot.use(conversations());
+bot.use(conversations({
+  storage: new PrismaAdapter(prisma.grammySession),
+}));
 
 const privateBot = bot.chatType("private");
 

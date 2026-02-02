@@ -2,6 +2,7 @@
   "version": "5",
   "specifiers": {
     "npm:@grammyjs/conversations@^2.1.1": "2.1.1_grammy@1.39.3",
+    "npm:@grammyjs/storage-file@^2.5.1": "2.5.1",
     "npm:@grammyjs/storage-prisma@^2.5.1": "2.5.1",
     "npm:@prisma/client@^6.19.2": "6.19.2_prisma@6.2.1",
     "npm:@trivago/prettier-plugin-sort-imports@^4.3.0": "4.3.0_prettier@3.8.1",
@@ -123,6 +124,9 @@
       "dependencies": [
         "grammy"
       ]
+    },
+    "@grammyjs/storage-file@2.5.1": {
+      "integrity": "sha512-16jrn2IzgJgIZUtcFiA/PI4WBNfHt1dAoimrRzwPyHvM1otNuKwWAAxA6l3m7ys6YrOLlONu4q4swEkPMOT9YA=="
     },
     "@grammyjs/storage-prisma@2.5.1": {
       "integrity": "sha512-OIH167hWpe9q4hFJSr5JXULRUB4CrO9EXPDa8PLmOknzuuBtXn4wQ7Z+JPKXYTdW3dkj1N1Kov3vW1zN7WjweQ=="
@@ -803,6 +807,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@grammyjs/conversations@^2.1.1",
+        "npm:@grammyjs/storage-file@^2.5.1",
         "npm:@grammyjs/storage-prisma@^2.5.1",
         "npm:@prisma/client@^6.19.2",
         "npm:@trivago/prettier-plugin-sort-imports@^4.3.0",
