@@ -26,6 +26,7 @@ import rules from "./commands/rules.ts";
 import start from "./commands/start.ts";
 import process from "node:process";
 import { MegaskabaContext } from "./common/types.ts";
+import { sequentialize } from "@grammyjs/runner";
 import { PrismaAdapter } from "@grammyjs/storage-prisma";
 import { prisma } from "../prisma/client.ts";
 import { conversations, createConversation } from "@grammyjs/conversations";
@@ -41,6 +42,14 @@ if (!process.env.BOT_TOKEN) {
 export const bot = new Bot<MegaskabaContext>(process.env.BOT_TOKEN, {
   client: { sensitiveLogs: false },
 });
+
+// Build a unique identifier for the `Context` object.
+function getSessionKey(ctx: MegaskabaContext) {
+  return ctx.chat?.id.toString();
+}
+
+// Sequentialize before accessing session data!
+bot.use(sequentialize(getSessionKey));
 
 bot.use(async (ctx: MegaskabaContext, next: NextFunction) => {
   console.log("UPDATE PRE SESSION: ", ctx?.update);
